@@ -139,13 +139,13 @@
             font-family: var(--font-display);
             font-size: 1.8rem;
             font-weight: 900;
-            color: #FFFFFF;
+            color: var(--text-primary);
             line-height: 1.2;
             text-transform: uppercase;
         }
         .pilgrim-name-mr {
             font-size: 1rem;
-            color: #A0C4FF;
+            color: var(--text-secondary);
             font-weight: 600;
             margin-top: 2px;
         }
@@ -623,6 +623,501 @@
         .hidden {
             display: none !important;
         }
+
+        /* =========================================================================
+           WARISEVA MOBILE UI POLISH & RESPONSIVE LAYOUT (360px - 430px)
+           Target reference inspired: pixel-perfect alignment, zero overflow,
+           comfortable touch targets, clean card hierarchy.
+           ========================================================================= */
+
+        /* Root Level Scroll-Lock: prevent any element from causing horizontal scroll */
+        html, body {
+            overflow-x: hidden !important;
+            width: 100% !important;
+            max-width: 100vw !important;
+        }
+
+        /* Dedicated Wari Palkhi Zone Card */
+        .zone-card-wrapper {
+            width: 100%;
+            margin-bottom: 14px;
+        }
+        .zone-info-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .zone-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+        .zone-icon-circle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--bg-card-elevated);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            flex-shrink: 0;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .zone-labels {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.25;
+        }
+        .zone-title-en {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: #4B5563;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .zone-title-mr {
+            font-size: 0.75rem;
+            color: #9CA3AF;
+            font-weight: 600;
+        }
+        .zone-val-text {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #111827;
+            text-align: right;
+            line-height: 1.25;
+            word-break: break-word;
+            flex: 1;
+        }
+
+        /* Dedicated Protected Medical Profile Card */
+        .pin-authorization-box {
+            background: linear-gradient(180deg, #1C2230 0%, #151A24 100%);
+            border: 1.5px solid rgba(255, 140, 0, 0.45);
+            border-radius: 18px;
+            padding: 18px 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .pin-head {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+        .pin-lock-icon {
+            font-size: 2rem;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+        .pin-head-text {
+            display: flex;
+            flex-direction: column;
+        }
+        .pin-title {
+            margin: 0;
+            font-size: 0.98rem;
+            font-weight: 800;
+            color: #FFA000;
+            letter-spacing: 0.5px;
+            font-family: var(--font-display);
+        }
+        .pin-desc {
+            margin: 4px 0 0 0;
+            font-size: 0.8rem;
+            color: #94A3B8;
+            line-height: 1.35;
+        }
+        .pin-entry-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+        .pin-inputs-row {
+            display: flex;
+            gap: 10px;
+            align-items: stretch;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .pin-digit-input {
+            flex: 1;
+            min-width: 0;
+            height: 52px;
+            background: #0B0E14;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            color: #FFFFFF;
+            font-size: 1.35rem;
+            font-family: var(--font-mono);
+            text-align: center;
+            letter-spacing: 6px;
+            padding: 0 8px;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .pin-digit-input:focus {
+            outline: none;
+            border-color: #FF8C00;
+            box-shadow: 0 0 0 2px rgba(255, 140, 0, 0.25);
+        }
+        .verify-pin-btn {
+            flex-shrink: 0;
+            width: 126px;
+            min-height: 52px;
+            background: linear-gradient(135deg, #FF6B00 0%, #FF5100 100%);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 12px;
+            font-family: var(--font-display);
+            font-size: 0.76rem;
+            font-weight: 900;
+            line-height: 1.25;
+            text-align: center;
+            padding: 6px 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(255, 107, 0, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            white-space: normal;
+            word-break: break-word;
+            box-sizing: border-box;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .verify-pin-btn:hover {
+            box-shadow: 0 6px 18px rgba(255, 107, 0, 0.5);
+            transform: translateY(-1px);
+        }
+        .verify-pin-btn:active {
+            transform: scale(0.98);
+        }
+        .pin-demo-hint {
+            font-size: 0.78rem;
+            color: #94A3B8;
+            text-align: left;
+            margin-top: 2px;
+        }
+        .pin-demo-hint strong {
+            color: #E2E8F0;
+        }
+
+        /* Action Buttons */
+        .emergency-action-section {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            margin-top: 4px;
+            margin-bottom: 8px;
+        }
+        .report-warkari-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #FF6B00 0%, #E65100 100%);
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
+            padding: 16px 18px;
+            color: #FFFFFF;
+            font-family: var(--font-display);
+            cursor: pointer;
+            box-shadow: 0 4px 18px rgba(255, 107, 0, 0.35);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            letter-spacing: 0.5px;
+            box-sizing: border-box;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .report-warkari-btn:hover {
+            box-shadow: 0 6px 22px rgba(255, 107, 0, 0.5);
+            transform: translateY(-1px);
+        }
+        .report-warkari-btn:active {
+            transform: scale(0.98);
+        }
+        .report-main-txt {
+            font-size: 1.05rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .report-sub-txt {
+            font-size: 0.8rem;
+            color: #FFE0B2;
+            font-weight: 700;
+            text-align: center;
+        }
+        .mega-sos-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #FF0055 0%, #D50000 100%);
+            border: 1.5px solid rgba(255, 255, 255, 0.25);
+            border-radius: 14px;
+            padding: 16px 18px;
+            color: #FFFFFF;
+            font-family: var(--font-display);
+            cursor: pointer;
+            box-shadow: 0 6px 22px rgba(213, 0, 0, 0.45);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            transition: all 0.2s ease;
+            letter-spacing: 0.5px;
+            animation: pulseSos 2s infinite;
+            box-sizing: border-box;
+        }
+        .sos-main-txt {
+            font-size: 1.12rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-align: center;
+        }
+        .sos-sub-txt {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #FFCDD2;
+            text-align: center;
+        }
+
+        /* Disclaimer Card */
+        .public-footer {
+            background: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 16px 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+            margin-top: 4px;
+            margin-bottom: 24px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .public-footer .demo-tag {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #9C27B0;
+            letter-spacing: 0.5px;
+            display: inline-block;
+            margin-bottom: 6px;
+        }
+        .public-footer p {
+            font-size: 0.8rem;
+            color: #5F6368;
+            line-height: 1.45;
+            margin: 0;
+        }
+
+        /* =========================================================================
+           MOBILE SPECIFIC STYLES (@media max-width: 640px)
+           Desktop remains 100% UNCHANGED.
+           ========================================================================= */
+        @media (max-width: 640px) {
+            body {
+                padding: 12px 12px 32px 12px;
+            }
+            .public-wrapper {
+                max-width: 100%;
+                width: 100%;
+                gap: 14px;
+                overflow-x: hidden;
+            }
+
+            /* 1. TOP NAVIGATION: Standalone Dark Header Card */
+            .public-global-header {
+                position: relative;
+                top: 0;
+                width: 100%;
+                padding: 14px 14px 12px 14px;
+                border-radius: 16px;
+                background: #131722;
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+                margin-bottom: 4px;
+            }
+            .public-header-inner {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                align-items: stretch;
+            }
+            .pub-brand-link {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                text-decoration: none;
+            }
+            .pub-emblem {
+                font-size: 1.25rem;
+            }
+            .pub-brand-name {
+                font-family: var(--font-display);
+                font-size: 1.12rem;
+                font-weight: 900;
+                color: #FFFFFF;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+            .ai-badge {
+                background: #FF6B00;
+                color: #FFFFFF;
+                font-size: 0.72rem;
+                font-weight: 800;
+                padding: 2px 6px;
+                border-radius: 6px;
+            }
+            .pub-brand-sub {
+                font-size: 0.74rem;
+                color: #94A3B8;
+                font-weight: 500;
+            }
+
+            /* Responsive 3-Column Navigation Grid */
+            .public-desktop-nav {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 6px;
+                width: 100%;
+            }
+            .pub-nav-link {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
+                padding: 7px 4px;
+                border-radius: 8px;
+                font-size: 0.76rem;
+                font-weight: 700;
+                color: #CBD5E1;
+                background: rgba(30, 41, 59, 0.65);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                min-height: 36px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                text-decoration: none;
+                transition: all 0.2s ease;
+                box-sizing: border-box;
+            }
+            .pub-nav-link:hover, .pub-nav-link:active {
+                background: rgba(0, 229, 255, 0.15);
+                border-color: #00E5FF;
+                color: #FFFFFF;
+            }
+
+            /* Identity Card Mobile Padding */
+            .identity-card {
+                padding: 16px;
+                border-radius: 18px;
+            }
+            .pilgrim-name {
+                font-size: 1.45rem;
+            }
+            .pilgrim-name-mr {
+                font-size: 0.92rem;
+            }
+
+            /* Subnav & Search Strip */
+            .wristband-subnav-row {
+                gap: 8px;
+            }
+            .subnav-btn {
+                flex: 1;
+                min-height: 42px;
+                font-size: 0.85rem;
+                padding: 6px 12px;
+            }
+            .public-wb-search-strip {
+                width: 100%;
+                display: flex;
+                gap: 6px;
+            }
+            .public-wb-input {
+                flex: 1;
+                min-width: 0;
+                max-width: none;
+                height: 42px;
+                font-size: 0.85rem;
+            }
+            .public-wb-lookup-btn {
+                flex-shrink: 0;
+                height: 42px;
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Narrow Mobile Breakpoint (<= 365px, e.g. 360px screens) */
+        @media (max-width: 365px) {
+            body {
+                padding: 10px 8px 24px 8px;
+            }
+            .public-desktop-nav {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 5px;
+            }
+            .pub-nav-link {
+                font-size: 0.78rem;
+                min-height: 38px;
+            }
+            /* Stack PIN and Verify button when space is constrained */
+            .pin-inputs-row {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .pin-digit-input {
+                width: 100%;
+                height: 48px;
+                font-size: 1.25rem;
+            }
+            .verify-pin-btn {
+                width: 100%;
+                height: 46px;
+                font-size: 0.82rem;
+            }
+            .zone-info-card {
+                padding: 12px 10px;
+                gap: 8px;
+            }
+            .zone-icon-circle {
+                width: 38px;
+                height: 38px;
+                font-size: 1.15rem;
+            }
+            .zone-title-en {
+                font-size: 0.72rem;
+            }
+            .zone-title-mr {
+                font-size: 0.7rem;
+            }
+            .zone-val-text {
+                font-size: 0.85rem;
+            }
+            .report-main-txt, .sos-main-txt {
+                font-size: 0.95rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -713,40 +1208,40 @@
             </div>
 
             <!-- Basic Identification Strip (Publicly Visible) -->
-            <div class="info-grid" style="margin-bottom: 12px;">
-                <div class="info-row">
-                    <div class="info-row-left">
-                        <span class="info-icon">📍</span>
-                        <div class="info-lbl-group">
-                            <span class="info-lbl-en">Wari Palkhi Zone</span>
-                            <span class="info-lbl-mr">पालखी तळ झोन</span>
+            <div class="zone-card-wrapper">
+                <div class="zone-info-card">
+                    <div class="zone-left">
+                        <div class="zone-icon-circle">📍</div>
+                        <div class="zone-labels">
+                            <span class="zone-title-en">WARI PALKHI ZONE</span>
+                            <span class="zone-title-mr">पालखी तळ झोन</span>
                         </div>
                     </div>
-                    <div class="info-val" style="font-size:0.85rem;">{{ pilgrim.zone }}</div>
+                    <div class="zone-val-text">{{ pilgrim.zone }}</div>
                 </div>
             </div>
 
             <!-- 🔐 PROTECTED MEDICAL PROFILE SECTION -->
-            <div id="public-protected-pin-box" class="pin-authorization-box" style="background: rgba(22, 27, 34, 0.85); border: 1.5px solid rgba(255, 107, 0, 0.4); border-radius: 14px; padding: 16px; margin-bottom: 16px;">
-                <div class="pin-head" style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-                    <span class="pin-lock-icon" style="font-size: 1.5rem;">🔐</span>
-                    <div>
-                        <h4 style="margin: 0; font-size: 0.95rem; font-weight: 800; color: #FFB74D; letter-spacing: 0.5px;">PROTECTED MEDICAL PROFILE</h4>
-                        <p style="margin: 3px 0 0 0; font-size: 0.78rem; color: #8B949E; line-height: 1.3;">Medical information is protected.<br>Enter the Wristband PIN to view emergency medical details.</p>
+            <div id="public-protected-pin-box" class="pin-authorization-box">
+                <div class="pin-head">
+                    <span class="pin-lock-icon">🔐</span>
+                    <div class="pin-head-text">
+                        <h4 class="pin-title">PROTECTED MEDICAL PROFILE</h4>
+                        <p class="pin-desc">Medical information is protected.<br>Enter the Wristband PIN to view emergency medical details.</p>
                     </div>
                 </div>
 
-                <div class="pin-entry-form" style="display: flex; flex-direction: column; gap: 8px;">
-                    <div class="pin-inputs-row" style="display: flex; gap: 8px;">
-                        <input type="password" id="public-pin-input" class="pin-digit-input" maxlength="8" placeholder="• • • •" autocomplete="off" style="flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(13, 17, 23, 0.9); color: #FFF; font-size: 1.1rem; text-align: center; letter-spacing: 4px;">
-                        <button type="button" id="public-verify-pin-btn" class="verify-pin-btn" style="padding: 12px 16px; border-radius: 8px; border: none; background: #FF6B00; color: #FFF; font-weight: 800; font-size: 0.88rem; cursor: pointer;">
+                <div class="pin-entry-form">
+                    <div class="pin-inputs-row">
+                        <input type="password" id="public-pin-input" class="pin-digit-input" maxlength="8" placeholder="• • • •" autocomplete="off" aria-label="Wristband PIN Input">
+                        <button type="button" id="public-verify-pin-btn" class="verify-pin-btn">
                             [ VERIFY & VIEW PROFILE ]
                         </button>
                     </div>
-                    <div class="pin-demo-hint" style="font-size: 0.75rem; color: #8B949E; text-align: left;">
+                    <div class="pin-demo-hint">
                         💡 <em>Demo Wristband PIN: <strong>2741</strong> (or <strong>WARI2026</strong>)</em>
                     </div>
-                    <div id="public-pin-error" class="form-error-text hidden" role="alert" style="color: #FF5252; background: rgba(255, 82, 82, 0.12); padding: 10px; border-radius: 8px; font-weight: 700; margin-top: 4px; font-size: 0.82rem; text-align: center;">
+                    <div id="public-pin-error" class="form-error-text hidden" role="alert">
                         ❌ Incorrect PIN<br>Please try again.
                     </div>
                 </div>
@@ -808,12 +1303,12 @@
 
         <!-- Unified Report & SOS Action Section -->
         <div class="emergency-action-section">
-            <button type="button" id="public-report-warkari-btn" class="report-warkari-btn" style="width: 100%; background: linear-gradient(135deg, #FF6B00, #E65100); border: 2px solid #FF8C00; border-radius: 16px; padding: 16px 20px; color: #FFFFFF; font-family: var(--font-display); font-size: 1.15rem; font-weight: 900; cursor: pointer; box-shadow: 0 4px 18px rgba(255, 107, 0, 0.4); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; letter-spacing: 0.5px;">
-                <span style="display: flex; align-items: center; gap: 8px;">
+            <button type="button" id="public-report-warkari-btn" class="report-warkari-btn">
+                <span class="report-main-txt">
                     <span>🚨</span>
                     <span>REPORT THIS WARKARI</span>
                 </span>
-                <span style="font-size: 0.78rem; color: #FFE0B2; font-weight: 700;">सुरक्षा अहवाल नोंदवा (Safety & Welfare Report)</span>
+                <span class="report-sub-txt">सुरक्षा अहवाल नोंदवा (Safety & Welfare Report)</span>
             </button>
 
             <button type="button" id="public-sos-btn" class="mega-sos-btn">
