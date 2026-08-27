@@ -1,0 +1,134 @@
+[
+  {
+    "zone_id": "ZONE_01",
+    "zone_name": "Zone 01 — Alandi / Dehu Phata",
+    "latitude": 18.6750,
+    "longitude": 73.8980,
+    "crowd_density": "HIGH",
+    "crowd_index": 78,
+    "congestion_choke_point": "Indrayani River Bridge bottleneck",
+    "safe_bypass_corridor": "Chakan-Alandi Outer Service Road",
+    "landmarks": ["Sant Dnyaneshwar Temple", "Indrayani River Ghat", "Alandi Municipal Dispensary"]
+  },
+  {
+    "zone_id": "ZONE_02",
+    "zone_name": "Zone 02 — Pune City / Wakdewadi",
+    "latitude": 18.5314,
+    "longitude": 73.8446,
+    "crowd_density": "MODERATE",
+    "crowd_index": 55,
+    "congestion_choke_point": "Shivajinagar Underpass & Sancheti Chowk",
+    "safe_bypass_corridor": "Old Pune-Mumbai Highway Emergency Lane",
+    "landmarks": ["Wakdewadi Medical Tent", "Shivajinagar Chowk", "Sancheti Hospital Post"]
+  },
+  {
+    "zone_id": "ZONE_03",
+    "zone_name": "Zone 03 — Hadapsar / Dive Ghat Base",
+    "latitude": 18.4967,
+    "longitude": 73.9417,
+    "crowd_density": "HIGH",
+    "crowd_index": 82,
+    "congestion_choke_point": "Dive Ghat Narrow Ascent (Ghat road choke)",
+    "safe_bypass_corridor": "Saswad-Bopdev Ghat Parallel Emergency Route",
+    "landmarks": ["Dive Ghat Base Camp", "Hadapsar Gadital First Aid", "Mastani Lake Point"]
+  },
+  {
+    "zone_id": "ZONE_04",
+    "zone_name": "Zone 04 — Saswad Palkhi Maidan",
+    "latitude": 18.3444,
+    "longitude": 74.0305,
+    "crowd_density": "CRITICAL",
+    "crowd_index": 94,
+    "congestion_choke_point": "Saswad Central Mandir Ringan & Bazar Chowk",
+    "safe_bypass_corridor": "Saswad South Bypass Service Corridor (Ambulance Lane)",
+    "landmarks": ["Saswad Palkhi Maidan", "Sant Sopankaka Mandir", "Saswad Rural Hospital"]
+  },
+  {
+    "zone_id": "ZONE_05",
+    "zone_name": "Zone 05 — Jejuri Mandir Tappa",
+    "latitude": 18.2750,
+    "longitude": 74.1610,
+    "crowd_density": "HIGH",
+    "crowd_index": 76,
+    "congestion_choke_point": "Khandoba Foothills & Bhandara Utsav Chowk",
+    "safe_bypass_corridor": "Jejuri Ring Bypass Road",
+    "landmarks": ["Khandoba Foothills", "Jejuri Palkhi Halt", "Jejuri Primary Health Center"]
+  },
+  {
+    "zone_id": "ZONE_06",
+    "zone_name": "Zone 06 — Lonand Market Chowk",
+    "latitude": 18.0415,
+    "longitude": 74.1901,
+    "crowd_density": "MODERATE",
+    "crowd_index": 48,
+    "congestion_choke_point": "Lonand Station Bazaar Line",
+    "safe_bypass_corridor": "Nira River Bank Outer Corridor",
+    "landmarks": ["Lonand Station Camp", "Nira River Crossing", "Lonand Civil Aid Camp"]
+  },
+  {
+    "zone_id": "ZONE_07",
+    "zone_name": "Zone 07 — Taradgaon / Phaltan",
+    "latitude": 17.9890,
+    "longitude": 74.4320,
+    "crowd_density": "LOW",
+    "crowd_index": 32,
+    "congestion_choke_point": "Taradgaon Main Square",
+    "safe_bypass_corridor": "Phaltan Bypass Highway",
+    "landmarks": ["Phaltan Medical Base", "Taradgaon Palkhi Visava", "Phaltan Sub-District Hospital"]
+  },
+  {
+    "zone_id": "ZONE_08",
+    "zone_name": "Zone 08 — Natepute Palkhi Ground",
+    "latitude": 17.8990,
+    "longitude": 74.7620,
+    "crowd_density": "MODERATE",
+    "crowd_index": 50,
+    "congestion_choke_point": "Natepute Bazaar Junction",
+    "safe_bypass_corridor": "Akluj Link Route",
+    "landmarks": ["Natepute Health Post", "Natepute Bazar Ground", "Akluj Road Junction"]
+  },
+  {
+    "zone_id": "ZONE_09",
+    "zone_name": "Zone 09 — Malshiras Palkhi Visava",
+    "latitude": 17.8280,
+    "longitude": 74.9080,
+    "crowd_density": "MODERATE",
+    "crowd_index": 45,
+    "congestion_choke_point": "Tehsil Ground Procession Entry",
+    "safe_bypass_corridor": "Malshiras Canal Road",
+    "landmarks": ["Malshiras Tehsil Ground", "Civil Dispensary Malshiras", "Palkhi Marg Relief Camp"]
+  },
+  {
+    "zone_id": "ZONE_10",
+    "zone_name": "Zone 10 — Velapur Sangam Post",
+    "latitude": 17.7510,
+    "longitude": 75.1430,
+    "crowd_density": "LOW",
+    "crowd_index": 30,
+    "congestion_choke_point": "Velapur ST Stand Crossing",
+    "safe_bypass_corridor": "Sangam Ring Road",
+    "landmarks": ["Velapur Palkhi Talao", "Ardhanari Nateshwar Medical Camp", "Velapur ST Stand"]
+  },
+  {
+    "zone_id": "ZONE_11",
+    "zone_name": "Zone 11 — Wakhari Ringan Maidan",
+    "latitude": 17.7020,
+    "longitude": 75.2780,
+    "crowd_density": "CRITICAL",
+    "crowd_index": 92,
+    "congestion_choke_point": "Wakhari Horse Ringan Enclosure (Extreme density)",
+    "safe_bypass_corridor": "Wakhari North Green Corridor",
+    "landmarks": ["Wakhari Ringan Ground", "Paduka Mandir Visava", "Wakhari Emergency Triage"]
+  },
+  {
+    "zone_id": "ZONE_12",
+    "zone_name": "Zone 12 — Pandharpur Mandir Parisar",
+    "latitude": 17.6775,
+    "longitude": 75.3240,
+    "crowd_density": "CRITICAL",
+    "crowd_index": 98,
+    "congestion_choke_point": "Chandrabhaga Ghat & Vitthal Mandir Entrance Lanes",
+    "safe_bypass_corridor": "Pandharpur VIP Emergency Ring Road to Civil Hospital",
+    "landmarks": ["Chandrabhaga Snan Ghat", "Vitthal Mandir Complex", "Pandharpur Civil Hospital Emergency Hub"]
+  }
+]

@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WariSeva AI — Medical Facility Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Outfit:wght@600;700;800;900&family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%200%20100%20100%22><text y=%22.9em%22 font-size=%2290%22>🏥</text></svg>">
+    <style>
+        :root {
+            --bg-app: #0A0E14;
+            --bg-card: #161B22;
+            --bg-card-elevated: #1C2128;
+            --border-color: #30363D;
+            --text-primary: #F0F6FC;
+            --text-secondary: #8B949E;
+            --accent-orange: #FF6B00;
+            --accent-cyan: #00E5FF;
+            --accent-green: #00E676;
+            --accent-red: #FF0055;
+            --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-display: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg-app);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            min-height: 100vh;
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .dashboard-container {
+            max-width: 600px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .dash-nav {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .dash-brand {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: #FFF;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .ai-pill {
+            background: linear-gradient(135deg, #00E5FF, #00B0FF);
+            color: #000;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 9999px;
+            font-weight: 900;
+        }
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .logout-btn:hover { color: #FFF; border-color: var(--accent-red); background: rgba(255, 0, 85, 0.15); }
+
+        /* Facility Profile Strip */
+        .facility-profile-card {
+            background: var(--bg-card);
+            border: 2px solid rgba(0, 229, 255, 0.35);
+            border-radius: 18px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .fpc-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .fpc-name {
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            font-weight: 900;
+            color: #FFF;
+        }
+        .fpc-meta {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .verif-tag {
+            background: rgba(0, 230, 118, 0.15);
+            color: #00E676;
+            border: 1px solid #00E676;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-size: 0.72rem;
+            font-weight: 800;
+        }
+
+        .status-select-wrap {
+            background: var(--bg-card-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 4px 10px;
+        }
+        .status-select {
+            background: transparent;
+            border: none;
+            color: #FFF;
+            font-family: var(--font-main);
+            font-size: 0.82rem;
+            font-weight: 800;
+            cursor: pointer;
+            outline: none;
+        }
+
+        /* Active Emergency Section */
+        .em-alert-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 12px 36px rgba(0,0,0,0.7);
+        }
+        .em-alert-card.critical-inbound {
+            border-color: var(--accent-red);
+            box-shadow: 0 0 35px rgba(255, 0, 85, 0.35);
+        }
+        .eac-header {
+            padding: 14px 18px;
+            background: var(--bg-card-elevated);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .eac-title {
+            font-family: var(--font-display);
+            font-size: 0.95rem;
+            font-weight: 900;
+            color: #FFF;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .eac-status-badge {
+            padding: 3px 10px;
+            border-radius: 9999px;
+            font-size: 0.72rem;
+            font-weight: 900;
+        }
+        .badge-inbound { background: rgba(255, 0, 85, 0.2); color: #FF5252; border: 1px solid #FF5252; }
+        .badge-accepted { background: rgba(0, 230, 118, 0.2); color: #00E676; border: 1px solid #00E676; }
+
+        .eac-body { padding: 20px 18px; display: flex; flex-direction: column; gap: 14px; }
+
+        .triage-grid {
+            background: var(--bg-card-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+        .tg-row { display: flex; justify-content: space-between; align-items: center; }
+        .tg-row span { color: var(--text-secondary); font-weight: 600; }
+        .tg-row strong { color: #FFF; font-weight: 800; text-align: right; }
+
+        .actions-row { display: flex; gap: 10px; }
+        .act-btn {
+            flex: 1;
+            padding: 15px;
+            border-radius: 12px;
+            font-family: var(--font-display);
+            font-size: 1.05rem;
+            font-weight: 900;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+            transition: all 0.15s;
+        }
+        .act-btn.accept { background: linear-gradient(135deg, #00E676, #00C853); color: #000; box-shadow: 0 4px 18px rgba(0,230,118,0.4); }
+        .act-btn.decline { background: rgba(255, 0, 85, 0.15); border: 1px solid var(--accent-red); color: #FF5252; }
+
+        /* Capacity Card */
+        .sec-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .sec-title {
+            font-family: var(--font-display);
+            font-size: 0.95rem;
+            font-weight: 900;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .capacity-control-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .cap-box {
+            background: var(--bg-card-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .cap-label { font-size: 0.75rem; color: var(--text-secondary); font-weight: 800; text-transform: uppercase; }
+        .counter-ctrl {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .cnt-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-color);
+            color: #FFF;
+            font-size: 1.2rem;
+            font-weight: 900;
+            cursor: pointer;
+        }
+        .cnt-num {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #FFF;
+        }
+        .save-cap-btn {
+            background: linear-gradient(135deg, #00E5FF, #00B0FF);
+            border: none;
+            border-radius: 10px;
+            padding: 12px;
+            color: #000;
+            font-family: var(--font-display);
+            font-size: 0.95rem;
+            font-weight: 900;
+            cursor: pointer;
+        }
+
+        .idle-box {
+            text-align: center;
+            padding: 36px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        
+        <nav class="dash-nav">
+            <div class="dash-brand">
+                <span>🛡️</span> WariSeva <span class="ai-pill">MEDICAL</span>
+            </div>
+            <button type="button" class="logout-btn" onclick="handleLogout()">🚪 Logout</button>
+        </nav>
+
+        <header class="facility-profile-card">
+            <div class="fpc-top">
+                <div>
+                    <h1 class="fpc-name" id="hosp-name-display">{{ hospital.name }}</h1>
+                    <div class="fpc-meta">
+                        <span style="font-family:var(--font-mono); color:var(--accent-cyan);">{{ hospital.hospital_id }}</span>
+                        <span>•</span>
+                        <span class="verif-tag">✓ VERIFIED MEDICAL FACILITY</span>
+                    </div>
+                </div>
+
+                <div class="status-select-wrap">
+                    <select id="hosp-status-select" class="status-select" onchange="updateHospitalStatus(this.value)">
+                        <option value="ACCEPTING" selected>🟢 ACCEPTING EMERGENCIES</option>
+                        <option value="LIMITED">🟡 LIMITED CAPACITY</option>
+                        <option value="NOT_ACCEPTING">🔴 NOT ACCEPTING</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <!-- 🚨 INCOMING EMERGENCY SECTION -->
+        <section id="hosp-emergency-section" class="em-alert-card critical-inbound">
+            <div class="eac-header">
+                <div class="eac-title">
+                    <span>🚨</span>
+                    <span>INCOMING PATIENT REFERRAL</span>
+                </div>
+                <span id="hosp-case-badge" class="eac-status-badge badge-inbound">ACTION REQUIRED</span>
+            </div>
+
+            <div class="eac-body" id="hosp-em-body">
+                <div class="triage-grid">
+                    <div class="tg-row">
+                        <span>Patient:</span>
+                        <strong id="h-patient-name" style="color:var(--accent-cyan); font-size:1.1rem;">Tukaram Shinde</strong>
+                    </div>
+                    <div class="tg-row">
+                        <span>WariSeva ID:</span>
+                        <strong id="h-wari-id" style="font-family:var(--font-mono);">WS-28471</strong>
+                    </div>
+                    <div class="tg-row">
+                        <span>Severity:</span>
+                        <strong id="h-severity" style="color:#FF5252;">CRITICAL MEDICAL</strong>
+                    </div>
+                    <div class="tg-row">
+                        <span>Origin Zone:</span>
+                        <strong id="h-zone">Zone 04 — Saswad Palkhi Maidan</strong>
+                    </div>
+                    <div class="tg-row">
+                        <span>Estimated Arrival:</span>
+                        <strong id="h-eta" style="color:#00E5FF;">~8 minutes (Ambulance En Route)</strong>
+                    </div>
+                    <div class="tg-row">
+                        <span>Medical Alert:</span>
+                        <strong id="h-alert" style="color:#FF5252;">⚠️ Asthma (Requires Inhaler & O2)</strong>
+                    </div>
+                </div>
+
+                <div id="hosp-action-buttons" class="actions-row">
+                    <button type="button" class="act-btn accept" onclick="acceptPatientCase()">
+                        <span>✅</span> ACCEPT PATIENT (RESERVE BED)
+                    </button>
+                    <button type="button" class="act-btn decline" onclick="declinePatientCase()">
+                        <span>✕</span> CANNOT ACCEPT
+                    </button>
+                </div>
+
+                <div id="hosp-accepted-banner" class="hidden" style="background:rgba(0,230,118,0.15); border:1px solid #00E676; border-radius:10px; padding:14px; text-align:center; color:#00E676; font-weight:800;">
+                    <div>✓ PATIENT ACCEPTED — Emergency Bed Reserved. Trauma team alerted for arrival.</div>
+                    <div style="display:flex; gap:10px; justify-content:center; margin-top:10px; flex-wrap:wrap;">
+                        <button type="button" class="act-btn accept" onclick="markPatientTransferred()" id="hosp-transfer-btn" style="background:#2563EB; color:#FFF; padding:8px 16px; font-size:0.85rem; border-radius:8px; border:none; cursor:pointer;">
+                            🏥 MARK PATIENT TRANSFERRED
+                        </button>
+                        <button type="button" class="act-btn accept" onclick="resolveEmergencyCase()" id="hosp-resolve-btn" style="background:#00E676; color:#000; padding:8px 16px; font-size:0.85rem; border-radius:8px; border:none; cursor:pointer;">
+                            ✅ RESOLVE EMERGENCY
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="hosp-idle-state" class="idle-box hidden">
+                <div style="font-size:2.5rem;">🏥</div>
+                <h3 style="font-family:var(--font-display); font-size:1.1rem; color:#FFF;">Ready for Inbound Referrals</h3>
+                <p style="font-size:0.85rem; color:var(--text-secondary); max-width:320px;">
+                    No pending emergency transfers assigned. Standing by on the WariSeva Emergency Medical Network.
+                </p>
+            </div>
+        </section>
+
+        <!-- 🛏️ CAPACITY MANAGEMENT -->
+        <section class="sec-card">
+            <div class="sec-title">
+                <span>🛏️</span> Live Bed & Ambulance Capacity
+            </div>
+
+            <div class="capacity-control-grid">
+                <div class="cap-box">
+                    <span class="cap-label">Emergency Beds Available</span>
+                    <div class="counter-ctrl">
+                        <button type="button" class="cnt-btn" onclick="adjustCount('beds', -1)">-</button>
+                        <span class="cnt-num" id="val-beds">12</span>
+                        <button type="button" class="cnt-btn" onclick="adjustCount('beds', 1)">+</button>
+                    </div>
+                </div>
+
+                <div class="cap-box">
+                    <span class="cap-label">ICU Beds Available</span>
+                    <div class="counter-ctrl">
+                        <button type="button" class="cnt-btn" onclick="adjustCount('icu', -1)">-</button>
+                        <span class="cnt-num" id="val-icu">2</span>
+                        <button type="button" class="cnt-btn" onclick="adjustCount('icu', 1)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="save-cap-btn" onclick="saveCapacity()">
+                💾 SAVE CAPACITY UPDATE / अद्यतन जतन करा
+            </button>
+        </section>
+
+    </div>
+
+    <script>
+        const HOSPITAL_ID = "{{ hospital.hospital_id }}";
+        let activeEmergencyId = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchHospitalCases();
+            setInterval(fetchHospitalCases, 3000);
+        });
+
+        function fetchHospitalCases() {
+            fetch('/api/hospital/cases')
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.active_emergency) {
+                    activeEmergencyId = data.active_emergency.emergency_id;
+                    renderIncomingPatient(data.active_emergency);
+                } else {
+                    renderIdleHospitalState();
+                }
+            })
+            .catch(() => {});
+        }
+
+        function renderIncomingPatient(em) {
+            document.getElementById('hosp-idle-state').classList.add('hidden');
+            document.getElementById('hosp-em-body').classList.remove('hidden');
+            document.getElementById('hosp-emergency-section').classList.add('critical-inbound');
+
+            document.getElementById('h-patient-name').textContent = em.reported_by || 'Tukaram Shinde';
+            document.getElementById('h-wari-id').textContent = em.wari_id || 'WS-28471';
+            document.getElementById('h-zone').textContent = em.wari_zone || 'Zone 04 — Saswad Palkhi Maidan';
+            
+            if (em.hospital_status === 'ACCEPTED') {
+                document.getElementById('hosp-action-buttons').classList.add('hidden');
+                document.getElementById('hosp-accepted-banner').classList.remove('hidden');
+                document.getElementById('hosp-case-badge').className = 'eac-status-badge badge-accepted';
+                document.getElementById('hosp-case-badge').textContent = 'BED RESERVED';
+            } else {
+                document.getElementById('hosp-action-buttons').classList.remove('hidden');
+                document.getElementById('hosp-accepted-banner').classList.add('hidden');
+                document.getElementById('hosp-case-badge').className = 'eac-status-badge badge-inbound';
+                document.getElementById('hosp-case-badge').textContent = 'INCOMING REFERRAL';
+            }
+        }
+
+        function renderIdleHospitalState() {
+            document.getElementById('hosp-em-body').classList.add('hidden');
+            document.getElementById('hosp-idle-state').classList.remove('hidden');
+            document.getElementById('hosp-emergency-section').classList.remove('critical-inbound');
+            document.getElementById('hosp-case-badge').className = 'eac-status-badge badge-accepted';
+            document.getElementById('hosp-case-badge').textContent = 'STANDBY';
+        }
+
+        function broadcastHospitalAcceptance() {
+            const emId = activeEmergencyId || 'EM-28471';
+            const record = {
+                id: emId,
+                emergency_id: emId,
+                wristbandId: 'WS-28471',
+                status: 'HOSPITAL_ACCEPTED',
+                volunteerId: 'V-001',
+                volunteerStatus: 'ARRIVED',
+                hospitalId: HOSPITAL_ID || 'H-001',
+                hospitalName: 'Saswad Rural Sub-District Hospital',
+                hospitalStatus: 'ACCEPTED',
+                currentStage: 11,
+                hospitalAcceptedAt: Date.now()
+            };
+            try {
+                localStorage.setItem('wariseva_shared_emergency_state', JSON.stringify(record));
+                if (typeof BroadcastChannel !== 'undefined') {
+                    const bc = new BroadcastChannel('wariseva_emergency_channel');
+                    bc.postMessage({ type: 'HOSPITAL_UPDATE', emergency: record });
+                    bc.close();
+                }
+            } catch (e) {}
+        }
+
+        function acceptPatientCase() {
+            if (!activeEmergencyId) return;
+            broadcastHospitalAcceptance();
+            fetch(`/api/hospital/cases/${activeEmergencyId}/accept`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ hospital_id: HOSPITAL_ID })
+            })
+            .then(res => res.json())
+            .then(() => fetchHospitalCases());
+        }
+
+        function markPatientTransferred() {
+            if (!activeEmergencyId) return;
+            const emId = activeEmergencyId || 'EM-28471';
+            const record = {
+                id: emId,
+                emergency_id: emId,
+                status: 'HOSPITAL_TRANSFER',
+                hospital_status: 'TRANSFERRED',
+                currentStage: 11
+            };
+            try {
+                localStorage.setItem('wariseva_shared_emergency_state', JSON.stringify(record));
+                if (typeof BroadcastChannel !== 'undefined') {
+                    const bc = new BroadcastChannel('wariseva_emergency_channel');
+                    bc.postMessage({ type: 'HOSPITAL_TRANSFER', emergency: record });
+                    bc.close();
+                }
+            } catch (e) {}
+            fetch(`/api/emergency/${emId}/transfer`, { method: 'POST' })
+            .then(res => res.json())
+            .then(() => {
+                alert('Patient transfer registered.');
+                fetchHospitalCases();
+            });
+        }
+
+        function resolveEmergencyCase() {
+            if (!activeEmergencyId) return;
+            const emId = activeEmergencyId || 'EM-28471';
+            const record = {
+                id: emId,
+                emergency_id: emId,
+                status: 'RESOLVED',
+                currentStage: 12
+            };
+            try {
+                localStorage.setItem('wariseva_shared_emergency_state', JSON.stringify(record));
+                if (typeof BroadcastChannel !== 'undefined') {
+                    const bc = new BroadcastChannel('wariseva_emergency_channel');
+                    bc.postMessage({ type: 'EMERGENCY_RESOLVED', emergency: record });
+                    bc.close();
+                }
+            } catch (e) {}
+            fetch(`/api/emergency/${emId}/resolve`, { method: 'POST' })
+            .then(res => res.json())
+            .then(() => {
+                alert('Emergency case marked as resolved.');
+                fetchHospitalCases();
+            });
+        }
+
+        function declinePatientCase() {
+            if (!activeEmergencyId) return;
+            const reason = prompt("Select reason for non-acceptance:\n1. No emergency beds\n2. ICU unavailable\n3. Facility at capacity\n4. Other", "No emergency beds");
+            if (!reason) return;
+
+            fetch(`/api/hospital/cases/${activeEmergencyId}/decline`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ hospital_id: HOSPITAL_ID, reason: reason })
+            })
+            .then(res => res.json())
+            .then(() => fetchHospitalCases());
+        }
+
+        function adjustCount(type, delta) {
+            const el = document.getElementById(`val-${type}`);
+            let val = parseInt(el.textContent) + delta;
+            if (val < 0) val = 0;
+            el.textContent = val;
+        }
+
+        function saveCapacity() {
+            const beds = parseInt(document.getElementById('val-beds').textContent);
+            const icu = parseInt(document.getElementById('val-icu').textContent);
+            fetch('/api/hospital/capacity', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    hospital_id: HOSPITAL_ID,
+                    emergency_beds: beds,
+                    icu_beds: icu
+                })
+            })
+            .then(res => res.json())
+            .then(() => alert('Hospital capacity updated successfully!'));
+        }
+
+        function updateHospitalStatus(val) {
+            fetch('/api/hospital/status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ hospital_id: HOSPITAL_ID, status: val })
+            });
+        }
+
+        function handleLogout() {
+            fetch('/api/hospital/logout', { method: 'POST' })
+            .then(() => window.location.href = '/hospital/login');
+        }
+    </script>
+</body>
+</html>

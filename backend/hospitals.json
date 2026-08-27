@@ -1,0 +1,74 @@
+[
+  {
+    "hospital_id": "HOSP-001",
+    "name": "Saswad Rural Sub-District Hospital",
+    "latitude": 18.3490,
+    "longitude": 74.0345,
+    "zone": "Zone 04 — Saswad Palkhi Maidan",
+    "address": "Saswad-Hadapsar Road, Purandar",
+    "phone": "02115-222333",
+    "emergency_available": true,
+    "capabilities": ["EMERGENCY_ICU", "TRAUMA", "GENERAL_SURGERY", "OXYGEN_SUPPORT"],
+    "note": "Prototype hospital information"
+  },
+  {
+    "hospital_id": "HOSP-002",
+    "name": "Purandar Critical Care & Trauma Hospital",
+    "latitude": 18.3430,
+    "longitude": 74.0280,
+    "zone": "Zone 04 — Saswad Palkhi Maidan",
+    "address": "Pune-Saswad Bypass Road, Saswad",
+    "phone": "02115-224455",
+    "emergency_available": true,
+    "capabilities": ["TRAUMA", "CARDIAC_TRIAGE", "BLOOD_BANK", "24x7_AMBULANCE"],
+    "note": "Prototype hospital information"
+  },
+  {
+    "hospital_id": "HOSP-003",
+    "name": "Sancheti & Sassoon General Emergency Hub",
+    "latitude": 18.5280,
+    "longitude": 73.8560,
+    "zone": "Zone 02 — Pune City / Wakdewadi",
+    "address": "Station Road / Shivajinagar, Pune",
+    "phone": "020-26128000",
+    "emergency_available": true,
+    "capabilities": ["LEVEL_1_TRAUMA", "NEURO", "CARDIAC_ICU", "BURN_UNIT"],
+    "note": "Prototype hospital information"
+  },
+  {
+    "hospital_id": "HOSP-004",
+    "name": "Jejuri Primary Rural Government Hospital",
+    "latitude": 18.2770,
+    "longitude": 74.1630,
+    "zone": "Zone 05 — Jejuri Mandir Tappa",
+    "address": "Mandir Foothills, Jejuri",
+    "phone": "02115-253100",
+    "emergency_available": true,
+    "capabilities": ["EMERGENCY_FIRST_CARE", "OXYGEN", "TRIAGE"],
+    "note": "Prototype hospital information"
+  },
+  {
+    "hospital_id": "HOSP-005",
+    "name": "Pandharpur Civil & District Hospital",
+    "latitude": 17.6780,
+    "longitude": 75.3260,
+    "zone": "Zone 12 — Pandharpur Mandir Parisar",
+    "address": "Station Road, Near Vitthal Mandir, Pandharpur",
+    "phone": "02186-223400",
+    "emergency_available": true,
+    "capabilities": ["MASS_CASUALTY_ICU", "TRAUMA", "DIALYSIS", "HEAT_STROKE_CENTER"],
+    "note": "Prototype hospital information"
+  },
+  {
+    "hospital_id": "HOSP-006",
+    "name": "Phaltan Sub-District Government Hospital",
+    "latitude": 17.9870,
+    "longitude": 74.4350,
+    "zone": "Zone 07 — Taradgaon / Phaltan",
+    "address": "Phaltan Ring Road, Phaltan",
+    "phone": "02166-222100",
+    "emergency_available": false,
+    "capabilities": ["GENERAL_OPD", "MATERNITY"],
+    "note": "Prototype hospital information"
+  }
+]

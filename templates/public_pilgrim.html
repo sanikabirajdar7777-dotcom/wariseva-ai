@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WariSeva AI — Emergency Identity Profile ({{ pilgrim.name }})</title>
+    <!-- High-Legibility Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Outfit:wght@600;700;800;900&family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%200%20100%20100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+    <style>
+                :root {
+            --bg-app: #FAF8F5;
+            --bg-card: #FFFFFF;
+            --bg-card-elevated: #F8F6F0;
+            --border-color: #E8E2D9;
+            --text-primary: #1C1D21;
+            --text-secondary: #5F6368;
+            --accent-orange: #E65100;
+            --accent-cyan: #7A0C18;
+            --accent-green: #1E8E3E;
+            --accent-red: #D32F2F;
+            --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-display: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-app);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 16px;
+            background-image: none;
+        }
+
+        .public-wrapper {
+            max-width: 480px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin: 0 auto;
+        }
+
+        /* Top Brand Strip */
+        .public-header {
+            text-align: center;
+            padding: 12px 0 6px 0;
+        }
+        .public-brand-title {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            letter-spacing: 0.5px;
+        }
+        .ai-pill {
+            background: linear-gradient(135deg, #FF6B00, #FF0055);
+            color: #FFF;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-weight: 800;
+        }
+        .public-kicker {
+            font-size: 0.78rem;
+            color: var(--accent-cyan);
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        /* Main Identity Card */
+        .identity-card {
+            background: var(--bg-card);
+            border: 2px solid rgba(0, 229, 255, 0.4);
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 229, 255, 0.12);
+            position: relative;
+            overflow: hidden;
+        }
+        .identity-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 5px;
+            background: linear-gradient(90deg, #FF6B00, #FFD600, #00E5FF);
+        }
+
+        .registered-badge-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+        .reg-badge {
+            background: rgba(0, 230, 118, 0.15);
+            border: 1px solid var(--accent-green);
+            color: var(--accent-green);
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .dindi-badge {
+            background: #FF6B00;
+            color: #FFFFFF;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+        }
+
+        .pilgrim-name-block {
+            margin-bottom: 16px;
+        }
+        .pilgrim-name {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #FFFFFF;
+            line-height: 1.2;
+            text-transform: uppercase;
+        }
+        .pilgrim-name-mr {
+            font-size: 1rem;
+            color: #A0C4FF;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .id-strip {
+            background: rgba(0, 229, 255, 0.08);
+            border: 1px dashed rgba(0, 229, 255, 0.35);
+            border-radius: 10px;
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+        .id-strip-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .id-strip-val {
+            font-family: var(--font-mono);
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: var(--accent-cyan);
+            letter-spacing: 1px;
+        }
+
+        /* Triage Grid */
+        .info-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .info-row {
+            background: var(--bg-card-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .info-row-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .info-icon {
+            font-size: 1.4rem;
+        }
+        .info-lbl-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .info-lbl-en {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .info-lbl-mr {
+            font-size: 0.75rem;
+            color: #6E7681;
+        }
+        .info-val {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-align: right;
+        }
+
+        .highlight-blood {
+            color: #FF5252;
+            font-size: 1.2rem;
+            font-weight: 900;
+        }
+        .alert-card-special {
+            background: rgba(255, 0, 85, 0.1);
+            border: 1px solid rgba(255, 0, 85, 0.4);
+        }
+        .alert-card-special .info-val {
+            color: #FF5252;
+        }
+
+        /* Unified Emergency Action Section */
+        .emergency-action-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 4px;
+        }
+        .mega-sos-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #FF0055, #D50000);
+            border: 2px solid #FF5252;
+            border-radius: 16px;
+            padding: 18px 20px;
+            color: #FFFFFF;
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 0 25px rgba(255, 0, 85, 0.5), 0 8px 24px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            transition: all 0.2s ease;
+            letter-spacing: 0.5px;
+            animation: pulseSos 2s infinite;
+        }
+        .sos-main-txt {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .sos-sub-txt {
+            font-size: 0.8rem;
+            color: #FFCDD2;
+            font-weight: 700;
+        }
+        @keyframes pulseSos {
+            0% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 0, 85, 0.4); }
+            50% { transform: scale(1.02); box-shadow: 0 0 35px rgba(255, 0, 85, 0.7); }
+            100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 0, 85, 0.4); }
+        }
+        .mega-sos-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Live Response Status Card */
+        .live-response-card {
+            background: linear-gradient(145deg, #0A192F, #0E2A47);
+            border: 2px solid #00E676;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 0 30px rgba(0, 230, 118, 0.25);
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .lrc-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 230, 118, 0.25);
+        }
+        .lrc-head-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #00E676;
+            font-weight: 900;
+            font-size: 1rem;
+        }
+        .lrc-badge {
+            background: rgba(0, 230, 118, 0.2);
+            color: #00E676;
+            border: 1px solid #00E676;
+            padding: 3px 8px;
+            border-radius: 9999px;
+            font-size: 0.72rem;
+            font-weight: 800;
+        }
+        .lrc-metric {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            font-size: 0.82rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .lrc-metric span {
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+        .lrc-metric strong {
+            color: #00E5FF;
+            font-weight: 800;
+            text-align: right;
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .modal-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 0, 85, 0.5);
+            border-radius: 18px;
+            padding: 24px;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 0, 85, 0.3);
+        }
+        .modal-icon {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+        .modal-title {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 900;
+            margin-bottom: 6px;
+        }
+        .modal-sub {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+        .patient-confirm-pill {
+            background: rgba(0, 229, 255, 0.1);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-bottom: 16px;
+            font-size: 0.82rem;
+            text-align: left;
+        }
+        .modal-btns-col {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .m-act-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            font-weight: 900;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .m-act-btn.confirm {
+            background: linear-gradient(135deg, #FF0055, #D50000);
+            border: none;
+            color: #FFF;
+            box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
+        }
+        .m-act-btn.cancel {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        /* Disclaimer Footer */
+        .public-footer {
+            text-align: center;
+            padding: 16px 8px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            line-height: 1.45;
+            border-top: 1px solid var(--border-color);
+        }
+        .demo-tag {
+            color: #FFD600;
+            font-weight: 800;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* Top Persistent Navigation Bar */
+        /* Global Application Header */
+        .public-global-header {
+            background: rgba(22, 27, 34, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 8px 14px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+            position: sticky;
+            top: 8px;
+            z-index: 100;
+            width: 100%;
+        }
+        .public-header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .pub-brand-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: #FFFFFF;
+        }
+        .pub-emblem {
+            font-size: 1.2rem;
+        }
+        .pub-brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+        .pub-brand-name {
+            font-family: var(--font-display);
+            font-size: 1.05rem;
+            font-weight: 900;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .pub-brand-sub {
+            font-size: 0.68rem;
+            color: var(--text-secondary);
+        }
+        .ai-badge {
+            font-size: 0.65rem;
+            font-weight: 800;
+            background: var(--accent-orange);
+            color: #FFF;
+            padding: 1px 5px;
+            border-radius: 4px;
+            letter-spacing: 0.05em;
+        }
+        .public-desktop-nav {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+        .pub-nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(48, 54, 61, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .pub-nav-link:hover {
+            background: rgba(0, 229, 255, 0.2);
+            border-color: var(--accent-cyan);
+            color: #FFFFFF;
+        }
+
+        /* Secondary Subnav (Home & Back) */
+        .wristband-subnav-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            width: 100%;
+            margin-top: 4px;
+        }
+        .subnav-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-family: var(--font-main);
+            font-size: 0.9rem;
+            font-weight: 800;
+            text-decoration: none;
+            cursor: pointer;
+            min-height: 44px;
+            min-width: 90px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(48, 54, 61, 0.8);
+            color: var(--text-primary);
+        }
+        .subnav-btn.home-btn {
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.35), rgba(255, 0, 85, 0.35));
+            border-color: rgba(255, 107, 0, 0.6);
+            color: #FFFFFF;
+        }
+        .subnav-btn.home-btn:hover {
+            background: linear-gradient(135deg, #FF6B00, #FF0055);
+            border-color: #FF5252;
+            box-shadow: 0 4px 16px rgba(255, 107, 0, 0.4);
+            transform: translateY(-1px);
+        }
+        .subnav-btn.back-btn:hover {
+            background: rgba(0, 229, 255, 0.2);
+            border-color: var(--accent-cyan);
+            color: #FFFFFF;
+            transform: translateY(-1px);
+        }
+        .nav-arrow { font-size: 1.1rem; font-weight: 900; }
+        .nav-icon { font-size: 1rem; }
+
+        .wristband-id-banner {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(0, 229, 255, 0.1);
+            border: 1px solid rgba(0, 229, 255, 0.35);
+            border-radius: 8px;
+            padding: 6px 14px;
+            margin-top: 8px;
+            font-size: 0.88rem;
+        }
+        .wib-label {
+            color: var(--text-secondary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.78rem;
+        }
+        .wib-val {
+            color: var(--accent-cyan);
+            font-family: var(--font-mono);
+            font-weight: 900;
+            font-size: 1.05rem;
+            letter-spacing: 1px;
+        }
+
+        .public-wb-search-strip {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .public-wb-input {
+            background: #161B22;
+            border: 1px solid rgba(0, 229, 255, 0.4);
+            color: #FFF;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            text-align: center;
+            text-transform: uppercase;
+            max-width: 220px;
+            width: 100%;
+        }
+        .public-wb-lookup-btn {
+            background: linear-gradient(135deg, #00E5FF, #00B0FF);
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            cursor: pointer;
+            min-height: 40px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="public-wrapper">
+        
+        <!-- ================= GLOBAL APPLICATION HEADER ================= -->
+        <header class="public-global-header">
+            <div class="public-header-inner">
+                <a href="/" class="pub-brand-link" title="WariSeva Home">
+                    <span class="pub-emblem">🛡️📍</span>
+                    <div class="pub-brand-text">
+                        <span class="pub-brand-name">WariSeva <span class="ai-badge">AI</span></span>
+                        <span class="pub-brand-sub">Safety Coordination</span>
+                    </div>
+                </a>
+
+                <nav class="public-desktop-nav" aria-label="Main Navigation">
+                    <a href="/" class="pub-nav-link" id="nav-item-home">
+                        <span>🏠 Home</span>
+                    </a>
+                    <a href="/#emergency" class="pub-nav-link">
+                        <span>🚨 Emergency</span>
+                    </a>
+                    <a href="/#safety-map" class="pub-nav-link">
+                        <span>🗺️ Safety Map</span>
+                    </a>
+                    <a href="/#services" class="pub-nav-link">
+                        <span>🛡️ Services</span>
+                    </a>
+                    <a href="/volunteer/login" class="pub-nav-link">
+                        <span>🙋 Volunteer</span>
+                    </a>
+                    <a href="/#responder" class="pub-nav-link">
+                        <span>🚑 Responder</span>
+                    </a>
+                    <a href="/#command" class="pub-nav-link">
+                        <span>🛰️ Command</span>
+                    </a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Secondary Quick Navigation Strip (Home & Back) -->
+        <div class="wristband-subnav-row app-page-navigation public-top-nav" id="app-page-navigation">
+            <a href="/" class="subnav-btn home-btn" id="public-nav-home" title="Return to WariSeva Home">
+                <span class="nav-arrow">←</span> <span>Home</span>
+            </a>
+            <button type="button" onclick="handlePublicBack()" class="subnav-btn back-btn" id="public-nav-back" title="Return to previous screen">
+                <span class="nav-arrow">←</span> <span>Back</span>
+            </button>
+        </div>
+
+        <!-- Wristband Header & ID Search -->
+        <header class="public-header">
+            <h1 class="public-brand-title">
+                <span>🪪</span> WariSeva AI Wristband
+            </h1>
+            <p class="public-kicker">WARISEVA WRISTBAND • Digital Identity & Emergency Assistance</p>
+            <div class="wristband-id-banner">
+                <span class="wib-label">Active Wristband ID:</span>
+                <span class="wib-val">{{ pilgrim.wari_id }}</span>
+            </div>
+
+            <!-- Manual Wristband Switcher / Search Strip -->
+            <div class="public-wb-search-strip">
+                <input type="text" id="public-switch-wari-id" placeholder="Enter Wristband ID (e.g. WS-30555)" value="{{ pilgrim.wari_id }}" class="public-wb-input">
+                <button type="button" id="public-lookup-btn" onclick="handleSwitchWristband()" class="public-wb-lookup-btn">
+                    🔍 Lookup ID
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Pilgrim Identity Card -->
+        <main class="identity-card">
+            <div class="registered-badge-row">
+                <span class="reg-badge">✓ REGISTERED PILGRIM</span>
+                <span class="dindi-badge">DINDI {{ pilgrim.dindi }}</span>
+            </div>
+
+            <div class="pilgrim-name-block">
+                <h2 class="pilgrim-name">{{ pilgrim.name }}</h2>
+                <div class="pilgrim-name-mr">तुकाराम शिंदे • वारकरी</div>
+            </div>
+
+            <div class="id-strip">
+                <span class="id-strip-label">WariSeva Safety ID</span>
+                <span class="id-strip-val">{{ pilgrim.wari_id }}</span>
+            </div>
+
+            <!-- Basic Identification Strip (Publicly Visible) -->
+            <div class="info-grid" style="margin-bottom: 12px;">
+                <div class="info-row">
+                    <div class="info-row-left">
+                        <span class="info-icon">📍</span>
+                        <div class="info-lbl-group">
+                            <span class="info-lbl-en">Wari Palkhi Zone</span>
+                            <span class="info-lbl-mr">पालखी तळ झोन</span>
+                        </div>
+                    </div>
+                    <div class="info-val" style="font-size:0.85rem;">{{ pilgrim.zone }}</div>
+                </div>
+            </div>
+
+            <!-- 🔐 PROTECTED MEDICAL PROFILE SECTION -->
+            <div id="public-protected-pin-box" class="pin-authorization-box" style="background: rgba(22, 27, 34, 0.85); border: 1.5px solid rgba(255, 107, 0, 0.4); border-radius: 14px; padding: 16px; margin-bottom: 16px;">
+                <div class="pin-head" style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                    <span class="pin-lock-icon" style="font-size: 1.5rem;">🔐</span>
+                    <div>
+                        <h4 style="margin: 0; font-size: 0.95rem; font-weight: 800; color: #FFB74D; letter-spacing: 0.5px;">PROTECTED MEDICAL PROFILE</h4>
+                        <p style="margin: 3px 0 0 0; font-size: 0.78rem; color: #8B949E; line-height: 1.3;">Medical information is protected.<br>Enter the Wristband PIN to view emergency medical details.</p>
+                    </div>
+                </div>
+
+                <div class="pin-entry-form" style="display: flex; flex-direction: column; gap: 8px;">
+                    <div class="pin-inputs-row" style="display: flex; gap: 8px;">
+                        <input type="password" id="public-pin-input" class="pin-digit-input" maxlength="8" placeholder="• • • •" autocomplete="off" style="flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(13, 17, 23, 0.9); color: #FFF; font-size: 1.1rem; text-align: center; letter-spacing: 4px;">
+                        <button type="button" id="public-verify-pin-btn" class="verify-pin-btn" style="padding: 12px 16px; border-radius: 8px; border: none; background: #FF6B00; color: #FFF; font-weight: 800; font-size: 0.88rem; cursor: pointer;">
+                            [ VERIFY & VIEW PROFILE ]
+                        </button>
+                    </div>
+                    <div class="pin-demo-hint" style="font-size: 0.75rem; color: #8B949E; text-align: left;">
+                        💡 <em>Demo Wristband PIN: <strong>2741</strong> (or <strong>WARI2026</strong>)</em>
+                    </div>
+                    <div id="public-pin-error" class="form-error-text hidden" role="alert" style="color: #FF5252; background: rgba(255, 82, 82, 0.12); padding: 10px; border-radius: 8px; font-weight: 700; margin-top: 4px; font-size: 0.82rem; text-align: center;">
+                        ❌ Incorrect PIN<br>Please try again.
+                    </div>
+                </div>
+            </div>
+
+            <!-- UNLOCKED MEDICAL PROFILE DETAILS (Initially Hidden) -->
+            <div id="public-unlocked-medical-box" class="hidden" style="margin-bottom: 16px;">
+                <div style="background: rgba(0, 230, 118, 0.1); border: 1px solid rgba(0, 230, 118, 0.4); border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; color: #00E676; font-weight: 800; font-size: 0.85rem;">
+                    <span>✓</span> <span>Verification Successful — Medical Profile Unlocked</span>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-row">
+                        <div class="info-row-left">
+                            <span class="info-icon">🩸</span>
+                            <div class="info-lbl-group">
+                                <span class="info-lbl-en">Blood Group</span>
+                                <span class="info-lbl-mr">रक्तगट</span>
+                            </div>
+                        </div>
+                        <div class="info-val highlight-blood" id="pub-med-blood">{{ pilgrim.blood_group }}</div>
+                    </div>
+
+                    <div class="info-row alert-card-special">
+                        <div class="info-row-left">
+                            <span class="info-icon">⚠️</span>
+                            <div class="info-lbl-group">
+                                <span class="info-lbl-en">Medical Alert</span>
+                                <span class="info-lbl-mr">वैद्यकीय सूचना</span>
+                            </div>
+                        </div>
+                        <div class="info-val" id="pub-med-alert">{{ pilgrim.medical_alert }}</div>
+                    </div>
+
+                    <div class="info-row">
+                        <div class="info-row-left">
+                            <span class="info-icon">📞</span>
+                            <div class="info-lbl-group">
+                                <span class="info-lbl-en">Emergency Contact</span>
+                                <span class="info-lbl-mr">आपत्कालीन संपर्क ({{ pilgrim.emergency_relation }})</span>
+                            </div>
+                        </div>
+                        <div class="info-val" id="pub-med-contact">{{ pilgrim.emergency_contact }}</div>
+                    </div>
+
+                    <div class="info-row">
+                        <div class="info-row-left">
+                            <span class="info-icon">📱</span>
+                            <div class="info-lbl-group">
+                                <span class="info-lbl-en">Mobile Number</span>
+                                <span class="info-lbl-mr">मोबाईल नंबर</span>
+                            </div>
+                        </div>
+                        <div class="info-val" id="pub-med-mobile">{{ pilgrim.mobile }}</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Unified Report & SOS Action Section -->
+        <div class="emergency-action-section">
+            <button type="button" id="public-report-warkari-btn" class="report-warkari-btn" style="width: 100%; background: linear-gradient(135deg, #FF6B00, #E65100); border: 2px solid #FF8C00; border-radius: 16px; padding: 16px 20px; color: #FFFFFF; font-family: var(--font-display); font-size: 1.15rem; font-weight: 900; cursor: pointer; box-shadow: 0 4px 18px rgba(255, 107, 0, 0.4); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; letter-spacing: 0.5px;">
+                <span style="display: flex; align-items: center; gap: 8px;">
+                    <span>🚨</span>
+                    <span>REPORT THIS WARKARI</span>
+                </span>
+                <span style="font-size: 0.78rem; color: #FFE0B2; font-weight: 700;">सुरक्षा अहवाल नोंदवा (Safety & Welfare Report)</span>
+            </button>
+
+            <button type="button" id="public-sos-btn" class="mega-sos-btn">
+                <span class="sos-main-txt">
+                    <span>🚨</span>
+                    <span>SOS — REQUEST EMERGENCY HELP</span>
+                </span>
+                <span class="sos-sub-txt">आपत्कालीन मदत मागवा</span>
+            </button>
+        </div>
+
+        <!-- WARKARI REPORT MODAL -->
+        <div id="warkari-report-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+            <div class="modal-card warkari-report-card" style="max-width: 460px; width: 92vw; text-align: left; background: var(--bg-card); border: 2px solid rgba(255, 107, 0, 0.4); border-radius: 16px; padding: 20px; box-shadow: 0 16px 40px rgba(0,0,0,0.6);">
+                <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 14px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 1.4rem;">🚨</span>
+                        <h3 style="font-size: 1.15rem; font-weight: 900; margin: 0; color: var(--text-primary);">REPORT THIS WARKARI</h3>
+                    </div>
+                    <button type="button" id="close-warkari-report-modal-btn" style="background: transparent; border: none; font-size: 1.3rem; color: var(--text-secondary); cursor: pointer;">✕</button>
+                </div>
+
+                <!-- Form View -->
+                <div id="warkari-report-form-view">
+                    <!-- Auto-Identified Pilgrim Card -->
+                    <div style="background: rgba(0, 229, 255, 0.06); border: 1px solid rgba(0, 229, 255, 0.3); border-radius: 10px; padding: 10px 14px; margin-bottom: 14px; font-size: 0.85rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                            <span style="color: var(--text-secondary);">Warkari:</span>
+                            <strong id="rep-modal-name" style="color: var(--text-primary);">{{ pilgrim.name }}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                            <span style="color: var(--text-secondary);">Wristband ID:</span>
+                            <strong id="rep-modal-wari-id" style="color: #00E5FF; font-family: var(--font-mono);">{{ pilgrim.wari_id }}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: var(--text-secondary);">Current Wari Zone:</span>
+                            <strong id="rep-modal-zone" style="color: #FFB74D; font-size: 0.78rem;">{{ pilgrim.zone }}</strong>
+                        </div>
+                    </div>
+
+                    <!-- Reason Selection -->
+                    <label style="display: block; font-size: 0.82rem; font-weight: 800; color: #FFB74D; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px;">
+                        SELECT REPORT REASON:
+                    </label>
+                    <div class="warkari-report-reasons-grid" id="warkari-report-reasons" style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px;">
+                        <button type="button" class="report-reason-btn active" data-reason="Medical Assistance" style="display: flex; align-items: center; gap: 8px; width: 100%; padding: 10px 12px; border-radius: 8px; border: 1.5px solid #FF5252; background: rgba(255, 82, 82, 0.15); color: #FFF; font-size: 0.88rem; font-weight: 700; cursor: pointer; text-align: left;">
+                            <span>🆘</span> <span>Medical Assistance</span>
+                        </button>
+                        <button type="button" class="report-reason-btn" data-reason="Lost / Separated" style="display: flex; align-items: center; gap: 8px; width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(48, 54, 61, 0.4); color: var(--text-primary); font-size: 0.88rem; font-weight: 700; cursor: pointer; text-align: left;">
+                            <span>📍</span> <span>Lost / Separated</span>
+                        </button>
+                        <button type="button" class="report-reason-btn" data-reason="Safety Concern" style="display: flex; align-items: center; gap: 8px; width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(48, 54, 61, 0.4); color: var(--text-primary); font-size: 0.88rem; font-weight: 700; cursor: pointer; text-align: left;">
+                            <span>⚠️</span> <span>Safety Concern</span>
+                        </button>
+                        <button type="button" class="report-reason-btn" data-reason="Separated From Dindi" style="display: flex; align-items: center; gap: 8px; width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(48, 54, 61, 0.4); color: var(--text-primary); font-size: 0.88rem; font-weight: 700; cursor: pointer; text-align: left;">
+                            <span>👥</span> <span>Separated From Dindi</span>
+                        </button>
+                        <button type="button" class="report-reason-btn" data-reason="Dehydration / Weakness" style="display: flex; align-items: center; gap: 8px; width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(48, 54, 61, 0.4); color: var(--text-primary); font-size: 0.88rem; font-weight: 700; cursor: pointer; text-align: left;">
+                            <span>💧</span> <span>Dehydration / Weakness</span>
+                        </button>
+                        <button type="button" class="report-reason-btn" data-reason="Requires Medical Attention" style="display: flex; align-items: center; gap: 8px; width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(48, 54, 61, 0.4); color: var(--text-primary); font-size: 0.88rem; font-weight: 700; cursor: pointer; text-align: left;">
+                            <span>🚑</span> <span>Requires Medical Attention</span>
+                        </button>
+                        <button type="button" class="report-reason-btn" data-reason="Other" style="display: flex; align-items: center; gap: 8px; width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(48, 54, 61, 0.4); color: var(--text-primary); font-size: 0.88rem; font-weight: 700; cursor: pointer; text-align: left;">
+                            <span>📝</span> <span>Other</span>
+                        </button>
+                    </div>
+
+                    <!-- Additional Notes (Optional) -->
+                    <div style="margin-bottom: 16px;">
+                        <label for="rep-additional-notes" style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">
+                            Additional Notes (Optional):
+                        </label>
+                        <textarea id="rep-additional-notes" placeholder="Enter additional information..." rows="2" style="width: 100%; padding: 10px; background: rgba(22, 27, 34, 0.8); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-family: var(--font-main); font-size: 0.85rem; resize: none;"></textarea>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <button type="button" id="submit-warkari-report-btn" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #FF6B00, #E65100); border: none; border-radius: 10px; color: #FFF; font-weight: 900; font-size: 1rem; cursor: pointer; letter-spacing: 0.5px; box-shadow: 0 4px 14px rgba(255, 107, 0, 0.4);">
+                            SUBMIT REPORT
+                        </button>
+                        <button type="button" id="cancel-warkari-report-btn" style="width: 100%; padding: 10px; background: transparent; border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-secondary); font-weight: 700; cursor: pointer;">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Success Confirmation View -->
+                <div id="warkari-report-success-view" class="hidden" style="text-align: center; padding: 12px 0;">
+                    <div style="font-size: 2.5rem; margin-bottom: 8px; color: #00E676;">✓</div>
+                    <h3 style="font-size: 1.25rem; font-weight: 900; color: #00E676; margin-bottom: 12px;">REPORT SUBMITTED</h3>
+                    
+                    <div style="background: rgba(0, 230, 118, 0.08); border: 1px solid rgba(0, 230, 118, 0.3); border-radius: 10px; padding: 12px; margin-bottom: 14px; text-align: left; font-size: 0.85rem;">
+                        <div style="margin-bottom: 6px;">Warkari: <strong id="succ-rep-name">{{ pilgrim.name }}</strong></div>
+                        <div style="margin-bottom: 6px;">Wristband: <strong id="succ-rep-id" style="color:#00E5FF; font-family:var(--font-mono);">{{ pilgrim.wari_id }}</strong></div>
+                        <div style="margin-bottom: 6px;">Reason: <strong id="succ-rep-reason" style="color:#FFB74D;">Medical Assistance</strong></div>
+                        <div style="color: #00E676; font-weight: 700; margin-top: 8px;">"The Wari Safety Network has been notified."</div>
+                    </div>
+
+                    <button type="button" id="close-rep-success-btn" style="width: 100%; padding: 12px; background: #1E8E3E; border: none; border-radius: 8px; color: #FFF; font-weight: 800; cursor: pointer;">
+                        [ CLOSE ]
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Live Response Status Card (Revealed after reporting) -->
+        <div id="live-response-box" class="live-response-card hidden">
+            <div class="lrc-head">
+                <div class="lrc-head-title">
+                    <span>🚨</span>
+                    <h3 id="lrc-title">EMERGENCY ACTIVE</h3>
+                </div>
+                <span class="lrc-badge" id="lrc-status-pill">DISPATCH COORDINATING</span>
+            </div>
+            <div class="lrc-metric">
+                <span>Incident Reference:</span>
+                <strong id="lrc-incident-id">EM-28471</strong>
+            </div>
+            <div class="lrc-metric">
+                <span>Patient Identified:</span>
+                <strong id="lrc-patient-name">{{ pilgrim.name }} ({{ pilgrim.wari_id }})</strong>
+            </div>
+            <div class="lrc-metric">
+                <span>Assigned First Responder:</span>
+                <strong id="lrc-volunteer-name">Ramesh Kulkarni (V-001 • First Aid)</strong>
+            </div>
+            <div class="lrc-metric">
+                <span>Estimated ETA:</span>
+                <strong id="lrc-eta">2 min (253m away)</strong>
+            </div>
+            <div class="lrc-metric">
+                <span>Nearest Medical Camp:</span>
+                <strong id="lrc-camp">Saswad Palkhi Maidan Medical Tent (238m)</strong>
+            </div>
+            <div class="lrc-metric">
+                <span>Recommended Hospital:</span>
+                <strong id="lrc-hospital">Purandar Critical Care & Trauma Hospital</strong>
+            </div>
+            <div class="lrc-metric">
+                <span>Emergency Source:</span>
+                <strong style="color: #FFD600;">QR Wristband (Public Reporter)</strong>
+            </div>
+        </div>
+
+        <!-- Disclaimer & Demo Notice -->
+        <footer class="public-footer">
+            <span class="demo-tag">🟣 DEMO / PROTOTYPE IDENTITY</span>
+            <p>DEMO DATA — NOT FOR REAL-WORLD USE. This emergency identity profile connects to the WariSeva AI response engine.</p>
+        </footer>
+
+    </div>
+
+    <!-- SOS Confirmation Modal -->
+    <div id="public-emergency-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <div class="modal-icon">🚨</div>
+            <h3 class="modal-title">Trigger Emergency SOS?</h3>
+            <p class="modal-sub">This will capture your exact coordinates and immediately alert the nearest verified Palkhi route volunteer and medical responder unit.</p>
+            
+            <div class="patient-confirm-pill">
+                <div>Patient: <strong>{{ pilgrim.name }}</strong> ({{ pilgrim.wari_id }})</div>
+                <div style="color: var(--text-secondary); font-size: 0.75rem; margin-top: 2px;">Dindi: 27 • Blood Group: {{ pilgrim.blood_group }}</div>
+            </div>
+
+            <div class="modal-btns-col">
+                <button type="button" id="btn-confirm-dispatch" class="m-act-btn confirm">
+                    🚨 CONFIRM & DISPATCH SOS
+                </button>
+                <button type="button" id="btn-cancel-modal" class="m-act-btn cancel">
+                    ✕ CANCEL
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const WARI_ID = "{{ pilgrim.wari_id }}";
+        const PATIENT_NAME = "{{ pilgrim.name }}";
+        let activeEmergencyId = null;
+        let pollTimer = null;
+
+        document.getElementById('public-sos-btn')?.addEventListener('click', () => {
+            document.getElementById('public-emergency-modal').classList.remove('hidden');
+        });
+
+        document.getElementById('btn-cancel-modal')?.addEventListener('click', () => {
+            document.getElementById('public-emergency-modal').classList.add('hidden');
+        });
+
+        document.getElementById('btn-confirm-dispatch')?.addEventListener('click', () => {
+            document.getElementById('public-emergency-modal').classList.add('hidden');
+            const sosBtn = document.getElementById('public-sos-btn');
+            if (sosBtn) {
+                sosBtn.disabled = true;
+                sosBtn.innerHTML = '<span class="sos-main-txt">⏳ DISPATCHING EMERGENCY RESPONSE...</span>';
+            }
+
+            // Capture GPS location of the reporting person
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        sendEmergencyReport('MEDICAL', pos.coords.latitude, pos.coords.longitude, 'GPS');
+                    },
+                    (err) => {
+                        // Fallback to simulated demo location (Zone 04 Saswad)
+                        sendEmergencyReport('MEDICAL', 18.3444, 74.0305, 'SIMULATED');
+                    },
+                    { timeout: 4000 }
+                );
+            } else {
+                sendEmergencyReport('MEDICAL', 18.3444, 74.0305, 'SIMULATED');
+            }
+        });
+
+        function sendEmergencyReport(emType, lat, lon, locSource) {
+            fetch('/api/public/report-emergency', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    source: 'QR_WARI_ID',
+                    wari_id: WARI_ID,
+                    patient_name: PATIENT_NAME,
+                    emergency_type: emType,
+                    reporter_type: 'QR_PUBLIC_USER',
+                    latitude: lat,
+                    longitude: lon,
+                    location_source: locSource
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    activeEmergencyId = data.emergency_id || 'EM-28471';
+                    const responseBox = document.getElementById('live-response-box');
+                    const sosBtn = document.getElementById('public-sos-btn');
+                    if (responseBox) responseBox.classList.remove('hidden');
+                    if (sosBtn) {
+                        sosBtn.innerHTML = '<span class="sos-main-txt">✅ EMERGENCY ACTIVE — RESPONDER COORDINATING</span>';
+                        sosBtn.style.background = '#00E676';
+                        sosBtn.style.borderColor = '#00E676';
+                    }
+                    if (data.emergency_id) {
+                        document.getElementById('lrc-incident-id').textContent = data.emergency_id;
+                    }
+                    if (data.assigned_volunteer) {
+                        document.getElementById('lrc-volunteer-name').textContent = `${data.assigned_volunteer.name} (${data.assigned_volunteer.wari_id})`;
+                        document.getElementById('lrc-eta').textContent = `${data.assigned_volunteer.eta_min || 2} min (${data.assigned_volunteer.distance_m || 253}m away)`;
+                    }
+                    if (data.recommended_hospital) {
+                        document.getElementById('lrc-hospital').textContent = data.recommended_hospital.name;
+                    }
+                    responseBox.scrollIntoView({ behavior: 'smooth' });
+
+                    // Auto-poll status every 3 seconds to stay in sync with Command Center & Volunteer actions
+                    if (pollTimer) clearInterval(pollTimer);
+                    pollTimer = setInterval(pollEmergencyStatus, 3000);
+                }
+            })
+            .catch(err => {
+                const responseBox = document.getElementById('live-response-box');
+                if (responseBox) responseBox.classList.remove('hidden');
+            });
+        }
+
+        function pollEmergencyStatus() {
+            if (!activeEmergencyId) return;
+            fetch(`/api/public/emergency-status/${activeEmergencyId}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    const statusPill = document.getElementById('lrc-status-pill');
+                    if (statusPill) {
+                        statusPill.textContent = data.status.replace('_', ' ');
+                        if (data.status === 'RESPONDING') {
+                            statusPill.style.background = 'rgba(255, 107, 0, 0.2)';
+                            statusPill.style.color = '#FFB74D';
+                            statusPill.style.borderColor = '#FF9100';
+                        } else if (data.status === 'WITH_PATIENT' || data.status === 'RESOLVED') {
+                            statusPill.style.background = 'rgba(0, 230, 118, 0.2)';
+                            statusPill.style.color = '#00E676';
+                            statusPill.style.borderColor = '#00E676';
+                        }
+                    }
+                    if (data.assigned_volunteer) {
+                        document.getElementById('lrc-volunteer-name').textContent = data.assigned_volunteer;
+                    }
+                    if (data.assigned_hospital) {
+                        document.getElementById('lrc-hospital').textContent = data.assigned_hospital;
+                    }
+                }
+            })
+            .catch(() => {});
+        }
+
+        function handleSwitchWristband() {
+            const val = (document.getElementById('public-switch-wari-id')?.value || '').trim().toUpperCase();
+            if (val) {
+                window.location.href = `/public/pilgrim/${val}`;
+            }
+        }
+
+        document.getElementById('public-switch-wari-id')?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handleSwitchWristband();
+            }
+        });
+
+        function handlePublicBack() {
+            if (document.referrer && document.referrer.includes(window.location.host) && !document.referrer.endsWith(window.location.pathname)) {
+                window.location.href = document.referrer;
+            } else if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = '/';
+            }
+        }
+
+        // ================= WARKARI REPORT MODAL LOGIC =================
+        let selectedReportReason = "Medical Assistance";
+
+        function openWarkariReportModal() {
+            const modal = document.getElementById('warkari-report-modal');
+            const formView = document.getElementById('warkari-report-form-view');
+            const succView = document.getElementById('warkari-report-success-view');
+            if (formView) formView.classList.remove('hidden');
+            if (succView) succView.classList.add('hidden');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeWarkariReportModal() {
+            const modal = document.getElementById('warkari-report-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        document.getElementById('public-report-warkari-btn')?.addEventListener('click', openWarkariReportModal);
+        document.getElementById('close-warkari-report-modal-btn')?.addEventListener('click', closeWarkariReportModal);
+        document.getElementById('cancel-warkari-report-btn')?.addEventListener('click', closeWarkariReportModal);
+        document.getElementById('close-rep-success-btn')?.addEventListener('click', closeWarkariReportModal);
+        document.getElementById('warkari-report-modal')?.addEventListener('click', (e) => {
+            if (e.target.id === 'warkari-report-modal') closeWarkariReportModal();
+        });
+
+        document.querySelectorAll('#warkari-report-reasons .report-reason-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('#warkari-report-reasons .report-reason-btn').forEach(b => {
+                    b.classList.remove('active');
+                    b.style.border = '1px solid var(--border-color)';
+                    b.style.background = 'rgba(48, 54, 61, 0.4)';
+                    b.style.color = 'var(--text-primary)';
+                });
+                btn.classList.add('active');
+                btn.style.border = '1.5px solid #FF5252';
+                btn.style.background = 'rgba(255, 82, 82, 0.15)';
+                btn.style.color = '#FFF';
+                selectedReportReason = btn.dataset.reason || btn.textContent.trim();
+            });
+        });
+
+        document.getElementById('submit-warkari-report-btn')?.addEventListener('click', () => {
+            const wariId = "{{ pilgrim.wari_id }}";
+            const name = "{{ pilgrim.name }}";
+            const notes = document.getElementById('rep-additional-notes')?.value || '';
+
+            fetch('/api/warkari/report', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    wari_id: wariId,
+                    name: name,
+                    reason: selectedReportReason,
+                    notes: notes,
+                    zone: "{{ pilgrim.zone }}"
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                const formView = document.getElementById('warkari-report-form-view');
+                const succView = document.getElementById('warkari-report-success-view');
+                const succReason = document.getElementById('succ-rep-reason');
+                if (succReason) succReason.textContent = selectedReportReason;
+                if (formView) formView.classList.add('hidden');
+                if (succView) succView.classList.remove('hidden');
+            })
+            .catch(() => {
+                const formView = document.getElementById('warkari-report-form-view');
+                const succView = document.getElementById('warkari-report-success-view');
+                if (formView) formView.classList.add('hidden');
+                if (succView) succView.classList.remove('hidden');
+            });
+        });
+
+        // ================= PUBLIC PIN VERIFICATION LOGIC =================
+        function handlePublicPinVerify() {
+            const pinVal = (document.getElementById('public-pin-input')?.value || '').trim();
+            const pinError = document.getElementById('public-pin-error');
+            const protectedBox = document.getElementById('public-protected-pin-box');
+            const unlockedBox = document.getElementById('public-unlocked-medical-box');
+
+            if (!pinVal) {
+                if (pinError) {
+                    pinError.classList.remove('hidden');
+                    pinError.innerHTML = '❌ PIN is required<br>Please enter Wristband PIN.';
+                }
+                return;
+            }
+
+            fetch('/api/qr/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    wari_id: "{{ pilgrim.wari_id }}",
+                    pin: pinVal,
+                    volunteer_id: 'PUBLIC_REPORTER',
+                    volunteer_name: 'Wari Safety Public Reporter'
+                })
+            })
+            .then(res => res.json().then(data => ({ status: res.status, body: data })))
+            .then(({ status, body }) => {
+                if (status === 200 && body.success && body.authorized) {
+                    if (pinError) pinError.classList.add('hidden');
+                    if (protectedBox) protectedBox.classList.add('hidden');
+                    if (unlockedBox) {
+                        unlockedBox.classList.remove('hidden');
+                        const p = body.pilgrim;
+                        if (p) {
+                            if (document.getElementById('pub-med-blood')) document.getElementById('pub-med-blood').textContent = p.blood_group || 'B+';
+                            if (document.getElementById('pub-med-alert')) document.getElementById('pub-med-alert').textContent = p.medical_alert || '⚠️ Asthma (Requires Inhaler Support)';
+                            if (document.getElementById('pub-med-contact')) document.getElementById('pub-med-contact').textContent = p.emergency_contact || '+91 98221 28542';
+                            if (document.getElementById('pub-med-mobile')) document.getElementById('pub-med-mobile').textContent = p.mobile || '+91 98220 99881';
+                        }
+                    }
+                } else {
+                    if (pinError) {
+                        pinError.classList.remove('hidden');
+                        pinError.innerHTML = '❌ Incorrect PIN<br>Please try again.';
+                    }
+                    if (unlockedBox) unlockedBox.classList.add('hidden');
+                }
+            })
+            .catch(() => {
+                if (pinError) {
+                    pinError.classList.remove('hidden');
+                    pinError.innerHTML = '❌ Incorrect PIN<br>Please try again.';
+                }
+            });
+        }
+
+        document.getElementById('public-verify-pin-btn')?.addEventListener('click', handlePublicPinVerify);
+        document.getElementById('public-pin-input')?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handlePublicPinVerify();
+            }
+        });
+    </script>
+</body>
+</html>

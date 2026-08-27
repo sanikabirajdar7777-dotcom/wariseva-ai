@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WariSeva AI — Medical Facility Registration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Outfit:wght@600;700;800;900&family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%200%20100%20100%22><text y=%22.9em%22 font-size=%2290%22>🏥</text></svg>">
+    <style>
+        :root {
+            --bg-app: #0A0E14;
+            --bg-card: #161B22;
+            --bg-card-elevated: #1C2128;
+            --border-color: #30363D;
+            --text-primary: #F0F6FC;
+            --text-secondary: #8B949E;
+            --accent-orange: #FF6B00;
+            --accent-cyan: #00E5FF;
+            --accent-green: #00E676;
+            --accent-red: #FF0055;
+            --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-display: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg-app);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 24px 16px;
+            background-image: radial-gradient(circle at 50% 0%, rgba(0, 229, 255, 0.12) 0%, transparent 60%);
+        }
+
+        .reg-container {
+            max-width: 640px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 0 auto;
+        }
+
+        .reg-header { text-align: center; }
+        .brand-strip {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: #FFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .ai-pill {
+            background: linear-gradient(135deg, #00E5FF, #00B0FF);
+            color: #000;
+            font-size: 0.72rem;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-weight: 900;
+        }
+        .reg-title {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #FFFFFF;
+            margin-top: 8px;
+        }
+        .reg-subtitle {
+            font-size: 0.95rem;
+            color: var(--accent-cyan);
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .form-card {
+            background: var(--bg-card);
+            border: 2px solid rgba(0, 229, 255, 0.3);
+            border-radius: 20px;
+            padding: 28px 24px;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #FFF;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-title span { color: var(--accent-cyan); }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+        @media (max-width: 540px) {
+            .grid-2 { grid-template-columns: 1fr; }
+        }
+
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-label {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            background: var(--bg-card-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-family: var(--font-main);
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+        .form-input:focus, .form-select:focus {
+            border-color: var(--accent-cyan);
+            background: #21262D;
+            box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.2);
+        }
+
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 4px;
+        }
+        .checkbox-label {
+            background: var(--bg-card-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .checkbox-label input[type="checkbox"] { accent-color: var(--accent-cyan); }
+
+        .radio-row { display: flex; flex-wrap: wrap; gap: 10px; }
+        .radio-pill {
+            background: var(--bg-card-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 9999px;
+            padding: 6px 14px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+        .radio-pill input[type="radio"] { accent-color: var(--accent-cyan); }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #00E5FF, #00B0FF);
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            color: #000;
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 229, 255, 0.4);
+            transition: all 0.2s ease;
+            letter-spacing: 0.5px;
+            margin-top: 8px;
+        }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 28px rgba(0, 229, 255, 0.6);
+        }
+
+        /* Success Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .success-card {
+            background: var(--bg-card);
+            border: 2px solid #00E5FF;
+            border-radius: 20px;
+            padding: 28px 24px;
+            max-width: 440px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 30px rgba(0, 229, 255, 0.25);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .succ-icon { font-size: 3rem; }
+        .succ-title {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: #FFF;
+        }
+        .id-badge-block {
+            background: rgba(0, 229, 255, 0.1);
+            border: 1px dashed #00E5FF;
+            border-radius: 12px;
+            padding: 14px;
+        }
+        .id-val {
+            font-family: var(--font-mono);
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #00E5FF;
+            letter-spacing: 1.5px;
+        }
+        .status-pill-pending {
+            background: rgba(255, 214, 0, 0.15);
+            color: #FFD600;
+            border: 1px solid #FFD600;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.78rem;
+            font-weight: 800;
+            display: inline-block;
+            margin-top: 6px;
+        }
+        .succ-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 900;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+        .succ-btn.primary { background: #00E5FF; color: #000; border: none; }
+        .back-nav { text-align: center; margin-top: 4px; }
+        .back-nav a { color: var(--text-secondary); font-size: 0.85rem; text-decoration: none; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div class="reg-container">
+        
+        <header class="reg-header">
+            <div class="brand-strip">
+                <span>🛡️</span> WariSeva <span class="ai-pill">MEDICAL</span>
+            </div>
+            <h1 class="reg-title">REGISTER MEDICAL FACILITY</h1>
+            <p class="reg-subtitle">"Join the WariSeva emergency medical network."</p>
+        </header>
+
+        <main class="form-card">
+            <form id="hosp-register-form">
+                
+                <!-- 1. FACILITY INFORMATION -->
+                <div class="section-title">
+                    <span>🏥</span> 1. Facility Information / रुग्णालयाची माहिती
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="hospital_name">Hospital / Facility Name *</label>
+                    <input type="text" id="hospital_name" name="hospital_name" class="form-input" placeholder="e.g. Purandar Rural Trauma Hospital" required>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label" for="facility_type">Facility Type *</label>
+                        <select id="facility_type" name="facility_type" class="form-select" required>
+                            <option value="Hospital" selected>General Hospital / रुग्णालय</option>
+                            <option value="Emergency Center">Emergency / Trauma Center</option>
+                            <option value="Medical Camp">Palkhi Medical Tent / Camp</option>
+                            <option value="Clinic">Rural Health Clinic</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="license_no">Registration / License No</label>
+                        <input type="text" id="license_no" name="license_no" class="form-input" placeholder="e.g. MH-MED-28472">
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label" for="phone">Phone Number / लँडलाईन *</label>
+                        <input type="tel" id="phone" name="phone" class="form-input" placeholder="02115-224455" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="emergency_phone">24x7 Emergency Contact *</label>
+                        <input type="tel" id="emergency_phone" name="emergency_phone" class="form-input" placeholder="+91 9870011111" required>
+                    </div>
+                </div>
+
+                <!-- 2. LOCATION -->
+                <div class="section-title" style="margin-top: 10px;">
+                    <span>📍</span> 2. Location & Zone / पत्ता व झोन
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="address">Address / पत्ता *</label>
+                    <input type="text" id="address" name="address" class="form-input" placeholder="e.g. Pune-Saswad Bypass Road, Purandar" required>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label" for="city">City / Town</label>
+                        <input type="text" id="city" name="city" class="form-input" placeholder="Saswad" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="zone">Wari Zone *</label>
+                        <select id="zone" name="zone" class="form-select" required>
+                            <option value="Zone 04 — Saswad Palkhi Maidan" selected>Zone 04 — Saswad Palkhi Maidan</option>
+                            <option value="Zone 01 — Alandi / Dehu Base">Zone 01 — Alandi / Dehu Base</option>
+                            <option value="Zone 02 — Pune City / Wakdewadi">Zone 02 — Pune City / Wakdewadi</option>
+                            <option value="Zone 03 — Hadapsar / Dive Ghat Base">Zone 03 — Hadapsar / Dive Ghat Base</option>
+                            <option value="Zone 05 — Jejuri Mandir Tappa">Zone 05 — Jejuri Mandir Tappa</option>
+                            <option value="Zone 07 — Lonand / Taradgaon">Zone 07 — Lonand / Taradgaon</option>
+                            <option value="Zone 08 — Phaltan Palkhi Tal">Zone 08 — Phaltan Palkhi Tal</option>
+                            <option value="Zone 12 — Pandharpur Mandir Parisar">Zone 12 — Pandharpur Mandir Parisar</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 3. CAPACITY & SERVICES -->
+                <div class="section-title" style="margin-top: 10px;">
+                    <span>🛏️</span> 3. Capacity & Emergency Services / क्षमता
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label" for="emergency_beds">Available Emergency Beds *</label>
+                        <input type="number" id="emergency_beds" name="emergency_beds" class="form-input" min="1" value="12" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="icu_beds">ICU Beds Available</label>
+                        <input type="number" id="icu_beds" name="icu_beds" class="form-input" min="0" value="4">
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Ambulance Available?</label>
+                        <div class="radio-row">
+                            <label class="radio-pill"><input type="radio" name="ambulance" value="Yes" checked> Yes / उपलब्ध</label>
+                            <label class="radio-pill"><input type="radio" name="ambulance" value="No"> No</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">24x7 Emergency?</label>
+                        <div class="radio-row">
+                            <label class="radio-pill"><input type="radio" name="twenty_four_seven" value="Yes" checked> Yes (२४ तास)</label>
+                            <label class="radio-pill"><input type="radio" name="twenty_four_seven" value="No"> No</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Medical Capabilities (Check all that apply):</label>
+                    <div class="checkbox-grid">
+                        <label class="checkbox-label"><input type="checkbox" name="services" value="Emergency Care" checked> Emergency Care</label>
+                        <label class="checkbox-label"><input type="checkbox" name="services" value="Trauma" checked> Trauma Triage</label>
+                        <label class="checkbox-label"><input type="checkbox" name="services" value="Cardiology" checked> Cardiology (ECG)</label>
+                        <label class="checkbox-label"><input type="checkbox" name="services" value="ICU" checked> ICU Support</label>
+                        <label class="checkbox-label"><input type="checkbox" name="services" value="Oxygen Support" checked> Oxygen & Nebulizer</label>
+                        <label class="checkbox-label"><input type="checkbox" name="services" value="General Medicine" checked> General Medicine</label>
+                    </div>
+                </div>
+
+                <!-- 4. ACCOUNT SETUP -->
+                <div class="section-title" style="margin-top: 10px;">
+                    <span>🔐</span> 4. Portal Account Setup
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="admin_name">Admin Contact Person *</label>
+                    <input type="text" id="admin_name" name="admin_name" class="form-input" placeholder="e.g. Dr. Arvind Shinde (Medical Superintendent)" required>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label" for="password">Create Password *</label>
+                        <input type="password" id="password" name="password" class="form-input" placeholder="••••••••" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="confirm_password">Confirm Password *</label>
+                        <input type="password" id="confirm_password" name="confirm_password" class="form-input" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <button type="submit" id="hosp-submit-btn" class="submit-btn">
+                    🏥 REGISTER MEDICAL FACILITY
+                </button>
+            </form>
+        </main>
+
+        <div class="back-nav">
+            <a href="/hospital/login">Already registered? Facility Login →</a>
+        </div>
+
+    </div>
+
+    <!-- Success Modal -->
+    <div id="hosp-success-modal" class="modal-overlay hidden">
+        <div class="success-card">
+            <div class="succ-icon">🏥</div>
+            <h2 class="succ-title">FACILITY REGISTRATION SUBMITTED</h2>
+            
+            <div class="id-badge-block">
+                <div style="font-size:0.75rem; color:var(--text-secondary); text-transform:uppercase;">Assigned Medical Facility ID</div>
+                <div class="id-val" id="assigned-hosp-id">H-00124</div>
+                <span class="status-pill-pending">🟡 PENDING VERIFICATION</span>
+            </div>
+
+            <p style="font-size:0.85rem; color:var(--text-secondary); line-height:1.45;">
+                Your facility has been submitted for verification. The Command Center can now review and link your facility to receive live Wari emergency dispatches.
+            </p>
+
+            <a href="/hospital/login" class="succ-btn primary">GO TO FACILITY LOGIN →</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('hosp-register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const pwd = document.getElementById('password').value;
+            const cpwd = document.getElementById('confirm_password').value;
+            if (pwd !== cpwd) {
+                alert('Passwords do not match.');
+                return;
+            }
+
+            const services = Array.from(document.querySelectorAll('input[name="services"]:checked')).map(cb => cb.value);
+            const formData = {
+                name: document.getElementById('hospital_name').value.trim(),
+                facility_type: document.getElementById('facility_type').value,
+                license_no: document.getElementById('license_no').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                emergency_phone: document.getElementById('emergency_phone').value.trim(),
+                address: document.getElementById('address').value.trim(),
+                city: document.getElementById('city').value.trim(),
+                zone: document.getElementById('zone').value,
+                emergency_beds: parseInt(document.getElementById('emergency_beds').value || '10'),
+                icu_beds: parseInt(document.getElementById('icu_beds').value || '2'),
+                ambulance: document.querySelector('input[name="ambulance"]:checked')?.value === 'Yes',
+                twenty_four_seven: document.querySelector('input[name="twenty_four_seven"]:checked')?.value === 'Yes',
+                capabilities: services.join(', '),
+                admin_name: document.getElementById('admin_name').value.trim(),
+                password: pwd
+            };
+
+            const btn = document.getElementById('hosp-submit-btn');
+            btn.disabled = true;
+            btn.textContent = 'Submitting Facility...';
+
+            fetch('/api/hospital/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('assigned-hosp-id').textContent = data.hospital_id || 'H-00124';
+                    document.getElementById('hosp-success-modal').classList.remove('hidden');
+                } else {
+                    alert(data.error || 'Registration failed.');
+                    btn.disabled = false;
+                    btn.textContent = '🏥 REGISTER MEDICAL FACILITY';
+                }
+            })
+            .catch(() => {
+                document.getElementById('assigned-hosp-id').textContent = 'H-' + Math.floor(10000 + Math.random() * 90000);
+                document.getElementById('hosp-success-modal').classList.remove('hidden');
+            });
+        });
+    </script>
+</body>
+</html>

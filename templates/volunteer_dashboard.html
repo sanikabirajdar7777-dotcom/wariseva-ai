@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WariSeva AI — Volunteer Response Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Outfit:wght@600;700;800;900&family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%200%20100%20100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+    <style>
+        :root {
+            --bg-app: #0A0E14;
+            --bg-card: #161B22;
+            --bg-card-elevated: #1C2128;
+            --border-color: #30363D;
+            --text-primary: #F0F6FC;
+            --text-secondary: #8B949E;
+            --accent-orange: #FF6B00;
+            --accent-cyan: #00E5FF;
+            --accent-green: #00E676;
+            --accent-red: #FF0055;
+            --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-display: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-app);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            min-height: 100vh;
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .dashboard-container {
+            max-width: 580px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Top Nav */
+        .dash-nav {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        .dash-brand {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: #FFF;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .ai-pill {
+            background: linear-gradient(135deg, #FF6B00, #FF0055);
+            color: #FFF;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 9999px;
+            font-weight: 800;
+        }
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .logout-btn:hover {
+            color: #FFF;
+            border-color: var(--accent-red);
+            background: rgba(255, 0, 85, 0.15);
+        }
+
+        /* Volunteer Profile Bar */
+        .vol-profile-card {
+            background: var(--bg-card);
+            border: 2px solid rgba(0, 229, 255, 0.35);
+            border-radius: 18px;
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+        }
+        .vol-profile-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .vol-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .vol-name {
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            font-weight: 900;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .vol-meta {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .vol-id-pill {
+            background: rgba(0, 229, 255, 0.15);
+            color: var(--accent-cyan);
+            border: 1px solid var(--accent-cyan);
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-weight: 800;
+            font-size: 0.72rem;
+        }
+
+        /* Status Dropdown */
+        .status-control-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-card-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 4px 10px;
+        }
+        .status-select {
+            background: transparent;
+            border: none;
+            color: #FFF;
+            font-family: var(--font-main);
+            font-size: 0.82rem;
+            font-weight: 800;
+            cursor: pointer;
+            outline: none;
+        }
+        .status-select option {
+            background: #161B22;
+            color: #FFF;
+        }
+
+        /* Active / Incoming Emergency Card */
+        .emergency-feed-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 12px 36px rgba(0,0,0,0.7);
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        .emergency-feed-card.active-alert {
+            border-color: var(--accent-red);
+            box-shadow: 0 0 30px rgba(255, 0, 85, 0.35);
+        }
+
+        .efc-header {
+            padding: 14px 18px;
+            background: var(--bg-card-elevated);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .efc-title {
+            font-family: var(--font-display);
+            font-size: 0.95rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #FFF;
+        }
+        .efc-status-pill {
+            padding: 3px 10px;
+            border-radius: 9999px;
+            font-size: 0.72rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .status-pending { background: rgba(255, 0, 85, 0.2); color: #FF5252; border: 1px solid #FF5252; }
+        .status-accepted { background: rgba(255, 107, 0, 0.2); color: #FF9100; border: 1px solid #FF9100; }
+        .status-enroute { background: rgba(0, 229, 255, 0.2); color: #00E5FF; border: 1px solid #00E5FF; }
+        .status-arrived { background: rgba(0, 230, 118, 0.2); color: #00E676; border: 1px solid #00E676; }
+        .status-assisted { background: rgba(105, 240, 174, 0.2); color: #69F0AE; border: 1px solid #69F0AE; }
+
+        .efc-body {
+            padding: 20px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        /* Patient Triage Card inside Emergency */
+        .patient-triage-box {
+            background: var(--bg-card-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .ptb-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+        .ptb-label {
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+        .ptb-val {
+            font-weight: 800;
+            color: #FFF;
+            text-align: right;
+        }
+        .ptb-patient-name {
+            font-size: 1.15rem;
+            color: var(--accent-cyan);
+            font-family: var(--font-display);
+            font-weight: 900;
+        }
+        .ptb-alert-highlight {
+            color: #FF5252;
+            font-weight: 800;
+            background: rgba(255, 0, 85, 0.1);
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 0, 85, 0.3);
+        }
+
+        /* Action Buttons Area */
+        .actions-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 4px;
+        }
+        .btn-action-col {
+            display: flex;
+            gap: 10px;
+        }
+        .btn-act {
+            flex: 1;
+            padding: 16px 14px;
+            border-radius: 12px;
+            font-family: var(--font-display);
+            font-size: 1.05rem;
+            font-weight: 900;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.15s ease;
+            border: none;
+            letter-spacing: 0.5px;
+        }
+        .btn-act.accept {
+            background: linear-gradient(135deg, #00E676, #00C853);
+            color: #000;
+            box-shadow: 0 4px 20px rgba(0, 230, 118, 0.4);
+        }
+        .btn-act.decline {
+            background: rgba(255, 0, 85, 0.15);
+            border: 1px solid var(--accent-red);
+            color: #FF5252;
+        }
+        .btn-act.start-route {
+            background: linear-gradient(135deg, #FF6B00, #FF3D00);
+            color: #FFF;
+            box-shadow: 0 4px 20px rgba(255, 107, 0, 0.4);
+        }
+        .btn-act.arrived {
+            background: linear-gradient(135deg, #00E5FF, #00B0FF);
+            color: #000;
+            box-shadow: 0 4px 20px rgba(0, 229, 255, 0.4);
+        }
+        .btn-act.assist {
+            background: linear-gradient(135deg, #FFD600, #FFAB00);
+            color: #000;
+            box-shadow: 0 4px 20px rgba(255, 214, 0, 0.4);
+        }
+        .btn-act.resolve {
+            background: linear-gradient(135deg, #00E676, #00C853);
+            color: #000;
+            box-shadow: 0 4px 20px rgba(0, 230, 118, 0.4);
+        }
+        .btn-act.secondary {
+            background: var(--bg-card-elevated);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            padding: 12px;
+        }
+        .btn-act:hover {
+            transform: translateY(-2px);
+        }
+        .btn-act:active {
+            transform: translateY(0);
+        }
+
+        /* Idle State */
+        .idle-state-box {
+            text-align: center;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+        .radar-icon {
+            font-size: 3rem;
+            animation: pulseRadar 2s infinite;
+        }
+        @keyframes pulseRadar {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+        .idle-title {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #FFF;
+        }
+        .idle-sub {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            max-width: 320px;
+            line-height: 1.4;
+        }
+
+        /* Location Card */
+        .sec-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .sec-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .sec-header span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--accent-cyan);
+        }
+        .loc-details {
+            background: var(--bg-card-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Summary Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .stat-card {
+            background: var(--bg-card-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .stat-num {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #FFF;
+        }
+        .stat-label {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* Modals */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .modal-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            padding: 24px;
+            max-width: 420px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+        }
+        .modal-title {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .modal-select {
+            width: 100%;
+            background: var(--bg-card-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px;
+            color: #FFF;
+            font-family: var(--font-main);
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        
+        <!-- Navigation -->
+        <nav class="dash-nav">
+            <div class="dash-brand">
+                <span>🛡️</span> WariSeva <span class="ai-pill">AI</span>
+            </div>
+            <button type="button" class="logout-btn" onclick="handleLogout()">🚪 Logout</button>
+        </nav>
+
+        <!-- Volunteer Profile Bar -->
+        <header class="vol-profile-card">
+            <div class="vol-profile-top">
+                <div class="vol-info">
+                    <h1 class="vol-name">
+                        <span id="vol-name-display">{{ volunteer.name }}</span>
+                    </h1>
+                    <div class="vol-meta">
+                        <span class="vol-id-pill" id="vol-id-display">{{ volunteer.wari_id }}</span>
+                        <span>•</span>
+                        <span id="vol-skills-display">{{ volunteer.certification or 'First Aid Certified' }}</span>
+                    </div>
+                </div>
+
+                <!-- Status Selector -->
+                <div class="status-control-wrapper">
+                    <select id="volunteer-status-select" class="status-select" onchange="updateVolunteerStatus(this.value)">
+                        <option value="AVAILABLE" {% if volunteer.status == 'AVAILABLE' %}selected{% endif %}>🟢 AVAILABLE</option>
+                        <option value="BUSY" {% if volunteer.status == 'BUSY' %}selected{% endif %}>🟡 BUSY</option>
+                        <option value="OFFLINE" {% if volunteer.status == 'OFFLINE' %}selected{% endif %}>⚪ OFFLINE</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <!-- 🚨 ACTIVE / INCOMING EMERGENCY SECTION -->
+        <section id="emergency-section" class="emergency-feed-card active-alert">
+            <div class="efc-header">
+                <div class="efc-title">
+                    <span>🚨</span>
+                    <span id="efc-header-text">ACTIVE EMERGENCY DISPATCH</span>
+                </div>
+                <span id="efc-status-badge" class="efc-status-pill status-pending">PENDING ACCEPTANCE</span>
+            </div>
+
+            <div class="efc-body" id="efc-body-content">
+                
+                <!-- Patient Triage Card -->
+                <div class="patient-triage-box">
+                    <div class="ptb-row">
+                        <span class="ptb-label">Patient Name:</span>
+                        <span class="ptb-val ptb-patient-name" id="em-patient-name">Tukaram Shinde</span>
+                    </div>
+                    <div class="ptb-row">
+                        <span class="ptb-label">WariSeva ID:</span>
+                        <span class="ptb-val" id="em-wari-id" style="font-family:var(--font-mono); color:var(--accent-cyan);">WS-28471</span>
+                    </div>
+                    <div class="ptb-row">
+                        <span class="ptb-label">Incident Reference:</span>
+                        <span class="ptb-val" id="em-incident-id">EM-28471</span>
+                    </div>
+                    <div class="ptb-row">
+                        <span class="ptb-label">Emergency Type:</span>
+                        <span class="ptb-val" id="em-type" style="color:#FF5252;">CRITICAL MEDICAL</span>
+                    </div>
+                    <div class="ptb-row">
+                        <span class="ptb-label">Location:</span>
+                        <span class="ptb-val" id="em-location">Zone 04 — Saswad Palkhi Maidan</span>
+                    </div>
+                    <div class="ptb-row">
+                        <span class="ptb-label">Proximity & ETA:</span>
+                        <span class="ptb-val" id="em-eta" style="color:#00E5FF;">350 m away • ~2 min</span>
+                    </div>
+                    <div class="ptb-row">
+                        <span class="ptb-label">Medical Alert:</span>
+                        <span class="ptb-val ptb-alert-highlight" id="em-alert">⚠️ Asthma (Inhaler Support)</span>
+                    </div>
+                    <div class="ptb-row">
+                        <span class="ptb-label">Incident Source:</span>
+                        <span class="ptb-val" id="em-source" style="color:#FFD600;">QR Wristband</span>
+                    </div>
+                </div>
+
+                <!-- Stage 1: Pending Acceptance Actions -->
+                <div id="stage-pending-actions" class="actions-grid">
+                    <div class="btn-action-col">
+                        <button type="button" class="btn-act accept" onclick="acceptCurrentCase()">
+                            <span>✅</span> ACCEPT CASE
+                        </button>
+                        <button type="button" class="btn-act decline" onclick="openDeclineModal()">
+                            <span>✕</span> DECLINE
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stage 2: Accepted Actions -->
+                <div id="stage-accepted-actions" class="actions-grid hidden">
+                    <button type="button" class="btn-act start-route" onclick="startResponse()">
+                        <span>🚀</span> START RESPONSE (EN ROUTE)
+                    </button>
+                </div>
+
+                <!-- Stage 3: En Route Actions -->
+                <div id="stage-enroute-actions" class="actions-grid hidden">
+                    <button type="button" class="btn-act arrived" onclick="markArrived()">
+                        <span>📍</span> ARRIVED AT PATIENT LOCATION
+                    </button>
+                    <div class="btn-action-col">
+                        <button type="button" class="btn-act secondary" onclick="viewPatientLocation()">
+                            <span>🗺️</span> View Coordinates
+                        </button>
+                        <button type="button" class="btn-act secondary" onclick="startNav()">
+                            <span>🧭</span> Open Navigation
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stage 4: Arrived Actions -->
+                <div id="stage-arrived-actions" class="actions-grid hidden">
+                    <button type="button" class="btn-act assist" onclick="openAssistModal()">
+                        <span>🩺</span> PATIENT ASSISTED (CONFIRM)
+                    </button>
+                </div>
+
+                <!-- Stage 5: Assisted Actions -->
+                <div id="stage-assisted-actions" class="actions-grid hidden">
+                    <button type="button" class="btn-act resolve" onclick="openResolveModal()">
+                        <span>📋</span> CLOSE & RESOLVE CASE
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Idle State Box (Shown when no active emergency exists) -->
+            <div id="idle-state-view" class="idle-state-box hidden">
+                <div class="radar-icon">📡</div>
+                <h3 class="idle-title">All Clear in Zone 04</h3>
+                <p class="idle-sub">Standing by for incoming emergency dispatches. You will be automatically notified if an incident occurs nearby.</p>
+            </div>
+        </section>
+
+        <!-- 📍 Current Location Section -->
+        <section class="sec-card">
+            <div class="sec-header">
+                <span><span>📍</span> Responder Location</span>
+                <button type="button" class="logout-btn" onclick="refreshLocation()">🔄 Refresh</button>
+            </div>
+            <div class="loc-details">
+                <div>
+                    <div style="font-weight:800; color:#FFF;" id="loc-name">Zone 04 — Saswad Palkhi Maidan Ground</div>
+                    <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:2px;" id="loc-coords">Lat: 18.3460, Lon: 74.0288 (Simulated / GPS)</div>
+                </div>
+                <span class="vol-id-pill">ACTIVE</span>
+            </div>
+        </section>
+
+        <!-- 📊 Response Summary Stats -->
+        <section class="sec-card">
+            <div class="sec-header">
+                <span><span>📊</span> My Response Summary</span>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-num" id="stat-cases-today">3</span>
+                    <span class="stat-label">Cases Handled Today</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-num" id="stat-avg-eta">3.8 min</span>
+                    <span class="stat-label">Average Response Time</span>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Decline Modal -->
+    <div id="decline-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <h3 class="modal-title"><span>⚠️</span> Decline Emergency Case</h3>
+            <p style="font-size:0.85rem; color:var(--text-secondary);">Please indicate why you are unable to attend this emergency. The case will be immediately re-routed to the next available responder.</p>
+            <select id="decline-reason" class="modal-select">
+                <option value="Too Far">Too Far / खूप लांब आहे</option>
+                <option value="Currently Busy">Currently Busy / सध्या व्यस्त आहे</option>
+                <option value="Not Qualified">Specialist Required / तज्ज्ञ आवश्यक</option>
+                <option value="Other">Other Reason / इतर कारण</option>
+            </select>
+            <div class="btn-action-col">
+                <button type="button" class="btn-act decline" onclick="submitDeclineCase()">Confirm Decline</button>
+                <button type="button" class="btn-act secondary" onclick="closeDeclineModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Patient Assisted Confirmation Modal -->
+    <div id="assist-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <h3 class="modal-title"><span>🩺</span> Confirm Patient Assistance</h3>
+            <p style="font-size:0.85rem; color:var(--text-secondary);">Confirm that you have reached the patient and administered initial first aid / emergency support.</p>
+            <div class="btn-action-col">
+                <button type="button" class="btn-act assist" onclick="submitAssistCase()">Confirm Assistance</button>
+                <button type="button" class="btn-act secondary" onclick="closeAssistModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Case Resolution Modal -->
+    <div id="resolve-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <h3 class="modal-title"><span>📋</span> Close & Resolve Incident</h3>
+            <p style="font-size:0.85rem; color:var(--text-secondary);">Select the final triage and resolution outcome for this emergency incident:</p>
+            <select id="resolve-outcome" class="modal-select">
+                <option value="Assistance Provided & Stabilized">Assistance Provided & Stabilized</option>
+                <option value="Transferred to Medical Camp">Transferred to Medical Camp (MC-001)</option>
+                <option value="Transferred to Hospital">Transferred to Hospital (Purandar Critical Care)</option>
+                <option value="Family Contacted & Reunited">Family Contacted & Reunited</option>
+                <option value="Other">Other Support Provided</option>
+            </select>
+            <div class="btn-action-col">
+                <button type="button" class="btn-act resolve" onclick="submitResolveCase()">Close Case (Resolved)</button>
+                <button type="button" class="btn-act secondary" onclick="closeResolveModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const VOLUNTEER_ID = "{{ volunteer.wari_id }}";
+        let currentEmergency = null;
+        let pollTimer = null;
+
+        // On Load, fetch cases and start live polling
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchCases();
+            pollTimer = setInterval(fetchCases, 3000);
+        });
+
+        function fetchCases() {
+            fetch('/api/volunteer/cases')
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    if (data.active_emergency) {
+                        currentEmergency = data.active_emergency;
+                        renderActiveEmergency(data.active_emergency);
+                    } else {
+                        currentEmergency = null;
+                        renderIdleState();
+                    }
+                }
+            })
+            .catch(() => {});
+        }
+
+        function renderActiveEmergency(em) {
+            document.getElementById('idle-state-view').classList.add('hidden');
+            document.getElementById('efc-body-content').classList.remove('hidden');
+            document.getElementById('emergency-section').classList.add('active-alert');
+
+            document.getElementById('em-patient-name').textContent = em.reported_by || 'Tukaram Shinde';
+            document.getElementById('em-wari-id').textContent = em.wari_id || 'WS-28471';
+            document.getElementById('em-incident-id').textContent = em.emergency_id;
+            document.getElementById('em-type').textContent = `${em.priority || 'CRITICAL'} ${em.emergency_type || 'MEDICAL'}`;
+            document.getElementById('em-location').textContent = em.wari_zone || 'Zone 04 — Saswad Palkhi Maidan';
+            document.getElementById('em-source').textContent = em.notes && em.notes.includes('QR') ? 'QR Wristband' : 'App SOS';
+
+            // Hide all action stages first
+            document.getElementById('stage-pending-actions').classList.add('hidden');
+            document.getElementById('stage-accepted-actions').classList.add('hidden');
+            document.getElementById('stage-enroute-actions').classList.add('hidden');
+            document.getElementById('stage-arrived-actions').classList.add('hidden');
+            document.getElementById('stage-assisted-actions').classList.add('hidden');
+
+            const badge = document.getElementById('efc-status-badge');
+
+            if (em.status === 'CREATED' || em.status === 'DISPATCHED') {
+                badge.className = 'efc-status-pill status-pending';
+                badge.textContent = 'INCOMING DISPATCH';
+                document.getElementById('stage-pending-actions').classList.remove('hidden');
+            } else if (em.status === 'ACCEPTED') {
+                badge.className = 'efc-status-pill status-accepted';
+                badge.textContent = 'ACCEPTED • READY';
+                document.getElementById('stage-accepted-actions').classList.remove('hidden');
+            } else if (em.status === 'EN_ROUTE' || em.status === 'RESPONDING') {
+                badge.className = 'efc-status-pill status-enroute';
+                badge.textContent = 'EN ROUTE TO PATIENT';
+                document.getElementById('stage-enroute-actions').classList.remove('hidden');
+            } else if (em.status === 'ARRIVED') {
+                badge.className = 'efc-status-pill status-arrived';
+                badge.textContent = 'ARRIVED AT LOCATION';
+                document.getElementById('stage-arrived-actions').classList.remove('hidden');
+            } else if (em.status === 'PATIENT_ASSISTED' || em.status === 'WITH_PATIENT') {
+                badge.className = 'efc-status-pill status-assisted';
+                badge.textContent = 'PATIENT ASSISTED';
+                document.getElementById('stage-assisted-actions').classList.remove('hidden');
+            }
+        }
+
+        function renderIdleState() {
+            document.getElementById('efc-body-content').classList.add('hidden');
+            document.getElementById('idle-state-view').classList.remove('hidden');
+            document.getElementById('emergency-section').classList.remove('active-alert');
+            document.getElementById('efc-header-text').textContent = 'VOLUNTEER RESPONDER STATUS';
+            const badge = document.getElementById('efc-status-badge');
+            badge.className = 'efc-status-pill status-arrived';
+            badge.textContent = 'STANDBY';
+        }
+
+        function broadcastEmergencyUpdate(stage, status, volStatus) {
+            const emId = currentEmergency ? currentEmergency.emergency_id : 'EM-28471';
+            const record = {
+                id: emId,
+                emergency_id: emId,
+                wristbandId: currentEmergency ? currentEmergency.wari_id : 'WS-28471',
+                status: status || 'VOLUNTEER_ACCEPTED',
+                volunteerId: VOLUNTEER_ID || 'V-001',
+                volunteerName: 'Ramesh Kulkarni',
+                volunteerStatus: volStatus || 'ACCEPTED',
+                hospitalId: null,
+                hospitalStatus: 'WAITING',
+                currentStage: stage || 7,
+                volunteerAcceptedAt: Date.now()
+            };
+            try {
+                localStorage.setItem('wariseva_shared_emergency_state', JSON.stringify(record));
+                if (typeof BroadcastChannel !== 'undefined') {
+                    const bc = new BroadcastChannel('wariseva_emergency_channel');
+                    bc.postMessage({ type: 'VOLUNTEER_UPDATE', emergency: record });
+                    bc.close();
+                }
+            } catch (e) {}
+        }
+
+        function acceptCurrentCase() {
+            if (!currentEmergency) return;
+            const emId = currentEmergency.emergency_id || 'EM-28471';
+            broadcastEmergencyUpdate(7, 'VOLUNTEER_ACCEPTED', 'ACCEPTED');
+            
+            fetch(`/api/volunteer/cases/${emId}/accept`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ volunteer_id: VOLUNTEER_ID })
+            })
+            .then(res => res.json())
+            .then(() => fetchCases());
+        }
+
+        function startResponse() {
+            if (!currentEmergency) return;
+            const emId = currentEmergency.emergency_id || 'EM-28471';
+            broadcastEmergencyUpdate(8, 'EN_ROUTE', 'RESPONDING');
+            fetch(`/api/volunteer/cases/${emId}/start`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ volunteer_id: VOLUNTEER_ID })
+            })
+            .then(res => res.json())
+            .then(() => fetchCases());
+        }
+
+        function markArrived() {
+            if (!currentEmergency) return;
+            const emId = currentEmergency.emergency_id || 'EM-28471';
+            broadcastEmergencyUpdate(9, 'VOLUNTEER_ARRIVED', 'ARRIVED');
+            fetch(`/api/volunteer/cases/${emId}/arrived`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ volunteer_id: VOLUNTEER_ID })
+            })
+            .then(res => res.json())
+            .then(() => fetchCases());
+        }
+
+        function openAssistModal() {
+            document.getElementById('assist-modal').classList.remove('hidden');
+        }
+        function closeAssistModal() {
+            document.getElementById('assist-modal').classList.add('hidden');
+        }
+        function submitAssistCase() {
+            closeAssistModal();
+            if (!currentEmergency) return;
+            fetch(`/api/volunteer/cases/${currentEmergency.emergency_id}/assisted`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ volunteer_id: VOLUNTEER_ID })
+            })
+            .then(res => res.json())
+            .then(() => fetchCases());
+        }
+
+        function openResolveModal() {
+            document.getElementById('resolve-modal').classList.remove('hidden');
+        }
+        function closeResolveModal() {
+            document.getElementById('resolve-modal').classList.add('hidden');
+        }
+        function submitResolveCase() {
+            const outcome = document.getElementById('resolve-outcome').value;
+            closeResolveModal();
+            if (!currentEmergency) return;
+            fetch(`/api/volunteer/cases/${currentEmergency.emergency_id}/resolve`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    volunteer_id: VOLUNTEER_ID,
+                    outcome: outcome
+                })
+            })
+            .then(res => res.json())
+            .then(() => {
+                fetchCases();
+                const count = document.getElementById('stat-cases-today');
+                if (count) count.textContent = parseInt(count.textContent || '3') + 1;
+            });
+        }
+
+        function openDeclineModal() {
+            document.getElementById('decline-modal').classList.remove('hidden');
+        }
+        function closeDeclineModal() {
+            document.getElementById('decline-modal').classList.add('hidden');
+        }
+        function submitDeclineCase() {
+            const reason = document.getElementById('decline-reason').value;
+            closeDeclineModal();
+            if (!currentEmergency) return;
+            fetch(`/api/volunteer/cases/${currentEmergency.emergency_id}/decline`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    volunteer_id: VOLUNTEER_ID,
+                    reason: reason
+                })
+            })
+            .then(res => res.json())
+            .then(() => fetchCases());
+        }
+
+        function updateVolunteerStatus(newStatus) {
+            fetch('/api/volunteer/status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: newStatus })
+            })
+            .then(res => res.json())
+            .then(() => fetchCases());
+        }
+
+        function refreshLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => sendLocationUpdate(pos.coords.latitude, pos.coords.longitude, 'GPS'),
+                    () => sendLocationUpdate(18.3460, 74.0288, 'SIMULATED')
+                );
+            } else {
+                sendLocationUpdate(18.3460, 74.0288, 'SIMULATED');
+            }
+        }
+
+        function sendLocationUpdate(lat, lon, src) {
+            fetch('/api/volunteer/location', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    volunteer_id: VOLUNTEER_ID,
+                    latitude: lat,
+                    longitude: lon,
+                    location_source: src
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('loc-coords').textContent = `Lat: ${lat.toFixed(4)}, Lon: ${lon.toFixed(4)} (${src})`;
+            });
+        }
+
+        function viewPatientLocation() {
+            if (currentEmergency) {
+                alert(`Patient Location:\nZone: ${currentEmergency.wari_zone}\nCoordinates: ${currentEmergency.latitude}, ${currentEmergency.longitude}`);
+            }
+        }
+
+        function startNav() {
+            if (currentEmergency) {
+                window.open(`https://www.google.com/maps/dir/?api=1&destination=${currentEmergency.latitude},${currentEmergency.longitude}`, '_blank');
+            }
+        }
+
+        function handleLogout() {
+            fetch('/api/volunteer/logout', { method: 'POST' })
+            .then(() => window.location.href = '/volunteer/login');
+        }
+    </script>
+</body>
+</html>

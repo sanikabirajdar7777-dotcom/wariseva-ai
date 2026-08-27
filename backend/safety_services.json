@@ -1,0 +1,145 @@
+[
+  {
+    "service_id": "SRV-WTR-01",
+    "name": "Saswad Palkhi Maidan Clean Drinking Water Point",
+    "type": "WATER",
+    "latitude": 18.3448,
+    "longitude": 74.0308,
+    "zone": "Zone 04 — Saswad Palkhi Maidan",
+    "address": "North Gate, Palkhi Maidan, Saswad",
+    "status": "AVAILABLE",
+    "note": "Free filtered drinking water & ORS packets"
+  },
+  {
+    "service_id": "SRV-WTR-02",
+    "name": "Sant Sopankaka Mandir Jal Seva Stree",
+    "type": "WATER",
+    "latitude": 18.3435,
+    "longitude": 74.0295,
+    "zone": "Zone 04 — Saswad Palkhi Maidan",
+    "address": "Near Sopankaka Mandir Entrance, Saswad",
+    "status": "AVAILABLE",
+    "note": "24h Chilled water tank"
+  },
+  {
+    "service_id": "SRV-WTR-03",
+    "name": "Dive Ghat Summit Hydration Post",
+    "type": "WATER",
+    "latitude": 18.4975,
+    "longitude": 73.9425,
+    "zone": "Zone 03 — Hadapsar / Dive Ghat Base",
+    "address": "Ghat Top Vista Point",
+    "status": "AVAILABLE",
+    "note": "Continuous tanker supply with electrolytes"
+  },
+  {
+    "service_id": "SRV-TLT-01",
+    "name": "Saswad Municipal Mobile Bio-Toilets (Block A)",
+    "type": "TOILET",
+    "latitude": 18.3452,
+    "longitude": 74.0312,
+    "zone": "Zone 04 — Saswad Palkhi Maidan",
+    "address": "East Boundary, Palkhi Ground, Saswad",
+    "status": "AVAILABLE",
+    "note": "Cleaned hourly, separate units for men/women"
+  },
+  {
+    "service_id": "SRV-TLT-02",
+    "name": "Purandar ST Stand Public Washrooms",
+    "type": "TOILET",
+    "latitude": 18.3468,
+    "longitude": 74.0332,
+    "zone": "Zone 04 — Saswad Palkhi Maidan",
+    "address": "ST Stand Complex, Saswad",
+    "status": "AVAILABLE",
+    "note": "Wheelchair accessible"
+  },
+  {
+    "service_id": "SRV-FOD-01",
+    "name": "Shri Vitthal Seva Mahaprasad Annachhatra",
+    "type": "FOOD",
+    "latitude": 18.3440,
+    "longitude": 74.0300,
+    "zone": "Zone 04 — Saswad Palkhi Maidan",
+    "address": "Central Mandap, Saswad Ground",
+    "status": "AVAILABLE",
+    "note": "Warm Khichdi, Tea, & Biscuits (Continuous)"
+  },
+  {
+    "service_id": "SRV-FOD-02",
+    "name": "Warkari Mitra Annadan Kendra",
+    "type": "FOOD",
+    "latitude": 18.3480,
+    "longitude": 74.0350,
+    "zone": "Zone 04 — Saswad Palkhi Maidan",
+    "address": "Hadapsar Road Chowk, Saswad",
+    "status": "AVAILABLE",
+    "note": "Bhakri & Pithla Seva"
+  },
+  {
+    "service_id": "SRV-RST-01",
+    "name": "Saswad ZP Primary School Rest & Night Shelter",
+    "type": "REST_AREA",
+    "latitude": 18.3455,
+    "longitude": 74.0290,
+    "zone": "Zone 04 — Saswad Palkhi Maidan",
+    "address": "School Road, Saswad",
+    "status": "AVAILABLE",
+    "note": "Matting, ceiling fans, mobile charging points"
+  },
+  {
+    "service_id": "SRV-RST-02",
+    "name": "Senior Citizens Elderly Care Vishranti Mandap",
+    "type": "REST_AREA",
+    "latitude": 18.3438,
+    "longitude": 74.0315,
+    "zone": "Zone 04 — Saswad Palkhi Maidan",
+    "address": "Opposite Sopankaka Temple, Saswad",
+    "status": "AVAILABLE",
+    "note": "Beds, foot massage & resting tents for seniors"
+  },
+  {
+    "service_id": "SRV-MED-01",
+    "name": "Saswad Palkhi Maidan Medical Tent (MC-001)",
+    "type": "MEDICAL_CAMP",
+    "latitude": 18.3460,
+    "longitude": 74.0320,
+    "zone": "Zone 04 — Saswad Palkhi Maidan",
+    "address": "Medical Sector A, Saswad",
+    "status": "AVAILABLE",
+    "note": "Free doctors, blood pressure, glucose & first aid"
+  },
+  {
+    "service_id": "SRV-HSP-01",
+    "name": "Saswad Rural Sub-District Hospital",
+    "type": "HOSPITAL",
+    "latitude": 18.3490,
+    "longitude": 74.0345,
+    "zone": "Zone 04 — Saswad Palkhi Maidan",
+    "address": "Saswad-Hadapsar Road, Purandar",
+    "status": "AVAILABLE",
+    "note": "24x7 Emergency Trauma & ICU support"
+  },
+  {
+    "service_id": "SRV-WTR-04",
+    "name": "Jejuri Foothills Hydration Seva",
+    "type": "WATER",
+    "latitude": 18.2755,
+    "longitude": 74.1615,
+    "zone": "Zone 05 — Jejuri Mandir Tappa",
+    "address": "Khandoba Foothills, Jejuri",
+    "status": "AVAILABLE",
+    "note": "Cold drinking water & lemon juice"
+  },
+  {
+    "service_id": "SRV-WTR-05",
+    "name": "Pandharpur Chandrabhaga Ghat Water Point",
+    "type": "WATER",
+    "latitude": 17.6770,
+    "longitude": 75.3235,
+    "zone": "Zone 12 — Pandharpur Mandir Parisar",
+    "address": "Chandrabhaga Snan Ghat, Pandharpur",
+    "status": "AVAILABLE",
+    "note": "RO Filtered Water"
+  }
+]

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WariSeva AI — Volunteer Response Portal Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Outfit:wght@600;700;800;900&family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%200%20100%20100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+    <style>
+                :root {
+            --bg-app: #FAF8F5;
+            --bg-card: #FFFFFF;
+            --bg-card-elevated: #F8F6F0;
+            --border-color: #E8E2D9;
+            --text-primary: #1C1D21;
+            --text-secondary: #5F6368;
+            --accent-orange: #E65100;
+            --accent-cyan: #7A0C18;
+            --accent-green: #1E8E3E;
+            --accent-red: #D32F2F;
+            --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-display: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-app);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 16px;
+            background-image: none;
+        }
+
+        .login-container {
+            max-width: 440px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Header */
+        .portal-header {
+            text-align: center;
+        }
+        .portal-brand {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            letter-spacing: 0.5px;
+        }
+        .ai-pill {
+            background: linear-gradient(135deg, #FF6B00, #FF0055);
+            color: #FFF;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-weight: 800;
+        }
+        .portal-kicker {
+            font-size: 0.85rem;
+            color: var(--accent-orange);
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 6px;
+        }
+        .portal-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        /* Login Card */
+        .login-card {
+            background: var(--bg-card);
+            border: 2px solid rgba(255, 107, 0, 0.35);
+            border-radius: 20px;
+            padding: 26px 24px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(255, 107, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 5px;
+            background: linear-gradient(90deg, #FF6B00, #FFD600, #00E676);
+        }
+
+        .login-title {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        .form-input {
+            width: 100%;
+            background: var(--bg-card-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 14px 16px;
+            font-family: var(--font-main);
+            font-size: 1rem;
+            color: var(--text-primary);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+        .form-input.mono {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .form-input:focus {
+            border-color: var(--accent-orange);
+            box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.2);
+            background: #21262D;
+        }
+
+        .error-banner {
+            background: rgba(255, 0, 85, 0.15);
+            border: 1px solid var(--accent-red);
+            color: #FF80AB;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #FF6B00, #FF3D00);
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            color: #FFFFFF;
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 4px 18px rgba(255, 107, 0, 0.4);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            letter-spacing: 0.5px;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(255, 107, 0, 0.6);
+        }
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Demo Helper Card */
+        .demo-helpers-card {
+            background: rgba(22, 27, 34, 0.85);
+            border: 1px dashed rgba(0, 229, 255, 0.35);
+            border-radius: 16px;
+            padding: 18px;
+        }
+        .demo-helpers-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        .demo-helpers-title {
+            font-size: 0.78rem;
+            font-weight: 900;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .demo-pill {
+            background: rgba(255, 214, 0, 0.15);
+            color: #FFD600;
+            border: 1px solid #FFD600;
+            padding: 2px 6px;
+            border-radius: 9999px;
+            font-size: 0.68rem;
+            font-weight: 800;
+        }
+
+        .demo-vols-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .demo-vol-row {
+            background: var(--bg-card-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .demo-vol-row:hover {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 229, 255, 0.08);
+            transform: translateX(4px);
+        }
+        .demo-vol-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .demo-vol-name {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: #FFF;
+        }
+        .demo-vol-desc {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+        }
+        .demo-vol-btn {
+            background: rgba(0, 229, 255, 0.15);
+            color: var(--accent-cyan);
+            border: 1px solid var(--accent-cyan);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            font-family: var(--font-mono);
+        }
+
+        .back-nav {
+            text-align: center;
+            margin-top: 4px;
+        }
+        .back-nav a {
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+        .back-nav a:hover {
+            color: #FFF;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        
+        <!-- Header -->
+        <header class="portal-header">
+            <h1 class="portal-brand">
+                <span>🛡️</span> WariSeva <span class="ai-pill">AI</span>
+            </h1>
+            <div class="portal-kicker">VOLUNTEER RESPONSE PORTAL</div>
+            <p class="portal-subtitle">"Respond faster. Save lives."</p>
+        </header>
+
+        <!-- Login Card -->
+        <main class="login-card">
+            <h2 class="login-title">
+                <span>🔐</span> Responder Authentication
+            </h2>
+
+            <div id="login-error" class="error-banner"></div>
+
+            <form id="volunteer-login-form">
+                <div class="form-group">
+                    <label class="form-label" for="volunteer_id">Volunteer ID / स्वयंसेवक आयडी</label>
+                    <input type="text" id="volunteer_id" name="volunteer_id" class="form-input mono" placeholder="e.g. V-001" required autofocus value="V-001">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">Password / पासवर्ड</label>
+                    <input type="password" id="password" name="password" class="form-input mono" placeholder="••••••••" required value="VOL001">
+                </div>
+
+                <button type="submit" id="submit-login-btn" class="login-btn">
+                    <span>🚀</span>
+                    <span>LOGIN TO RESPONDER PORTAL</span>
+                </button>
+            </form>
+        </main>
+
+        <!-- Demo Quick Access Panel -->
+        <section class="demo-helpers-card">
+            <div class="demo-helpers-header">
+                <span class="demo-helpers-title">
+                    <span>⚡</span> 1-Click Demo Accounts
+                </span>
+                <span class="demo-pill">HACKATHON DEMO</span>
+            </div>
+
+            <div class="demo-vols-grid">
+                <div class="demo-vol-row" onclick="fillDemoCredentials('V-001', 'VOL001')">
+                    <div class="demo-vol-left">
+                        <span class="demo-vol-name">Ramesh Kulkarni (V-001)</span>
+                        <span class="demo-vol-desc">Medical Volunteer • Zone 04 • Available</span>
+                    </div>
+                    <span class="demo-vol-btn">VOL001</span>
+                </div>
+
+                <div class="demo-vol-row" onclick="fillDemoCredentials('V-002', 'VOL002')">
+                    <div class="demo-vol-left">
+                        <span class="demo-vol-name">Amit Patil (V-002)</span>
+                        <span class="demo-vol-desc">General Volunteer • Zone 04 • Available</span>
+                    </div>
+                    <span class="demo-vol-btn">VOL002</span>
+                </div>
+
+                <div class="demo-vol-row" onclick="fillDemoCredentials('V-003', 'VOL003')">
+                    <div class="demo-vol-left">
+                        <span class="demo-vol-name">Suresh Jadhav (V-003)</span>
+                        <span class="demo-vol-desc">Medical Volunteer • Zone 05 • Busy</span>
+                    </div>
+                    <span class="demo-vol-btn">VOL003</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Back to Main Navigation -->
+        <div class="back-nav">
+            <a href="/">← Return to WariSeva Main App</a>
+        </div>
+
+    </div>
+
+    <script>
+        function fillDemoCredentials(vId, pwd) {
+            document.getElementById('volunteer_id').value = vId;
+            document.getElementById('password').value = pwd;
+            document.getElementById('login-error').style.display = 'none';
+        }
+
+        document.getElementById('volunteer-login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const vId = document.getElementById('volunteer_id').value.trim().toUpperCase();
+            const pwd = document.getElementById('password').value.trim();
+            const errorDiv = document.getElementById('login-error');
+            const submitBtn = document.getElementById('submit-login-btn');
+
+            errorDiv.style.display = 'none';
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span>⏳</span> Authenticating...';
+
+            fetch('/api/volunteer/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    volunteer_id: vId,
+                    password: pwd
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '/volunteer/dashboard';
+                } else {
+                    errorDiv.textContent = data.error || 'Invalid credentials.';
+                    errorDiv.style.display = 'block';
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<span>🚀</span> LOGIN TO RESPONDER PORTAL';
+                }
+            })
+            .catch(err => {
+                errorDiv.textContent = 'Server connection error. Please retry.';
+                errorDiv.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>🚀</span> LOGIN TO RESPONDER PORTAL';
+            });
+        });
+    </script>
+</body>
+</html>

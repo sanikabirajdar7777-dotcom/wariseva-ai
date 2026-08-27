@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WariSeva AI — QR Calibration & Diagnostics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-page: #0B0F17;
+            --bg-card: #151C28;
+            --border-color: #2D3748;
+            --text-primary: #F7FAFC;
+            --text-muted: #A0AEC0;
+            --accent-cyan: #00E5FF;
+            --accent-green: #00E676;
+            --accent-orange: #FF6B00;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-primary);
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+        }
+        .qr-test-container {
+            max-width: 560px;
+            width: 100%;
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            padding: 28px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+        }
+        .brand-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 229, 255, 0.12);
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            padding: 4px 14px;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+        h1 {
+            font-size: 1.6rem;
+            font-weight: 900;
+            margin-bottom: 4px;
+            color: #FFFFFF;
+        }
+        .subhead {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+        
+        /* 100% Solid Pure White Square with Clean Quiet Zone */
+        .qr-display-box {
+            background: #FFFFFF;
+            padding: 16px;
+            border-radius: 12px;
+            display: inline-block;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+        }
+        .qr-display-box img {
+            display: block;
+            width: 320px;
+            height: 320px;
+            image-rendering: pixelated;
+        }
+        
+        .payload-info-box {
+            background: #0D1117;
+            border: 1px dashed rgba(0, 229, 255, 0.4);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .payload-lbl {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        .payload-url {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--accent-cyan);
+            word-break: break-all;
+        }
+        
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .spec-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px;
+            font-size: 0.75rem;
+        }
+        .spec-card strong {
+            display: block;
+            color: var(--accent-green);
+            font-size: 0.85rem;
+            margin-top: 2px;
+        }
+
+        .actions-row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        .btn-act {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+        .btn-act.primary {
+            background: linear-gradient(135deg, #00E5FF, #00B0FF);
+            color: #000;
+            border: none;
+        }
+        .btn-act.secondary {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+        .btn-act:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="qr-test-container">
+        <div class="brand-badge">🛡️ WARISEVA AI • QR CALIBRATION</div>
+        <h1>Tukaram Shinde (WS-28471)</h1>
+        <p class="subhead">Point physical phone camera / Google Lens directly at the QR below:</p>
+
+        <div class="qr-display-box">
+            <img src="/api/qr/image?wari_id=WS-28471&t={{ cache_bust }}" alt="Machine Scannable QR Code (WS-28471)">
+        </div>
+
+        <div class="payload-info-box">
+            <div class="payload-lbl">🔗 QR Encoded Target URL (Machine-Readable Payload):</div>
+            <div class="payload-url" id="payload-text">{{ qr_payload_url }}</div>
+        </div>
+
+        <div class="specs-grid">
+            <div class="spec-card">
+                Source Size
+                <strong>540 x 540 px</strong>
+            </div>
+            <div class="spec-card">
+                Error Correction
+                <strong>Level H (30%)</strong>
+            </div>
+            <div class="spec-card">
+                Quiet Zone
+                <strong>✓ 4 Modules</strong>
+            </div>
+        </div>
+
+        <div class="actions-row">
+            <a href="{{ qr_payload_url }}" target="_blank" class="btn-act primary">
+                🌐 OPEN QR URL IN BROWSER ↗
+            </a>
+            <a href="/" class="btn-act secondary">
+                ⬅ RETURN TO DASHBOARD
+            </a>
+        </div>
+    </div>
+</body>
+</html>
