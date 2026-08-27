@@ -1,9 +1,10 @@
 {
+  "functions": {
+    "api/**/*.py": {
+      "includeFiles": "templates/**, static/**, backend/*.json"
+    }
+  },
   "rewrites": [
-    {
-      "source": "/static/(.*)",
-      "destination": "/static/$1"
-    },
     {
       "source": "/(.*)",
       "destination": "/api/index.py"

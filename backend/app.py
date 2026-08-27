@@ -22,12 +22,25 @@ import math
 import random
 import sqlite3
 from datetime import datetime
-from flask import Flask, render_template, request, jsonify, send_file, Response, session, redirect, url_for
+from flask import Flask, render_template, request, jsonify, send_file, send_from_directory, Response, session, redirect, url_for
 
 # Path configuration
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 template_dir = os.path.join(base_dir, 'templates')
 static_dir = os.path.join(base_dir, 'static')
+if not os.path.exists(static_dir):
+    alt_static = os.path.abspath('static')
+    if os.path.exists(alt_static):
+        static_dir = alt_static
+    else:
+        alt_pub = os.path.abspath('public/static')
+        if os.path.exists(alt_pub):
+            static_dir = alt_pub
+if not os.path.exists(template_dir):
+    alt_tmpl = os.path.abspath('templates')
+    if os.path.exists(alt_tmpl):
+        template_dir = alt_tmpl
+
 zones_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'wari_zones.json')
 hospitals_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'hospitals.json')
 safety_services_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'safety_services.json')
@@ -49,7 +62,7 @@ if os.environ.get('VERCEL') or os.environ.get('AWS_LAMBDA_FUNCTION_NAME') or not
 else:
     db_path = local_db_path
 
-app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
+app = Flask(__name__, template_folder=template_dir, static_folder=static_dir, static_url_path='/static')
 app.secret_key = os.environ.get('SECRET_KEY', 'wariseva-volunteer-auth-key-2026')
 
 def get_db_connection():
@@ -539,6 +552,22 @@ def health_check():
 @app.route('/notifications')
 def home():
     return render_template('index.html')
+
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    return send_from_directory(static_dir, filename)
+
+@app.route('/css/<path:filename>')
+def serve_css(filename):
+    return send_from_directory(static_dir, filename)
+
+@app.route('/js/<path:filename>')
+def serve_js(filename):
+    return send_from_directory(static_dir, filename)
+
+@app.route('/images/<path:filename>')
+def serve_images(filename):
+    return send_from_directory(static_dir, filename)
 
 @app.route('/safety-id', methods=['GET'])
 def safety_id_page():

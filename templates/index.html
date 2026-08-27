@@ -13,7 +13,7 @@
     <!-- Leaflet OpenStreetMap CSS & JS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <!-- Lightweight QR Generation & Scanner Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
@@ -44,7 +44,7 @@
                 <!-- Brand Header -->
                 <div class="sidebar-brand" id="sidebar-brand-home">
                     <div class="sidebar-brand-content" onclick="document.getElementById('nav-home')?.click()" style="cursor:pointer;">
-                        <img src="/static/logo.png" alt="WariSeva AI" class="sidebar-logo-img">
+                        <img src="{{ url_for('static', filename='logo.png') }}" alt="WariSeva AI" class="sidebar-logo-img">
                         <div class="sidebar-brand-text">
                             <span class="sidebar-brand-title">WariSeva <span class="sidebar-ai-tag">AI</span></span>
                             <span class="sidebar-brand-tagline" data-i18n="tagline">Your safety, one tap away.</span>
@@ -236,7 +236,7 @@
 
                             <div class="emergency-card-body">
                                 <!-- Cultural Watermark Silhouette -->
-                                <img src="/static/logo.png" alt="Vitthal Logo Watermark" class="emergency-card-bg-logo">
+                                <img src="{{ url_for('static', filename='logo.png') }}" alt="Vitthal Logo Watermark" class="emergency-card-bg-logo">
 
                                 <!-- Circular Master SOS Button -->
                                 <div class="sos-button-wrapper">
@@ -3422,6 +3422,6 @@
 
         </div><!-- End main-wrapper -->
     <!-- Master Application Controller Script -->
-    <script src="/static/script.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
