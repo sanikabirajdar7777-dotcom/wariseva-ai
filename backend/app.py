@@ -525,13 +525,18 @@ def health_check():
     }), 200
 
 @app.route('/')
+@app.route('/api/index')
+@app.route('/api/index.py')
 @app.route('/emergency')
 @app.route('/safety-map')
 @app.route('/services')
 @app.route('/qr-scanner')
 @app.route('/command')
+@app.route('/command-center')
 @app.route('/volunteer')
 @app.route('/hospital')
+@app.route('/medical-facility')
+@app.route('/notifications')
 def home():
     return render_template('index.html')
 
