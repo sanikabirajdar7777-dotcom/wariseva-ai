@@ -28,10 +28,26 @@ from flask import Flask, render_template, request, jsonify, send_file, Response,
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 template_dir = os.path.join(base_dir, 'templates')
 static_dir = os.path.join(base_dir, 'static')
-db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'wariseva.db')
 zones_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'wari_zones.json')
 hospitals_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'hospitals.json')
 safety_services_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'safety_services.json')
+
+# Database path configuration
+# On serverless platforms like Vercel, the source tree is read-only.
+# SQLite must store its database in /tmp (the only writable directory).
+local_db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'wariseva.db')
+if os.environ.get('VERCEL') or os.environ.get('AWS_LAMBDA_FUNCTION_NAME') or not os.access(os.path.dirname(local_db_path) or '.', os.W_OK):
+    import tempfile
+    import shutil
+    tmp_dir = '/tmp' if os.path.exists('/tmp') else tempfile.gettempdir()
+    db_path = os.path.join(tmp_dir, 'wariseva.db')
+    if not os.path.exists(db_path) and os.path.exists(local_db_path):
+        try:
+            shutil.copy2(local_db_path, db_path)
+        except Exception:
+            pass
+else:
+    db_path = local_db_path
 
 app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 app.secret_key = os.environ.get('SECRET_KEY', 'wariseva-volunteer-auth-key-2026')
@@ -4204,7 +4220,7 @@ def get_public_base_url():
     
     try:
         if request and request.host and not request.host.startswith(('localhost', '127.0.0.1')):
-            scheme = request.scheme or 'http'
+            scheme = request.headers.get('X-Forwarded-Proto', request.scheme or 'http')
             return f"{scheme}://{request.host}".rstrip('/')
     except Exception:
         pass
