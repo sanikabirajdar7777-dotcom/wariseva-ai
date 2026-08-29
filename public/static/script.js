@@ -721,12 +721,15 @@
             })();
             const portal = document.getElementById('first-screen-role-selection');
             const warkariDash = document.getElementById('warkari-user-dashboard');
+            const whySection = document.getElementById('home-why-wariseva');
             if (currentRole === 'WARKARI') {
                 if (portal) { portal.classList.add('hidden'); portal.style.display = 'none'; }
                 if (warkariDash) { warkariDash.classList.remove('hidden'); warkariDash.style.display = 'block'; }
+                if (whySection) { whySection.classList.add('hidden'); whySection.style.display = 'none'; }
             } else {
                 if (portal) { portal.classList.remove('hidden'); portal.style.display = 'block'; }
                 if (warkariDash) { warkariDash.classList.add('hidden'); warkariDash.style.display = 'none'; }
+                if (whySection) { whySection.classList.remove('hidden'); whySection.style.display = 'block'; }
             }
         }
 
@@ -4005,9 +4008,14 @@
                 } catch (e) {}
                 window.WariState.selectedRole = 'WARKARI';
 
+                const whySection = document.getElementById('home-why-wariseva');
                 if (portal) {
                     portal.classList.add('hidden');
                     portal.style.display = 'none';
+                }
+                if (whySection) {
+                    whySection.classList.add('hidden');
+                    whySection.style.display = 'none';
                 }
                 if (warkariDash) {
                     warkariDash.classList.remove('hidden');
@@ -4033,9 +4041,14 @@
                 } catch (e) {}
                 window.WariState.selectedRole = null;
 
+                const whySection = document.getElementById('home-why-wariseva');
                 if (warkariDash) {
                     warkariDash.classList.add('hidden');
                     warkariDash.style.display = 'none';
+                }
+                if (whySection) {
+                    whySection.classList.remove('hidden');
+                    whySection.style.display = 'block';
                 }
                 if (portal) {
                     portal.classList.remove('hidden');

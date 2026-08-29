@@ -330,6 +330,47 @@
                         </div>
 
                     </div>
+
+                    <!-- ================= FEATURE 3: JOIN THE WARI SAFETY NETWORK ================= -->
+                    <div class="network-portals-section" id="home-network-portals" style="margin-top: 24px;">
+                        <div class="section-title-row">
+                            <h2 style="display:none;">WARISEVA AI</h2>
+                            <h3 class="home-section-title">🤝 JOIN THE WARI SAFETY NETWORK</h3>
+                            <p class="section-subtitle">Empowering real-world responders, medical institutions, and regional volunteers.</p>
+                        </div>
+                        <div class="network-portals-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                            <!-- Card 1: Volunteer Registration -->
+                            <div class="network-portal-card volunteer-card" style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:var(--radius-lg); padding:16px;">
+                                <div class="npc-icon">🦺</div>
+                                <h4 class="npc-title" style="font-weight:800; color:var(--maroon-primary);">VOLUNTEER RESPONDER</h4>
+                                <p class="npc-desc" style="font-size:0.8rem; color:var(--text-secondary); margin:8px 0;">Register as an on-ground responder to accept local medical dispatches and assist pilgrims along the Palkhi route.</p>
+                                <div class="npc-btn-group" style="display:flex; gap:8px; margin-top:12px;">
+                                    <a href="/volunteer/register" class="npc-btn primary" style="background:var(--maroon-primary); color:#FFF; padding:6px 12px; border-radius:6px; font-weight:700; font-size:0.8rem;">REGISTER VOLUNTEER</a>
+                                    <a href="/volunteer/login" class="npc-btn secondary" style="background:var(--bg-hover); border:1px solid var(--border-subtle); padding:6px 12px; border-radius:6px; font-weight:700; font-size:0.8rem;">LOGIN</a>
+                                </div>
+                            </div>
+                            <!-- Card 2: Medical Facility Registration -->
+                            <div class="network-portal-card hospital-card" style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:var(--radius-lg); padding:16px;">
+                                <div class="npc-icon">🏥</div>
+                                <h4 class="npc-title" style="font-weight:800; color:var(--maroon-primary);">HOSPITAL / MEDICAL FACILITY</h4>
+                                <p class="npc-desc" style="font-size:0.8rem; color:var(--text-secondary); margin:8px 0;">Register medical centers to receive critical trauma intake alerts, update real-time bed capacity, and accept patient transfers.</p>
+                                <div class="npc-btn-group" style="display:flex; gap:8px; margin-top:12px;">
+                                    <a href="/hospital/register" class="npc-btn primary" style="background:var(--maroon-primary); color:#FFF; padding:6px 12px; border-radius:6px; font-weight:700; font-size:0.8rem;">REGISTER FACILITY</a>
+                                    <a href="/hospital/login" class="npc-btn secondary" style="background:var(--bg-hover); border:1px solid var(--border-subtle); padding:6px 12px; border-radius:6px; font-weight:700; font-size:0.8rem;">LOGIN</a>
+                                </div>
+                            </div>
+                            <!-- Card 3: Command Center -->
+                            <div class="network-portal-card command-card" style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:var(--radius-lg); padding:16px;">
+                                <div class="npc-icon">🖥️</div>
+                                <h4 class="npc-title" style="font-weight:800; color:var(--maroon-primary);">COMMAND CENTER</h4>
+                                <p class="npc-desc" style="font-size:0.8rem; color:var(--text-secondary); margin:8px 0;">Authorized emergency coordination, volunteer & hospital verification, live resource monitoring, and incident oversight.</p>
+                                <div class="npc-btn-group" style="margin-top:12px;">
+                                    <button type="button" class="npc-btn primary green" id="home-command-center-btn" onclick="document.getElementById('nav-command').click()" style="background:var(--status-green); color:#FFF; padding:6px 12px; border-radius:6px; font-weight:700; font-size:0.8rem;">📡 COMMAND CENTER</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <!-- ================= WARKARI / USER DASHBOARD VIEW ================= -->
@@ -565,46 +606,7 @@
                     </div>
 
                 </div>
-            
-                    <!-- ================= FEATURE 3: JOIN THE WARI SAFETY NETWORK ================= -->
-                    <div class="network-portals-section" id="home-network-portals" style="margin-top: 24px;">
-                        <div class="section-title-row">
-                            <h2 style="display:none;">WARISEVA AI</h2>
-<h3 class="home-section-title">🤝 JOIN THE WARI SAFETY NETWORK</h3>
-                            <p class="section-subtitle">Empowering real-world responders, medical institutions, and regional volunteers.</p>
-                        </div>
-                        <div class="network-portals-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
-                            <!-- Card 1: Volunteer Registration -->
-                            <div class="network-portal-card volunteer-card" style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:var(--radius-lg); padding:16px;">
-                                <div class="npc-icon">🦺</div>
-                                <h4 class="npc-title" style="font-weight:800; color:var(--maroon-primary);">VOLUNTEER RESPONDER</h4>
-                                <p class="npc-desc" style="font-size:0.8rem; color:var(--text-secondary); margin:8px 0;">Register as an on-ground responder to accept local medical dispatches and assist pilgrims along the Palkhi route.</p>
-                                <div class="npc-btn-group" style="display:flex; gap:8px; margin-top:12px;">
-                                    <a href="/volunteer/register" class="npc-btn primary" style="background:var(--maroon-primary); color:#FFF; padding:6px 12px; border-radius:6px; font-weight:700; font-size:0.8rem;">REGISTER VOLUNTEER</a>
-                                    <a href="/volunteer/login" class="npc-btn secondary" style="background:var(--bg-hover); border:1px solid var(--border-subtle); padding:6px 12px; border-radius:6px; font-weight:700; font-size:0.8rem;">LOGIN</a>
-                                </div>
-                            </div>
-                            <!-- Card 2: Medical Facility Registration -->
-                            <div class="network-portal-card hospital-card" style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:var(--radius-lg); padding:16px;">
-                                <div class="npc-icon">🏥</div>
-                                <h4 class="npc-title" style="font-weight:800; color:var(--maroon-primary);">HOSPITAL / MEDICAL FACILITY</h4>
-                                <p class="npc-desc" style="font-size:0.8rem; color:var(--text-secondary); margin:8px 0;">Register medical centers to receive critical trauma intake alerts, update real-time bed capacity, and accept patient transfers.</p>
-                                <div class="npc-btn-group" style="display:flex; gap:8px; margin-top:12px;">
-                                    <a href="/hospital/register" class="npc-btn primary" style="background:var(--maroon-primary); color:#FFF; padding:6px 12px; border-radius:6px; font-weight:700; font-size:0.8rem;">REGISTER FACILITY</a>
-                                    <a href="/hospital/login" class="npc-btn secondary" style="background:var(--bg-hover); border:1px solid var(--border-subtle); padding:6px 12px; border-radius:6px; font-weight:700; font-size:0.8rem;">LOGIN</a>
-                                </div>
-                            </div>
-                            <!-- Card 3: Command Center -->
-                            <div class="network-portal-card command-card" style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:var(--radius-lg); padding:16px;">
-                                <div class="npc-icon">🖥️</div>
-                                <h4 class="npc-title" style="font-weight:800; color:var(--maroon-primary);">COMMAND CENTER</h4>
-                                <p class="npc-desc" style="font-size:0.8rem; color:var(--text-secondary); margin:8px 0;">Authorized emergency coordination, volunteer & hospital verification, live resource monitoring, and incident oversight.</p>
-                                <div class="npc-btn-group" style="margin-top:12px;">
-                                    <button type="button" class="npc-btn primary green" id="home-command-center-btn" onclick="document.getElementById('nav-command').click()" style="background:var(--status-green); color:#FFF; padding:6px 12px; border-radius:6px; font-weight:700; font-size:0.8rem;">📡 COMMAND CENTER</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            </div><!-- end #warkari-user-dashboard -->
 
                     <!-- ================= FEATURE 4: WHY WARISEVA AI? ================= -->
                     <div class="why-wariseva-section" id="home-why-wariseva" style="margin-top: 32px; margin-bottom: 24px;">
@@ -647,7 +649,6 @@
                             </div>
                         </div>
                     </div>
-                </div><!-- end #warkari-user-dashboard -->
 
             </section>
 

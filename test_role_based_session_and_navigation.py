@@ -82,5 +82,26 @@ class TestRoleBasedSessionAndNavigation(unittest.TestCase):
         """Verify .arb-logout-btn CSS rules exist."""
         self.assertIn('.arb-logout-btn', self.css)
 
+    def test_07_portals_excluded_from_warkari_dashboard(self):
+        """Verify JOIN THE WARI SAFETY NETWORK is strictly part of landing and excluded from Warkari Dashboard."""
+        landing_start = self.html.find('id="first-screen-role-selection"')
+        landing_end = self.html.find('id="warkari-user-dashboard"')
+        dash_start = landing_end
+        dash_end = self.html.find('<!-- end #warkari-user-dashboard -->')
+
+        landing_html = self.html[landing_start:landing_end]
+        dash_html = self.html[dash_start:dash_end]
+
+        # Portals MUST be inside Landing
+        self.assertIn('id="home-network-portals"', landing_html)
+        self.assertIn('JOIN THE WARI SAFETY NETWORK', landing_html)
+
+        # Portals and Responder registration MUST NOT be inside Warkari Dashboard
+        self.assertNotIn('id="home-network-portals"', dash_html)
+        self.assertNotIn('JOIN THE WARI SAFETY NETWORK', dash_html)
+        self.assertNotIn('VOLUNTEER RESPONDER', dash_html)
+        self.assertNotIn('HOSPITAL / MEDICAL FACILITY', dash_html)
+        self.assertNotIn('COMMAND CENTER OPERATIONS', dash_html)
+
 if __name__ == '__main__':
     unittest.main()
