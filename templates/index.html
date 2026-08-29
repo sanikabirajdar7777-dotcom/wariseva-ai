@@ -335,19 +335,20 @@
                 <!-- ================= WARKARI / USER DASHBOARD VIEW ================= -->
                 <div id="warkari-user-dashboard" class="warkari-user-dashboard">
                     
-                    <!-- Active Role Banner with Switch Role Button -->
-                    <div class="active-role-sticky-banner" id="warkari-active-role-banner">
+                    <!-- Authenticated Warkari Session Header -->
+                    <div class="active-role-sticky-banner warkari-session-banner" id="warkari-active-role-banner">
                         <div class="arb-left">
                             <span class="arb-icon">👤</span>
                             <div>
-                                <span class="arb-kicker">ACTIVE ROLE</span>
-                                <strong class="arb-title">WARKARI / USER DASHBOARD</strong>
+                                <span class="arb-kicker">AUTHENTICATED PILGRIM SESSION</span>
+                                <strong class="arb-title" id="warkari-user-display-name">Tukaram Shinde (WS-28471 • Dindi 27)</strong>
                             </div>
                         </div>
                         <div class="arb-right">
-                            <button type="button" class="arb-switch-btn" id="btn-switch-role-from-warkari" title="Return to Role Selection">
-                                <span>← Change Role / First Screen</span>
+                            <button type="button" class="arb-switch-btn arb-logout-btn" id="warkari-logout-btn" title="End session and return to Landing Page">
+                                <span>🚪 LOGOUT</span>
                             </button>
+                            <button type="button" id="btn-switch-role-from-warkari" style="display:none;" aria-hidden="true"></button>
                         </div>
                     </div>
 
@@ -1622,14 +1623,15 @@
                         <div class="arb-left">
                             <span class="arb-icon">🧑‍🚒</span>
                             <div>
-                                <span class="arb-kicker">ACTIVE ROLE</span>
+                                <span class="arb-kicker">AUTHENTICATED VOLUNTEER SESSION</span>
                                 <strong class="arb-title">VOLUNTEER RESPONSE NETWORK</strong>
                             </div>
                         </div>
                         <div class="arb-right">
-                            <button type="button" class="arb-switch-btn" id="vol-back-to-roles-btn" title="Return to Role Selection">
-                                <span>← Change Role / Home</span>
+                            <button type="button" class="arb-switch-btn arb-logout-btn" id="vol-top-logout-btn" title="End Volunteer session and return to Landing Page">
+                                <span>🚪 LOGOUT</span>
                             </button>
+                            <button type="button" id="vol-back-to-roles-btn" style="display:none;" aria-hidden="true"></button>
                         </div>
                     </div>
                     
@@ -1660,8 +1662,9 @@
                             </div>
                             <div id="vol-spa-login-error" class="error-banner hidden" style="color: #FF5252; background: rgba(255,82,82,0.1); padding: 8px; border-radius: 6px; font-size: 0.85rem; margin-top: 4px;"></div>
                             <div id="vol-spa-login-success" class="success-banner hidden" style="color: #00E676; background: rgba(0,230,118,0.15); border: 1px solid #00E676; padding: 8px; border-radius: 6px; font-size: 0.85rem; margin-top: 4px; text-align: center; font-weight: 700;">✓ Authentication Successful</div>
-                            <div class="auth-buttons-row">
-                                <button type="button" class="auth-submit-btn primary" id="vol-spa-login-btn">🔐 LOGIN</button>
+                            <div class="auth-buttons-row" style="margin-top: 10px; display: flex; gap: 8px;">
+                                <button type="button" class="auth-submit-btn primary" id="vol-spa-login-btn" style="flex: 2;">🔐 LOGIN</button>
+                                <button type="button" class="auth-submit-btn secondary" id="vol-login-back-btn" style="flex: 1; background: rgba(255,255,255,0.08); border: 1px solid var(--border-color); color: var(--text-secondary); cursor: pointer;">← BACK</button>
                             </div>
                         </form>
                     </div>
@@ -1817,14 +1820,15 @@
                         <div class="arb-left">
                             <span class="arb-icon">🏥</span>
                             <div>
-                                <span class="arb-kicker">ACTIVE ROLE</span>
+                                <span class="arb-kicker">AUTHENTICATED MEDICAL FACILITY SESSION</span>
                                 <strong class="arb-title">HOSPITAL / MEDICAL FACILITY PORTAL</strong>
                             </div>
                         </div>
                         <div class="arb-right">
-                            <button type="button" class="arb-switch-btn" id="hosp-back-to-roles-btn" title="Return to Role Selection">
-                                <span>← Change Role / Home</span>
+                            <button type="button" class="arb-switch-btn arb-logout-btn" id="hosp-top-logout-btn" title="End Hospital session and return to Landing Page">
+                                <span>🚪 LOGOUT</span>
                             </button>
+                            <button type="button" id="hosp-back-to-roles-btn" style="display:none;" aria-hidden="true"></button>
                         </div>
                     </div>
                     
@@ -1855,8 +1859,9 @@
                             </div>
                             <div id="hosp-spa-login-error" class="error-banner hidden" style="color: #FF5252; background: rgba(255,82,82,0.1); padding: 8px; border-radius: 6px; font-size: 0.85rem; margin-top: 4px;"></div>
                             <div id="hosp-spa-login-success" class="success-banner hidden" style="color: #00E676; background: rgba(0,230,118,0.15); border: 1px solid #00E676; padding: 8px; border-radius: 6px; font-size: 0.85rem; margin-top: 4px; text-align: center; font-weight: 700;">✓ Authentication Successful</div>
-                            <div class="auth-buttons-row">
-                                <button type="button" class="auth-submit-btn primary" id="hosp-spa-login-btn" style="background: linear-gradient(135deg, #00E676, #00C853); color: #000; font-weight: 800;">🔐 LOGIN</button>
+                            <div class="auth-buttons-row" style="margin-top: 10px; display: flex; gap: 8px;">
+                                <button type="button" class="auth-submit-btn primary" id="hosp-spa-login-btn" style="flex: 2; background: linear-gradient(135deg, #00E676, #00C853); color: #000; font-weight: 800;">🔐 LOGIN</button>
+                                <button type="button" class="auth-submit-btn secondary" id="hosp-login-back-btn" style="flex: 1; background: rgba(255,255,255,0.08); border: 1px solid var(--border-color); color: var(--text-secondary); cursor: pointer;">← BACK</button>
                             </div>
                         </form>
                     </div>

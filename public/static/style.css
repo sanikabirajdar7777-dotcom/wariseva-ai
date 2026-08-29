@@ -9413,6 +9413,18 @@ html, body {
     color: #FFA726;
 }
 
+.arb-logout-btn {
+    background: rgba(255, 23, 68, 0.15);
+    border: 1px solid rgba(255, 23, 68, 0.4);
+    color: #FF5252;
+}
+
+.arb-logout-btn:hover {
+    background: rgba(255, 23, 68, 0.3);
+    border-color: #FF1744;
+    color: #FFFFFF;
+}
+
 /* Dedicated Volunteer QR Scanner Feature Card in Dashboard */
 .vol-qr-action-banner {
     background: linear-gradient(135deg, rgba(0, 229, 255, 0.12) 0%, rgba(2, 136, 209, 0.08) 100%);

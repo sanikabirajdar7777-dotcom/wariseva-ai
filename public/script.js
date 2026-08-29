@@ -714,6 +714,22 @@
             window.WariState.currentView = viewId;
         }
 
+        // Role-based visibility enforcement inside home-view
+        if (viewId === 'home-view') {
+            const currentRole = (function() {
+                try { return sessionStorage.getItem('wariseva_session_role') || sessionStorage.getItem('wariseva_selected_role'); } catch(e) { return null; }
+            })();
+            const portal = document.getElementById('first-screen-role-selection');
+            const warkariDash = document.getElementById('warkari-user-dashboard');
+            if (currentRole === 'WARKARI') {
+                if (portal) { portal.classList.add('hidden'); portal.style.display = 'none'; }
+                if (warkariDash) { warkariDash.classList.remove('hidden'); warkariDash.style.display = 'block'; }
+            } else {
+                if (portal) { portal.classList.remove('hidden'); portal.style.display = 'block'; }
+                if (warkariDash) { warkariDash.classList.add('hidden'); warkariDash.style.display = 'none'; }
+            }
+        }
+
         // Update Desktop, Sidebar & Mobile Nav active states
         document.querySelectorAll('.sidebar-panel .nav-link-btn, .desktop-nav .nav-link-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.view === viewId);
@@ -1967,6 +1983,7 @@
                         succEl.classList.remove('hidden');
                     }
                     sessionStorage.setItem('wariseva_volunteer_auth', JSON.stringify(body.volunteer || { id: id || 'V-001', name: 'Ramesh Kulkarni' }));
+                    sessionStorage.setItem('wariseva_session_role', 'VOLUNTEER');
                     window.WariState.volunteerAuth.isLoggedIn = true;
                     setTimeout(() => {
                         checkVolAuth();
@@ -2001,9 +2018,14 @@
 
         // 5. Volunteer In-App Logout
         document.getElementById('vol-spa-logout-btn')?.addEventListener('click', () => {
-            sessionStorage.removeItem('wariseva_volunteer_auth');
-            checkVolAuth();
-            showToast('🚪 Volunteer logged out.', 'info');
+            if (typeof window.logoutCurrentRole === 'function') {
+                window.logoutCurrentRole();
+            } else {
+                sessionStorage.removeItem('wariseva_volunteer_auth');
+                sessionStorage.removeItem('wariseva_session_role');
+                checkVolAuth();
+                showToast('🚪 Volunteer logged out.', 'info');
+            }
         });
 
         // 6. Hospital In-App Login
@@ -2038,6 +2060,7 @@
                         succEl.classList.remove('hidden');
                     }
                     sessionStorage.setItem('wariseva_hospital_auth', JSON.stringify(body.hospital || { id: id || 'MF-001', name: 'WariSeva Medical Camp — Zone 04' }));
+                    sessionStorage.setItem('wariseva_session_role', 'HOSPITAL');
                     setTimeout(() => {
                         checkHospAuth();
                         loadResponderEmergencyFeed();
@@ -2071,9 +2094,14 @@
 
         // 7. Hospital In-App Logout
         document.getElementById('hosp-spa-logout-btn')?.addEventListener('click', () => {
-            sessionStorage.removeItem('wariseva_hospital_auth');
-            checkHospAuth();
-            showToast('🚪 Medical Facility logged out.', 'info');
+            if (typeof window.logoutCurrentRole === 'function') {
+                window.logoutCurrentRole();
+            } else {
+                sessionStorage.removeItem('wariseva_hospital_auth');
+                sessionStorage.removeItem('wariseva_session_role');
+                checkHospAuth();
+                showToast('🚪 Medical Facility logged out.', 'info');
+            }
         });
 
         // 8. Command Center In-App Login
@@ -3965,16 +3993,30 @@
             const warkariDash = document.getElementById('warkari-user-dashboard');
 
             function activateWarkariRole(smooth = true) {
-                switchView('home-view');
-                if (portal) portal.classList.add('hidden');
+                try {
+                    sessionStorage.setItem('wariseva_session_role', 'WARKARI');
+                    sessionStorage.setItem('wariseva_selected_role', 'WARKARI');
+                    sessionStorage.setItem('wariseva_warkari_auth', JSON.stringify({
+                        wari_id: 'WS-28471',
+                        name: 'Tukaram Shinde',
+                        dindi: '27',
+                        phone: '+91 98221 28471'
+                    }));
+                } catch (e) {}
+                window.WariState.selectedRole = 'WARKARI';
+
+                if (portal) {
+                    portal.classList.add('hidden');
+                    portal.style.display = 'none';
+                }
                 if (warkariDash) {
                     warkariDash.classList.remove('hidden');
+                    warkariDash.style.display = 'block';
                     if (smooth) {
                         warkariDash.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
                 }
-                window.WariState.selectedRole = 'WARKARI';
-                try { sessionStorage.setItem('wariseva_selected_role', 'WARKARI'); } catch (e) {}
+                switchView('home-view');
                 setTimeout(() => {
                     initHomeSafetyMap();
                     if (window.WariState.maps.homeSafety) {
@@ -3984,26 +4026,63 @@
             }
 
             function showFirstScreenPortal() {
-                switchView('home-view');
+                try {
+                    sessionStorage.removeItem('wariseva_session_role');
+                    sessionStorage.removeItem('wariseva_selected_role');
+                    sessionStorage.removeItem('wariseva_warkari_auth');
+                } catch (e) {}
+                window.WariState.selectedRole = null;
+
+                if (warkariDash) {
+                    warkariDash.classList.add('hidden');
+                    warkariDash.style.display = 'none';
+                }
                 if (portal) {
                     portal.classList.remove('hidden');
+                    portal.style.display = 'block';
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
-                if (warkariDash) warkariDash.classList.add('hidden');
-                window.WariState.selectedRole = null;
-                try { sessionStorage.removeItem('wariseva_selected_role'); } catch (e) {}
+                switchView('home-view');
+            }
+
+            function logoutCurrentRole() {
+                const currentRole = (function() {
+                    try { return sessionStorage.getItem('wariseva_session_role') || window.WariState.selectedRole; } catch(e) { return null; }
+                })();
+
+                try {
+                    sessionStorage.removeItem('wariseva_session_role');
+                    sessionStorage.removeItem('wariseva_selected_role');
+                    sessionStorage.removeItem('wariseva_warkari_auth');
+                    sessionStorage.removeItem('wariseva_volunteer_auth');
+                    sessionStorage.removeItem('wariseva_hospital_auth');
+                } catch (e) {}
+
+                if (currentRole === 'VOLUNTEER') {
+                    fetch('/api/volunteer/logout', { method: 'POST' }).catch(() => {});
+                    if (typeof checkVolAuth === 'function') checkVolAuth();
+                } else if (currentRole === 'HOSPITAL') {
+                    fetch('/api/hospital/logout', { method: 'POST' }).catch(() => {});
+                    if (typeof checkHospAuth === 'function') checkHospAuth();
+                }
+
+                showFirstScreenPortal();
+                showToast('🚪 Logged out. Returned to Landing Page.', 'info');
             }
 
             window.activateWarkariRole = activateWarkariRole;
             window.showFirstScreenPortal = showFirstScreenPortal;
+            window.logoutCurrentRole = logoutCurrentRole;
 
             // 1. Role Selection Card & Button Click Handlers
             document.getElementById('btn-select-role-warkari')?.addEventListener('click', (e) => {
                 e.stopPropagation();
                 activateWarkariRole();
+                showToast('👤 Logged in as Warkari (Tukaram Shinde • WS-28471)', 'success');
             });
             document.getElementById('card-role-warkari')?.addEventListener('click', () => {
                 activateWarkariRole();
+                showToast('👤 Logged in as Warkari (Tukaram Shinde • WS-28471)', 'success');
             });
 
             document.getElementById('btn-select-role-volunteer')?.addEventListener('click', (e) => {
@@ -4030,29 +4109,50 @@
                 switchView('command-view');
             });
 
-            // 2. Return to First Screen / Role Selectors
-            document.getElementById('btn-switch-role-from-warkari')?.addEventListener('click', showFirstScreenPortal);
-            document.getElementById('vol-back-to-roles-btn')?.addEventListener('click', showFirstScreenPortal);
-            document.getElementById('hosp-back-to-roles-btn')?.addEventListener('click', showFirstScreenPortal);
+            // 2. Return to First Screen / Logout Handlers
+            document.getElementById('warkari-logout-btn')?.addEventListener('click', logoutCurrentRole);
+            document.getElementById('btn-switch-role-from-warkari')?.addEventListener('click', logoutCurrentRole);
+            document.getElementById('vol-top-logout-btn')?.addEventListener('click', logoutCurrentRole);
+            document.getElementById('vol-back-to-roles-btn')?.addEventListener('click', logoutCurrentRole);
+            document.getElementById('vol-login-back-btn')?.addEventListener('click', showFirstScreenPortal);
+            document.getElementById('hosp-top-logout-btn')?.addEventListener('click', logoutCurrentRole);
+            document.getElementById('hosp-back-to-roles-btn')?.addEventListener('click', logoutCurrentRole);
+            document.getElementById('hosp-login-back-btn')?.addEventListener('click', showFirstScreenPortal);
             document.getElementById('cmd-back-to-roles-btn')?.addEventListener('click', showFirstScreenPortal);
 
-            // 3. Home Nav triggers First Screen
-            document.getElementById('sidebar-brand-home')?.addEventListener('click', showFirstScreenPortal);
-            document.getElementById('nav-home')?.addEventListener('click', showFirstScreenPortal);
-            document.getElementById('mob-nav-home')?.addEventListener('click', showFirstScreenPortal);
+            // 3. Home Navigation respects current logged-in role
+            const handleHomeNavClick = () => {
+                const role = (function() {
+                    try { return sessionStorage.getItem('wariseva_session_role') || sessionStorage.getItem('wariseva_selected_role'); } catch(e) { return null; }
+                })();
+                if (role === 'WARKARI') {
+                    activateWarkariRole(false);
+                } else if (role === 'VOLUNTEER') {
+                    switchView('volunteer-view');
+                } else if (role === 'HOSPITAL') {
+                    switchView('responder-view');
+                } else {
+                    showFirstScreenPortal();
+                }
+            };
+            document.getElementById('sidebar-brand-home')?.addEventListener('click', handleHomeNavClick);
+            document.getElementById('nav-home')?.addEventListener('click', handleHomeNavClick);
+            document.getElementById('mob-nav-home')?.addEventListener('click', handleHomeNavClick);
 
             // 4. Initial State on load
             try {
-                const savedRole = sessionStorage.getItem('wariseva_selected_role');
+                const savedRole = sessionStorage.getItem('wariseva_session_role') || sessionStorage.getItem('wariseva_selected_role');
                 if (savedRole === 'WARKARI') {
                     activateWarkariRole(false);
+                } else if (savedRole === 'VOLUNTEER' && sessionStorage.getItem('wariseva_volunteer_auth')) {
+                    switchView('volunteer-view');
+                } else if (savedRole === 'HOSPITAL' && sessionStorage.getItem('wariseva_hospital_auth')) {
+                    switchView('responder-view');
                 } else {
-                    if (warkariDash) warkariDash.classList.add('hidden');
-                    if (portal) portal.classList.remove('hidden');
+                    showFirstScreenPortal();
                 }
             } catch (e) {
-                if (warkariDash) warkariDash.classList.add('hidden');
-                if (portal) portal.classList.remove('hidden');
+                showFirstScreenPortal();
             }
         }
 
