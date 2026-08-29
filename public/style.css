@@ -9583,4 +9583,71 @@ html, body {
     }
 }
 
+/* =========================================================================
+   GREEN CORRIDOR: EMERGENCY ROUTE OPTIMIZATION STYLES
+   ========================================================================= */
+.green-corridor-card {
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.green-corridor-card:hover {
+    border-color: rgba(0, 230, 118, 0.6);
+    box-shadow: 0 4px 20px rgba(0, 230, 118, 0.1);
+}
+
+.gc-status-pill.active {
+    animation: gcPulseGlow 2s infinite ease-in-out;
+}
+
+@keyframes gcPulseGlow {
+    0%, 100% { box-shadow: 0 0 4px rgba(0, 230, 118, 0.4); }
+    50% { box-shadow: 0 0 12px rgba(0, 230, 118, 0.8); }
+}
+
+.gc-route-option-card {
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.gc-route-option-card:hover {
+    transform: translateY(-2px);
+}
+
+.gc-route-option-card.recommended {
+    box-shadow: 0 4px 14px rgba(0, 230, 118, 0.08);
+}
+
+.gc-action-btn {
+    transition: filter 0.2s ease, transform 0.15s ease;
+}
+
+.gc-action-btn:hover {
+    filter: brightness(1.15);
+    transform: translateY(-1px);
+}
+
+.gc-action-btn:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .gc-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .gc-quick-actions {
+        width: 100%;
+    }
+    .gc-quick-actions button {
+        flex: 1;
+        text-align: center;
+    }
+    .gc-telemetry-bar {
+        grid-template-columns: 1fr 1fr !important;
+    }
+    .gc-routes-comparison-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+
 

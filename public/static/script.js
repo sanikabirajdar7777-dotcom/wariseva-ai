@@ -3008,7 +3008,11 @@
 
     // Medical Facility Console uses the exact same shared reusable component
     function initResponderMap() {
-        return renderLiveCrowdAwareNavigationMap('responder-map', 'hospital');
+        const map = renderLiveCrowdAwareNavigationMap('responder-map', 'hospital');
+        if (typeof loadGreenCorridorData === 'function') {
+            loadGreenCorridorData();
+        }
+        return map;
     }
 
     // Command Center Map
@@ -3380,6 +3384,101 @@
             showToast('Hospital selected in prototype mode.', 'info');
         });
     }
+
+    // =========================================================================
+    // GREEN CORRIDOR: EMERGENCY ROUTE OPTIMIZATION ENGINE
+    // =========================================================================
+    function loadGreenCorridorData(emId) {
+        const id = emId || window.WariState.currentEmergencyId || 'EM-28471';
+        fetch(`/api/emergency/${id}/green-corridor`)
+            .then(res => res.json())
+            .then(data => {
+                if (!data.success) return;
+                window.WariState.greenCorridor = data;
+
+                // 1. Update Telemetry
+                const ambIdEl = document.getElementById('gc-ambulance-id');
+                const destHospEl = document.getElementById('gc-dest-hospital-name');
+                const etaEl = document.getElementById('gc-recommended-eta');
+                const trafficEl = document.getElementById('gc-recommended-traffic');
+
+                if (ambIdEl && data.ambulance) ambIdEl.textContent = `${data.ambulance.unit_id} (${data.ambulance.status})`;
+                if (destHospEl && data.destination) destHospEl.textContent = data.destination.name;
+                if (etaEl && data.summary) etaEl.textContent = `${data.summary.optimized_eta_min} min`;
+                if (trafficEl && data.summary) trafficEl.textContent = data.summary.traffic_condition;
+
+                // 2. Render Green Corridor on Responder Map
+                renderGreenCorridorOnMap(data);
+            })
+            .catch(() => {});
+    }
+
+    function renderGreenCorridorOnMap(gcData) {
+        const map = window.WariState.maps['responder'];
+        if (!map || typeof L === 'undefined' || !gcData || !gcData.routes) return;
+
+        // Clean previous green corridor layers
+        if (window.WariState.gcLayers) {
+            window.WariState.gcLayers.forEach(l => {
+                try { map.removeLayer(l); } catch(e) {}
+            });
+        }
+        window.WariState.gcLayers = [];
+
+        const recRoute = gcData.routes.find(r => r.is_recommended) || gcData.routes[0];
+        const altRoute = gcData.routes.find(r => !r.is_recommended);
+
+        // Render Alternative Route first (underneath)
+        if (altRoute && altRoute.polyline) {
+            const altLine = L.polyline(altRoute.polyline, {
+                color: '#FF5252',
+                weight: 4,
+                opacity: 0.65,
+                dashArray: '6, 6'
+            }).addTo(map).bindPopup(`<b>${altRoute.name}</b><br>Distance: ${altRoute.distance_km} km (Shorter)<br>Congestion: ${altRoute.congestion_level} (${altRoute.congestion_percent}%)<br>ETA: ${altRoute.estimated_eta_min} min (DELAYED)<br><span style="color:#FF5252;">${altRoute.decision_rationale}</span>`);
+            window.WariState.gcLayers.push(altLine);
+            window.WariState.altRouteLine = altLine;
+        }
+
+        // Render Recommended Green Corridor (on top, glowing emerald)
+        if (recRoute && recRoute.polyline) {
+            const greenLine = L.polyline(recRoute.polyline, {
+                color: '#00E676',
+                weight: 7,
+                opacity: 0.95
+            }).addTo(map).bindPopup(`<b>🟢 ${recRoute.name}</b><br>Distance: ${recRoute.distance_km} km (Longer)<br>Congestion: ${recRoute.congestion_level} (${recRoute.congestion_percent}%)<br>ETA: <b>${recRoute.estimated_eta_min} min (FASTER)</b><br><span style="color:#00E676;">${recRoute.decision_rationale}</span>`);
+            window.WariState.gcLayers.push(greenLine);
+            window.WariState.greenRouteLine = greenLine;
+
+            // Fit bounds to green route
+            try { map.fitBounds(greenLine.getBounds(), { padding: [40, 40] }); } catch(e) {}
+        }
+    }
+
+    function activateGreenCorridor(emId) {
+        const id = emId || window.WariState.currentEmergencyId || 'EM-28471';
+        fetch(`/api/emergency/${id}/green-corridor/activate`, { method: 'POST' })
+            .then(res => res.json())
+            .then(data => {
+                const badge = document.getElementById('gc-status-badge');
+                if (badge) {
+                    badge.textContent = '🟢 ACTIVE';
+                    badge.className = 'gc-status-pill active';
+                }
+                showToast(data.message || '✓ Green Corridor activated: Prioritizing fastest emergency arrival', 'success');
+                if (data.plan) {
+                    renderGreenCorridorOnMap(data.plan);
+                }
+            })
+            .catch(() => {
+                showToast('✓ Green Corridor activated (Prototype simulated bypass)', 'success');
+            });
+    }
+
+    window.loadGreenCorridorData = loadGreenCorridorData;
+    window.renderGreenCorridorOnMap = renderGreenCorridorOnMap;
+    window.activateGreenCorridor = activateGreenCorridor;
+
 
     // DOM Ready Event Initialization
     
@@ -4713,6 +4812,37 @@
             .catch(() => {
                 document.getElementById('resp-arrived-banner')?.classList.remove('hidden');
             });
+        });
+
+        // Green Corridor Route & Activation Controls
+        document.getElementById('btn-gc-activate-corridor')?.addEventListener('click', () => {
+            activateGreenCorridor();
+        });
+
+        document.getElementById('btn-gc-view-green-route')?.addEventListener('click', () => {
+            if (window.WariState.greenRouteLine) {
+                const map = window.WariState.maps['responder'];
+                if (map) {
+                    try {
+                        map.fitBounds(window.WariState.greenRouteLine.getBounds(), { padding: [40, 40] });
+                        window.WariState.greenRouteLine.openPopup();
+                    } catch(e) {}
+                }
+            }
+            showToast("🟢 Displaying Recommended Green Corridor (13 min ETA)", "success");
+        });
+
+        document.getElementById('btn-gc-view-alt-route')?.addEventListener('click', () => {
+            if (window.WariState.altRouteLine) {
+                const map = window.WariState.maps['responder'];
+                if (map) {
+                    try {
+                        map.fitBounds(window.WariState.altRouteLine.getBounds(), { padding: [40, 40] });
+                        window.WariState.altRouteLine.openPopup();
+                    } catch(e) {}
+                }
+            }
+            showToast("⚪ Displaying Alternative Congested Route (26 min ETA)", "warning");
         });
 
         // 14. Command Center Sub-Tabs

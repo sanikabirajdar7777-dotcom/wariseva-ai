@@ -1809,6 +1809,36 @@ def select_hospital(emergency_id):
     }), 200
 
 # =========================================================================
+# GREEN CORRIDOR: EMERGENCY ROUTE OPTIMIZATION APIS
+# =========================================================================
+try:
+    from green_corridor import get_green_corridor_plan
+except ImportError:
+    from backend.green_corridor import get_green_corridor_plan
+
+@app.route('/api/emergency/<emergency_id>/green-corridor', methods=['GET'])
+def api_get_green_corridor(emergency_id):
+    """Retrieve multi-factor emergency route optimization plan prioritizing travel time over distance."""
+    plan = get_green_corridor_plan(emergency_id)
+    return jsonify(plan), 200
+
+@app.route('/api/emergency/<emergency_id>/green-corridor/activate', methods=['POST'])
+def api_activate_green_corridor(emergency_id):
+    """Simulate Green Corridor route clearance and activation for responding ambulance."""
+    plan = get_green_corridor_plan(emergency_id)
+    plan['status'] = 'ACTIVE'
+    plan['activated_at'] = datetime.now().isoformat()
+    return jsonify({
+        'success': True,
+        'emergency_id': emergency_id,
+        'status': 'ACTIVE',
+        'route_id': plan['recommended_route_id'],
+        'message': f"Green Corridor activated: {plan['summary']['recommended_route']} prioritizes fastest emergency arrival ({plan['summary']['optimized_eta_min']} min ETA).",
+        'plan': plan
+    }), 200
+
+
+# =========================================================================
 # STEP 8: WARI SAFETY SERVICES APIS
 # =========================================================================
 

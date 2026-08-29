@@ -1923,6 +1923,99 @@
                                 <div id="responder-map" class="tactical-leaflet-box"></div>
                             </div>
 
+                            <!-- ================= GREEN CORRIDOR: EMERGENCY ROUTE OPTIMIZATION ================= -->
+                            <div class="green-corridor-card" id="hospital-green-corridor-card" style="margin-top: 16px; background: #0D1117; border: 1px solid rgba(0, 230, 118, 0.4); border-radius: 12px; padding: 16px;">
+                                <div class="gc-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+                                    <div>
+                                        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                            <h3 style="margin: 0; color: #00E676; font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; gap: 6px;">
+                                                <span>🚑</span> GREEN CORRIDOR
+                                            </h3>
+                                            <span class="gc-status-pill active" id="gc-status-badge" style="background: rgba(0, 230, 118, 0.2); color: #00E676; border: 1px solid #00E676; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.5px;">🟢 ACTIVE</span>
+                                            <span class="gc-demo-tag" style="background: rgba(255, 171, 0, 0.15); color: #FFAB00; border: 1px solid rgba(255, 171, 0, 0.4); padding: 2px 8px; border-radius: 12px; font-size: 0.7rem; font-weight: 700;">SIMULATED TRAFFIC (DEMO)</span>
+                                        </div>
+                                        <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #8B949E;">Emergency Route Optimization • Prioritizing Arrival Speed Over Geographical Distance</p>
+                                    </div>
+                                    <div class="gc-quick-actions" style="display: flex; gap: 6px; flex-wrap: wrap;">
+                                        <button type="button" class="gc-action-btn primary" id="btn-gc-activate-corridor" style="background: linear-gradient(135deg, #00E676, #00C853); color: #000; border: none; padding: 6px 12px; border-radius: 6px; font-weight: 800; font-size: 0.8rem; cursor: pointer;">
+                                            ⚡ ACTIVATE GREEN CORRIDOR
+                                        </button>
+                                        <button type="button" class="gc-action-btn secondary" id="btn-gc-view-green-route" style="background: rgba(0, 230, 118, 0.15); color: #00E676; border: 1px solid #00E676; padding: 6px 12px; border-radius: 6px; font-weight: 700; font-size: 0.8rem; cursor: pointer;">
+                                            🗺️ VIEW GREEN ROUTE
+                                        </button>
+                                        <button type="button" class="gc-action-btn secondary" id="btn-gc-view-alt-route" style="background: rgba(255, 255, 255, 0.06); color: #C9D1D9; border: 1px solid rgba(255, 255, 255, 0.15); padding: 6px 12px; border-radius: 6px; font-weight: 700; font-size: 0.8rem; cursor: pointer;">
+                                            ⚪ VIEW ALTERNATIVE
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Compact Emergency Telemetry Bar -->
+                                <div class="gc-telemetry-bar" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; background: rgba(22, 27, 34, 0.8); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 10px; margin-bottom: 12px;">
+                                    <div class="gc-telemetry-item">
+                                        <span style="font-size: 0.72rem; color: #8B949E; display: block;">🚑 AMBULANCE</span>
+                                        <strong id="gc-ambulance-id" style="color: #FFF; font-size: 0.85rem;">MR-001 (En Route)</strong>
+                                        <div style="font-size: 0.72rem; color: #60A5FA;">Saswad Sector 4</div>
+                                    </div>
+                                    <div class="gc-telemetry-item">
+                                        <span style="font-size: 0.72rem; color: #8B949E; display: block;">🏥 DESTINATION</span>
+                                        <strong id="gc-dest-hospital-name" style="color: #FFF; font-size: 0.85rem;">Saswad Sub-District Hospital</strong>
+                                        <div style="font-size: 0.72rem; color: #00E676;">Trauma ICU Ready</div>
+                                    </div>
+                                    <div class="gc-telemetry-item">
+                                        <span style="font-size: 0.72rem; color: #8B949E; display: block;">⚡ OPTIMIZED ETA</span>
+                                        <strong id="gc-recommended-eta" style="color: #00E676; font-size: 1.05rem;">13 min</strong>
+                                        <div style="font-size: 0.72rem; color: #00E676; font-weight: 700;">Saves 13 min vs Direct</div>
+                                    </div>
+                                    <div class="gc-telemetry-item">
+                                        <span style="font-size: 0.72rem; color: #8B949E; display: block;">🚦 TRAFFIC CONGESTION</span>
+                                        <strong id="gc-recommended-traffic" style="color: #00E676; font-size: 0.85rem;">LOW (18% Congestion)</strong>
+                                        <div style="font-size: 0.72rem; color: #8B949E;">Cleared Bypass</div>
+                                    </div>
+                                </div>
+
+                                <!-- Route Evaluation & Selection Cards -->
+                                <div class="gc-routes-comparison-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
+                                    <!-- Route B (Recommended Green Corridor) -->
+                                    <div class="gc-route-option-card recommended" style="background: rgba(0, 230, 118, 0.08); border: 2px solid #00E676; border-radius: 8px; padding: 12px; position: relative;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                            <span style="background: #00E676; color: #000; font-size: 0.7rem; font-weight: 800; padding: 2px 8px; border-radius: 4px;">RECOMMENDED GREEN CORRIDOR 🟢</span>
+                                            <span style="font-size: 0.75rem; color: #00E676; font-weight: 800;">SCORE: 96/100</span>
+                                        </div>
+                                        <h4 style="margin: 4px 0 6px 0; color: #FFF; font-size: 0.95rem;">Route B — Peripheral Bypass Link Road</h4>
+                                        <div style="display: flex; gap: 12px; margin-bottom: 8px; font-size: 0.8rem;">
+                                            <span>Distance: <strong style="color: #FFF;">8.4 km</strong> <em style="font-size:0.75rem; color:#8B949E;">(Longer)</em></span>
+                                            <span>Traffic: <strong style="color: #00E676;">Low (18%)</strong></span>
+                                            <span>ETA: <strong style="color: #00E676; font-size: 0.9rem;">13 min</strong> <em style="font-size:0.75rem; color:#00E676; font-weight:700;">(FASTER)</em></span>
+                                        </div>
+                                        <p style="margin: 0; font-size: 0.78rem; color: #C9D1D9; line-height: 1.4; background: rgba(0, 0, 0, 0.25); padding: 8px; border-radius: 6px;">
+                                            💡 <strong>Why Selected:</strong> Recommended Green Corridor: Despite being 3.6 km longer in geographical distance, low traffic congestion delivers the patient <strong>13 minutes faster</strong> than the direct procession route.
+                                        </p>
+                                    </div>
+
+                                    <!-- Route A (Alternative Direct Route - Congested) -->
+                                    <div class="gc-route-option-card congested" style="background: rgba(255, 82, 82, 0.05); border: 1px solid rgba(255, 82, 82, 0.35); border-radius: 8px; padding: 12px; position: relative;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                            <span style="background: rgba(255, 82, 82, 0.2); color: #FF5252; font-size: 0.7rem; font-weight: 800; padding: 2px 8px; border-radius: 4px;">ALTERNATIVE (CONGESTED) 🔴</span>
+                                            <span style="font-size: 0.75rem; color: #FF5252; font-weight: 800;">SCORE: 34/100</span>
+                                        </div>
+                                        <h4 style="margin: 4px 0 6px 0; color: #FFF; font-size: 0.95rem;">Route A — Direct Palkhi Procession Highway</h4>
+                                        <div style="display: flex; gap: 12px; margin-bottom: 8px; font-size: 0.8rem;">
+                                            <span>Distance: <strong style="color: #FFF;">4.8 km</strong> <em style="font-size:0.75rem; color:#00E676;">(Shorter)</em></span>
+                                            <span>Traffic: <strong style="color: #FF5252;">Severe (88%)</strong></span>
+                                            <span>ETA: <strong style="color: #FF5252; font-size: 0.9rem;">26 min</strong> <em style="font-size:0.75rem; color:#FF5252; font-weight:700;">(DELAYED)</em></span>
+                                        </div>
+                                        <p style="margin: 0; font-size: 0.78rem; color: #8B949E; line-height: 1.4; background: rgba(0, 0, 0, 0.25); padding: 8px; border-radius: 6px;">
+                                            ⚠️ <strong>Why Not Recommended:</strong> Geographically 3.6 km shorter, but severe pedestrian density and Palkhi procession choke points cause an estimated <strong>26-minute delay</strong>.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="gc-footer-notice" style="margin-top: 10px; font-size: 0.72rem; color: #8B949E; display: flex; align-items: center; gap: 6px;">
+                                    <span>ℹ️</span>
+                                    <span><strong>Simulated Traffic Data (Demo):</strong> Emergency route optimization prioritizes patient survival and arrival speed over raw geographical distance. Physical traffic signals are not controlled.</span>
+                                </div>
+                            </div>
+
                             <!-- Hospital Escalation Action Deck -->
                             <div class="hospital-deck" id="hospital-escalation-section" style="margin-top: 14px;">
                                 <button type="button" id="escalate-hospital-btn" class="escalate-trigger-btn" style="background: linear-gradient(135deg, #FF6B00, #FF3D00); border: none; color: #FFF; padding: 10px 16px; border-radius: 8px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
