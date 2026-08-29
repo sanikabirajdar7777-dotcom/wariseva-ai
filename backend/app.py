@@ -1837,6 +1837,63 @@ def api_activate_green_corridor(emergency_id):
         'plan': plan
     }), 200
 
+# =========================================================================
+# EMERGENCY CORRIDOR: CROWD CLEARANCE COORDINATION APIS
+# =========================================================================
+try:
+    from emergency_corridor import get_corridor, request_corridor, assign_volunteers, update_status, reset_corridor
+except ImportError:
+    from backend.emergency_corridor import get_corridor, request_corridor, assign_volunteers, update_status, reset_corridor
+
+@app.route('/api/emergency/<emergency_id>/corridor', methods=['GET'])
+def api_get_corridor(emergency_id):
+    """Get active Emergency Corridor state, ambulance telemetry, and volunteer coordination roster."""
+    corridor = get_corridor(emergency_id)
+    return jsonify({'success': True, 'corridor': corridor}), 200
+
+@app.route('/api/emergency/<emergency_id>/corridor/request', methods=['POST'])
+def api_request_corridor(emergency_id):
+    """Trigger an Emergency Corridor request when ambulance is stuck in crowd."""
+    corridor = request_corridor(emergency_id)
+    return jsonify({
+        'success': True,
+        'message': 'Emergency Corridor requested. Command Centre alerted to dispatch nearby volunteers.',
+        'corridor': corridor
+    }), 200
+
+@app.route('/api/emergency/<emergency_id>/corridor/assign', methods=['POST'])
+def api_assign_corridor(emergency_id):
+    """Command Centre assigns nearby volunteers to clear crowd corridor."""
+    data = request.get_json(silent=True) or {}
+    vol_ids = data.get('volunteer_ids', ['V-001', 'V-002', 'V-003'])
+    corridor = assign_volunteers(emergency_id, vol_ids)
+    return jsonify({
+        'success': True,
+        'message': f"Assigned {len(corridor['assigned_volunteers'])} volunteers to clear emergency corridor.",
+        'corridor': corridor
+    }), 200
+
+@app.route('/api/emergency/<emergency_id>/corridor/status', methods=['POST'])
+def api_update_corridor_status(emergency_id):
+    """Update progression of crowd clearance corridor."""
+    data = request.get_json(silent=True) or {}
+    new_status = data.get('status', 'CLEARING')
+    actor = data.get('actor', 'VOLUNTEER V-001')
+    corridor = update_status(emergency_id, new_status, actor)
+    return jsonify({
+        'success': True,
+        'message': f"Corridor status updated to: {corridor['status_label']}",
+        'corridor': corridor
+    }), 200
+
+@app.route('/api/emergency/<emergency_id>/corridor/reset', methods=['POST'])
+def api_reset_corridor(emergency_id):
+    """Reset Emergency Corridor demo state."""
+    corridor = reset_corridor(emergency_id)
+    return jsonify({'success': True, 'corridor': corridor}), 200
+
+
+
 
 # =========================================================================
 # STEP 8: WARI SAFETY SERVICES APIS

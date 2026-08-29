@@ -9649,5 +9649,74 @@ html, body {
     }
 }
 
+/* =========================================================================
+   EMERGENCY CORRIDOR: CROWD-CLEARANCE COORDINATION STYLES
+   ========================================================================= */
+.emergency-corridor-card,
+.cmd-emergency-corridor-card,
+.vol-emergency-corridor-card {
+    transition: transform 0.2s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
 
+.vol-emergency-corridor-card {
+    animation: corridorAlertPulse 2.5s infinite ease-in-out;
+}
 
+@keyframes corridorAlertPulse {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(255, 109, 0, 0.2);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255, 109, 0, 0.45);
+    }
+}
+
+.ecc-step-btn {
+    transition: filter 0.15s ease, transform 0.15s ease;
+}
+
+.ecc-step-btn:hover {
+    filter: brightness(1.15);
+    transform: translateY(-1px);
+}
+
+.ecc-step-btn:active {
+    transform: translateY(0);
+}
+
+.btn-request-corridor {
+    transition: filter 0.2s ease, transform 0.15s ease;
+}
+
+.btn-request-corridor:hover {
+    filter: brightness(1.15);
+    transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+    .ecc-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .btn-request-corridor {
+        width: 100%;
+        justify-content: center;
+    }
+    .ecc-telemetry-grid {
+        grid-template-columns: 1fr 1fr !important;
+    }
+    .ecc-step-btn {
+        flex: 1 1 calc(50% - 4px);
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .ecc-telemetry-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .ecc-step-btn {
+        flex: 1 1 100%;
+        text-align: center;
+    }
+}

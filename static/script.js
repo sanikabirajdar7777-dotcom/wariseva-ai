@@ -3003,7 +3003,11 @@
 
     // Volunteer Console uses the shared reusable component
     function initVolunteerMap() {
-        return renderLiveCrowdAwareNavigationMap('volunteer-map', 'volunteer');
+        const map = renderLiveCrowdAwareNavigationMap('volunteer-map', 'volunteer');
+        if (typeof loadEmergencyCorridorState === 'function') {
+            loadEmergencyCorridorState();
+        }
+        return map;
     }
 
     // Medical Facility Console uses the exact same shared reusable component
@@ -3011,6 +3015,9 @@
         const map = renderLiveCrowdAwareNavigationMap('responder-map', 'hospital');
         if (typeof loadGreenCorridorData === 'function') {
             loadGreenCorridorData();
+        }
+        if (typeof loadEmergencyCorridorState === 'function') {
+            loadEmergencyCorridorState();
         }
         return map;
     }
@@ -3478,6 +3485,150 @@
     window.loadGreenCorridorData = loadGreenCorridorData;
     window.renderGreenCorridorOnMap = renderGreenCorridorOnMap;
     window.activateGreenCorridor = activateGreenCorridor;
+
+    // =========================================================================
+    // EMERGENCY CORRIDOR: CROWD CLEARANCE COORDINATION ENGINE
+    // =========================================================================
+    function loadEmergencyCorridorState(emId) {
+        const id = emId || window.WariState.currentEmergencyId || 'EM-28471';
+        fetch(`/api/emergency/${id}/corridor`)
+            .then(res => res.json())
+            .then(data => {
+                if (!data.success || !data.corridor) return;
+                const c = data.corridor;
+                window.WariState.emergencyCorridor = c;
+
+                // 1. Update Hospital Portal UI
+                const hospBadge = document.getElementById('hosp-corridor-status-badge');
+                const hospBanner = document.getElementById('hosp-corridor-active-banner');
+                const hospLiveText = document.getElementById('hosp-corridor-live-status-text');
+                if (hospBadge) {
+                    hospBadge.textContent = c.status === 'IDLE' ? '🟡 STANDBY' : c.status_label;
+                    hospBadge.className = `ecc-status-pill ${c.status.toLowerCase()}`;
+                }
+                if (hospBanner && hospLiveText) {
+                    if (c.status !== 'IDLE') {
+                        hospBanner.classList.remove('hidden');
+                        hospLiveText.textContent = `Status: ${c.status_label}`;
+                    } else {
+                        hospBanner.classList.add('hidden');
+                    }
+                }
+
+                // 2. Update Command Centre UI
+                const cmdBadge = document.getElementById('cmd-corridor-status-badge');
+                if (cmdBadge) {
+                    cmdBadge.textContent = c.status_label;
+                    cmdBadge.style.color = (c.status === 'CLEAR' || c.status === 'COMPLETED') ? '#00E676' : '#FFB300';
+                }
+
+                // 3. Update Volunteer Portal UI
+                const volBadge = document.getElementById('vol-corridor-badge');
+                if (volBadge) {
+                    volBadge.textContent = c.status_label;
+                    volBadge.style.color = (c.status === 'CLEAR' || c.status === 'COMPLETED') ? '#00E676' : '#FF9100';
+                }
+
+                // 4. Render Corridor on Active Maps
+                renderEmergencyCorridorOnMap(c);
+            })
+            .catch(() => {});
+    }
+
+    function renderEmergencyCorridorOnMap(corridor) {
+        if (!corridor || corridor.status === 'IDLE' || typeof L === 'undefined') return;
+
+        ['responder', 'volunteer', 'command'].forEach(mapKey => {
+            const map = window.WariState.maps[mapKey];
+            if (!map) return;
+
+            window.WariState.corridorLayers = window.WariState.corridorLayers || {};
+            if (window.WariState.corridorLayers[mapKey]) {
+                window.WariState.corridorLayers[mapKey].forEach(l => {
+                    try { map.removeLayer(l); } catch(e) {}
+                });
+            }
+            window.WariState.corridorLayers[mapKey] = [];
+
+            // Ambulance marker with blinking beacon popup
+            if (corridor.ambulance && corridor.ambulance.coordinates) {
+                const ambMarker = L.marker(corridor.ambulance.coordinates).addTo(map)
+                    .bindPopup(`<b>🚑 ${corridor.ambulance.unit_id}</b><br>${corridor.ambulance.driver_name}<br>Status: <strong>${corridor.status_label}</strong><br><span style="color:#FF5252;">${corridor.ambulance.choke_reason}</span>`);
+                window.WariState.corridorLayers[mapKey].push(ambMarker);
+            }
+
+            // Draw clear corridor passage line if Volunteers Assigned or Clearing or Clear
+            if (corridor.destination_hospital && corridor.destination_hospital.coordinates && corridor.ambulance) {
+                const passageCoords = [
+                    corridor.ambulance.coordinates,
+                    [18.3480, 74.0338],
+                    corridor.destination_hospital.coordinates
+                ];
+                const passageColor = (corridor.status === 'CLEAR' || corridor.status === 'MOVING' || corridor.status === 'COMPLETED') ? '#00E676' : '#FF9100';
+                const corridorLine = L.polyline(passageCoords, {
+                    color: passageColor,
+                    weight: 6,
+                    opacity: 0.9,
+                    dashArray: (corridor.status === 'CLEAR' || corridor.status === 'MOVING') ? null : '6, 6'
+                }).addTo(map).bindPopup(`<b>🚨 Emergency Corridor Passage</b><br>Stage: ${corridor.status_label}<br>Clearance: Volunteer Marshalls holding safety line.`);
+                window.WariState.corridorLayers[mapKey].push(corridorLine);
+            }
+        });
+    }
+
+    function requestEmergencyCorridor(emId) {
+        const id = emId || window.WariState.currentEmergencyId || 'EM-28471';
+        fetch(`/api/emergency/${id}/corridor/request`, { method: 'POST' })
+            .then(res => res.json())
+            .then(data => {
+                showToast("🚨 Emergency Corridor Requested! Command Centre alerted to dispatch nearby volunteers.", "warning");
+                loadEmergencyCorridorState(id);
+            })
+            .catch(() => {
+                showToast("Emergency Corridor requested in prototype mode.", "info");
+            });
+    }
+
+    function assignCorridorVolunteers(emId) {
+        const id = emId || window.WariState.currentEmergencyId || 'EM-28471';
+        fetch(`/api/emergency/${id}/corridor/assign`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ volunteer_ids: ['V-001', 'V-002', 'V-003'] })
+        })
+        .then(res => res.json())
+        .then(data => {
+            showToast("👥 3 Volunteers Assigned to clear emergency corridor!", "success");
+            loadEmergencyCorridorState(id);
+        })
+        .catch(() => {
+            showToast("Volunteers assigned in prototype mode.", "info");
+        });
+    }
+
+    function updateCorridorStatus(newStatus, actor) {
+        const id = window.WariState.currentEmergencyId || 'EM-28471';
+        fetch(`/api/emergency/${id}/corridor/status`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: newStatus, actor: actor || 'VOLUNTEER V-001' })
+        })
+        .then(res => res.json())
+        .then(data => {
+            showToast(data.message || `✓ Corridor status: ${newStatus}`, "success");
+            loadEmergencyCorridorState(id);
+        })
+        .catch(() => {
+            showToast(`Corridor status updated to ${newStatus}`, "info");
+        });
+    }
+
+    window.loadEmergencyCorridorState = loadEmergencyCorridorState;
+    window.renderEmergencyCorridorOnMap = renderEmergencyCorridorOnMap;
+    window.requestEmergencyCorridor = requestEmergencyCorridor;
+    window.assignCorridorVolunteers = assignCorridorVolunteers;
+    window.updateCorridorStatus = updateCorridorStatus;
+
 
 
     // DOM Ready Event Initialization
@@ -4843,6 +4994,65 @@
                 }
             }
             showToast("⚪ Displaying Alternative Congested Route (26 min ETA)", "warning");
+        });
+
+        // =========================================================================
+        // Emergency Corridor Workflow Event Listeners
+        // =========================================================================
+        // 1. Hospital / Ambulance Request
+        document.getElementById('btn-hosp-request-corridor')?.addEventListener('click', () => {
+            requestEmergencyCorridor();
+        });
+
+        // 2. Command Centre Volunteer Assignment & Map Focus
+        document.getElementById('btn-cmd-assign-corridor')?.addEventListener('click', () => {
+            assignCorridorVolunteers();
+        });
+
+        document.getElementById('btn-cmd-focus-corridor')?.addEventListener('click', () => {
+            const map = window.WariState.maps['command'];
+            if (map) {
+                map.flyTo([18.3470, 74.0330], 16);
+            }
+            showToast("📍 Focusing Command Map on Emergency Corridor Choke Point", "info");
+        });
+
+        document.getElementById('btn-cmd-cancel-corridor')?.addEventListener('click', () => {
+            const id = window.WariState.currentEmergencyId || 'EM-28471';
+            fetch(`/api/emergency/${id}/corridor/reset`, { method: 'POST' })
+                .then(() => {
+                    showToast("Emergency Corridor request cancelled.", "info");
+                    loadEmergencyCorridorState(id);
+                });
+        });
+
+        // 3. Volunteer Corridor Step Progression
+        document.getElementById('btn-vol-corridor-accept')?.addEventListener('click', () => {
+            updateCorridorStatus('ASSIGNED', 'Ramesh Kulkarni (V-001)');
+        });
+
+        document.getElementById('btn-vol-corridor-enroute')?.addEventListener('click', () => {
+            updateCorridorStatus('EN_ROUTE', 'Ramesh Kulkarni (V-001)');
+        });
+
+        document.getElementById('btn-vol-corridor-location')?.addEventListener('click', () => {
+            updateCorridorStatus('AT_LOCATION', 'Ramesh Kulkarni (V-001)');
+        });
+
+        document.getElementById('btn-vol-corridor-clearing')?.addEventListener('click', () => {
+            updateCorridorStatus('CLEARING', 'Ramesh Kulkarni (V-001)');
+        });
+
+        document.getElementById('btn-vol-corridor-clear')?.addEventListener('click', () => {
+            updateCorridorStatus('CLEAR', 'Ramesh Kulkarni (V-001)');
+        });
+
+        document.getElementById('btn-vol-corridor-moving')?.addEventListener('click', () => {
+            updateCorridorStatus('MOVING', 'Dr. Arvind Shinde (AMB-01)');
+        });
+
+        document.getElementById('btn-vol-corridor-completed')?.addEventListener('click', () => {
+            updateCorridorStatus('COMPLETED', 'Dr. Arvind Shinde (AMB-01)');
         });
 
         // 14. Command Center Sub-Tabs

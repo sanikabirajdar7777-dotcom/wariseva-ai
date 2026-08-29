@@ -1711,6 +1711,51 @@
                             </button>
                         </div>
 
+                        <!-- Dedicated Emergency Corridor Alert & Crowd-Clearance Card -->
+                        <div class="vol-emergency-corridor-card" id="vol-emergency-corridor-card" style="margin-top: 12px; margin-bottom: 14px; background: #0D1117; border: 2px solid #FF6D00; border-radius: 12px; padding: 16px; box-shadow: 0 4px 18px rgba(255, 109, 0, 0.15);">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;">
+                                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                    <span style="font-size: 1.3rem;">🚨</span>
+                                    <h3 style="margin: 0; color: #FF9100; font-size: 1.1rem; font-weight: 800;">URGENT: EMERGENCY CORRIDOR ASSIGNMENT</h3>
+                                    <span id="vol-corridor-badge" style="background: rgba(255, 109, 0, 0.2); color: #FF9100; border: 1px solid #FF9100; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 800;">ASSIGNMENT ACTIVE</span>
+                                </div>
+                                <span style="font-size: 0.75rem; color: #8B949E; font-family: var(--font-mono);" id="vol-corridor-time-stamp">EM-28471</span>
+                            </div>
+
+                            <p style="margin: 0 0 10px 0; font-size: 0.85rem; color: #FFF; line-height: 1.4;">
+                                🚑 <strong>Ambulance AMB-01</strong> carrying patient <strong>Tukaram Shinde</strong> is blocked by severe crowd at <strong>Saswad Sector 4 (Crossing Gate 2)</strong>. Help clear a safe temporary passage toward Saswad Rural Hospital!
+                            </p>
+
+                            <!-- Crowd Coordination Action Workflow Progression -->
+                            <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px;">
+                                <button type="button" class="ecc-step-btn" id="btn-vol-corridor-accept" style="background: #2563EB; color: #FFF; border: none; padding: 6px 12px; border-radius: 6px; font-weight: 700; font-size: 0.78rem; cursor: pointer;">
+                                    🦺 ACCEPT
+                                </button>
+                                <button type="button" class="ecc-step-btn" id="btn-vol-corridor-enroute" style="background: rgba(37,99,235,0.2); border: 1px solid #2563EB; color: #60A5FA; padding: 6px 12px; border-radius: 6px; font-weight: 700; font-size: 0.78rem; cursor: pointer;">
+                                    🚶 EN ROUTE
+                                </button>
+                                <button type="button" class="ecc-step-btn" id="btn-vol-corridor-location" style="background: rgba(255,171,0,0.2); border: 1px solid #FFAB00; color: #FFAB00; padding: 6px 12px; border-radius: 6px; font-weight: 700; font-size: 0.78rem; cursor: pointer;">
+                                    📍 AT LOCATION
+                                </button>
+                                <button type="button" class="ecc-step-btn" id="btn-vol-corridor-clearing" style="background: linear-gradient(135deg, #FF6D00, #E65100); color: #FFF; border: none; padding: 6px 12px; border-radius: 6px; font-weight: 800; font-size: 0.78rem; cursor: pointer;">
+                                    📢 CLEARING CROWD
+                                </button>
+                                <button type="button" class="ecc-step-btn" id="btn-vol-corridor-clear" style="background: linear-gradient(135deg, #00E676, #00C853); color: #000; border: none; padding: 6px 12px; border-radius: 6px; font-weight: 800; font-size: 0.78rem; cursor: pointer;">
+                                    🟢 CORRIDOR CLEAR
+                                </button>
+                                <button type="button" class="ecc-step-btn" id="btn-vol-corridor-moving" style="background: rgba(0,229,255,0.2); border: 1px solid #00E5FF; color: #00E5FF; padding: 6px 12px; border-radius: 6px; font-weight: 700; font-size: 0.78rem; cursor: pointer;">
+                                    🚑 AMBULANCE MOVING
+                                </button>
+                                <button type="button" class="ecc-step-btn" id="btn-vol-corridor-completed" style="background: rgba(0,230,118,0.2); border: 1px solid #00E676; color: #00E676; padding: 6px 12px; border-radius: 6px; font-weight: 700; font-size: 0.78rem; cursor: pointer;">
+                                    ✅ COMPLETED
+                                </button>
+                            </div>
+
+                            <div style="font-size: 0.72rem; color: #8B949E; background: rgba(0, 0, 0, 0.35); padding: 8px; border-radius: 6px;">
+                                ℹ️ <strong>Safety & Human Crowd Guidance:</strong> Guide pilgrims calmly toward the sides. Form a human safety chain with fellow volunteers. Keep the center clear until the ambulance passes. No physical confrontation.
+                            </div>
+                        </div>
+
                         <!-- Synchronized Active Emergency Dispatch Card -->
                         <div id="volunteer-active-response-box" class="active-task-card">
                             <div class="task-card-header">
@@ -2016,6 +2061,51 @@
                                 </div>
                             </div>
 
+                            <!-- ================= EMERGENCY CORRIDOR: CROWD-CLEARANCE COORDINATION ================= -->
+                            <div class="emergency-corridor-card" id="hospital-emergency-corridor-card" style="margin-top: 14px; background: #0D1117; border: 1px solid rgba(255, 109, 0, 0.4); border-radius: 12px; padding: 16px;">
+                                <div class="ecc-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+                                    <div>
+                                        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                            <h3 style="margin: 0; color: #FF9100; font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; gap: 6px;">
+                                                <span>🚨</span> EMERGENCY CORRIDOR
+                                            </h3>
+                                            <span class="ecc-status-pill idle" id="hosp-corridor-status-badge" style="background: rgba(255, 171, 0, 0.15); color: #FFB300; border: 1px solid #FFB300; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 800;">🟡 STANDBY</span>
+                                        </div>
+                                        <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #8B949E;">Ambulance Crowd-Clearance Coordination • Command Centre & Volunteer Dispatch</p>
+                                    </div>
+                                    <button type="button" class="btn-request-corridor" id="btn-hosp-request-corridor" style="background: linear-gradient(135deg, #FF6D00, #E65100); color: #FFF; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 800; font-size: 0.82rem; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                                        <span>🚑</span> REQUEST EMERGENCY CORRIDOR
+                                    </button>
+                                </div>
+
+                                <div class="ecc-telemetry-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; background: rgba(22, 27, 34, 0.8); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 10px; margin-bottom: 10px;">
+                                    <div>
+                                        <span style="font-size: 0.72rem; color: #8B949E; display: block;">🚑 VEHICLE</span>
+                                        <strong id="hosp-corridor-amb" style="color: #FFF; font-size: 0.85rem;">AMB-01 (Dr. Arvind Shinde)</strong>
+                                        <div style="font-size: 0.72rem; color: #60A5FA;">Mobile Ambulance 1</div>
+                                    </div>
+                                    <div>
+                                        <span style="font-size: 0.72rem; color: #8B949E; display: block;">📍 BOTTLENECK CHOKE</span>
+                                        <strong id="hosp-corridor-location" style="color: #FFF; font-size: 0.85rem;">Saswad Sector 4 (Crossing Gate 2)</strong>
+                                        <div style="font-size: 0.72rem; color: #FF5252;">Severe Pilgrimage Crowd</div>
+                                    </div>
+                                    <div>
+                                        <span style="font-size: 0.72rem; color: #8B949E; display: block;">🏥 DESTINATION</span>
+                                        <strong id="hosp-corridor-dest" style="color: #FFF; font-size: 0.85rem;">Saswad Sub-District Hospital</strong>
+                                        <div style="font-size: 0.72rem; color: #00E676;">Bed Confirmed</div>
+                                    </div>
+                                    <div>
+                                        <span style="font-size: 0.72rem; color: #8B949E; display: block;">👥 VOLUNTEER MARSHALLS</span>
+                                        <strong id="hosp-corridor-vol-count" style="color: #FFB300; font-size: 0.85rem;">3 Nearby Available</strong>
+                                        <div id="hosp-corridor-vol-summary" style="font-size: 0.72rem; color: #8B949E;">Ready to clear passage</div>
+                                    </div>
+                                </div>
+
+                                <div id="hosp-corridor-active-banner" class="hidden" style="background: rgba(255, 109, 0, 0.12); border: 1px solid #FF6D00; border-radius: 8px; padding: 10px 12px; font-size: 0.82rem; color: #FFB300;">
+                                    📢 <strong>Status:</strong> <span id="hosp-corridor-live-status-text">Emergency Corridor requested. Command Centre alerting nearby volunteers to clear path.</span>
+                                </div>
+                            </div>
+
                             <!-- Hospital Escalation Action Deck -->
                             <div class="hospital-deck" id="hospital-escalation-section" style="margin-top: 14px;">
                                 <button type="button" id="escalate-hospital-btn" class="escalate-trigger-btn" style="background: linear-gradient(135deg, #FF6B00, #FF3D00); border: none; color: #FFF; padding: 10px 16px; border-radius: 8px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
@@ -2262,6 +2352,59 @@
                                         <button type="button" class="why-expl-btn small" onclick="openWhyFacilityModal('H-001')">
                                             WHY THIS FACILITY? →
                                         </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Command Center Emergency Corridor Alert Card -->
+                            <div class="cmd-emergency-corridor-card" id="cmd-emergency-corridor-card" style="margin-top: 14px; background: #0D1117; border: 1px solid rgba(255, 109, 0, 0.5); border-radius: 10px; padding: 14px;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+                                    <div>
+                                        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                            <span style="font-size: 1.1rem;">🚨</span>
+                                            <h4 style="margin: 0; color: #FF9100; font-size: 1rem; font-weight: 800;">EMERGENCY CORRIDOR DISPATCH DESK</h4>
+                                            <span id="cmd-corridor-status-badge" style="background: rgba(255, 171, 0, 0.15); color: #FFB300; border: 1px solid #FFB300; padding: 2px 8px; border-radius: 12px; font-size: 0.72rem; font-weight: 800;">🟡 CORRIDOR REQUESTED</span>
+                                        </div>
+                                        <p style="margin: 4px 0 0 0; font-size: 0.78rem; color: #8B949E;">Ambulance AMB-01 blocked at Saswad Palkhi Maidan. Coordinate nearby volunteers to clear safe passage.</p>
+                                    </div>
+                                    <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                                        <button type="button" id="btn-cmd-assign-corridor" style="background: linear-gradient(135deg, #00E676, #00C853); color: #000; border: none; padding: 6px 12px; border-radius: 6px; font-weight: 800; font-size: 0.78rem; cursor: pointer;">
+                                            👥 ASSIGN VOLUNTEERS TO CORRIDOR
+                                        </button>
+                                        <button type="button" id="btn-cmd-focus-corridor" style="background: rgba(0, 229, 255, 0.15); color: #00E5FF; border: 1px solid #00E5FF; padding: 6px 12px; border-radius: 6px; font-weight: 700; font-size: 0.78rem; cursor: pointer;">
+                                            🗺️ VIEW LOCATION
+                                        </button>
+                                        <button type="button" id="btn-cmd-cancel-corridor" style="background: rgba(255, 82, 82, 0.15); color: #FF5252; border: 1px solid #FF5252; padding: 6px 10px; border-radius: 6px; font-weight: 700; font-size: 0.78rem; cursor: pointer;">
+                                            ❌ CANCEL
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Nearby Volunteers Roster -->
+                                <div style="background: rgba(22, 27, 34, 0.8); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 8px; padding: 10px;">
+                                    <div style="font-size: 0.75rem; color: #8B949E; font-weight: 700; margin-bottom: 6px; letter-spacing: 0.5px;">📍 NEARBY AVAILABLE VOLUNTEERS FOR CORRIDOR CLEARANCE:</div>
+                                    <div id="cmd-corridor-volunteers-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px;">
+                                        <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(0, 230, 118, 0.3); border-radius: 6px; padding: 8px;">
+                                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                <strong style="color: #FFF; font-size: 0.82rem;">Ramesh Kulkarni (V-001)</strong>
+                                                <span style="color: #00E676; font-size: 0.7rem; font-weight: 800;">120m away</span>
+                                            </div>
+                                            <div style="font-size: 0.72rem; color: #8B949E;">Lead Marshall • First Aid Certified • ETA 45s</div>
+                                        </div>
+                                        <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(0, 230, 118, 0.3); border-radius: 6px; padding: 8px;">
+                                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                <strong style="color: #FFF; font-size: 0.82rem;">Suresh Patil (V-002)</strong>
+                                                <span style="color: #00E676; font-size: 0.7rem; font-weight: 800;">250m away</span>
+                                            </div>
+                                            <div style="font-size: 0.72rem; color: #8B949E;">Flank Safety • Crowd Guidance • ETA 90s</div>
+                                        </div>
+                                        <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(0, 230, 118, 0.3); border-radius: 6px; padding: 8px;">
+                                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                <strong style="color: #FFF; font-size: 0.82rem;">Aniket Deshmukh (V-003)</strong>
+                                                <span style="color: #00E676; font-size: 0.7rem; font-weight: 800;">400m away</span>
+                                            </div>
+                                            <div style="font-size: 0.72rem; color: #8B949E;">Advance Clearance • Youth Seva • ETA 140s</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
