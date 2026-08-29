@@ -3629,6 +3629,157 @@
     window.assignCorridorVolunteers = assignCorridorVolunteers;
     window.updateCorridorStatus = updateCorridorStatus;
 
+    // =========================================================================
+    // REPORTS & FEEDBACK ENGINE (WARKARI & VOLUNTEER)
+    // =========================================================================
+    const WARKARI_FEEDBACK_CATEGORIES = [
+        'App Experience', 'Emergency Response', 'Volunteer Support',
+        'Medical Facility', 'Maps / Services', 'Other'
+    ];
+
+    const VOLUNTEER_FEEDBACK_CATEGORIES = [
+        'App Experience', 'Warkari Assistance', 'Emergency Response',
+        'Hospital Coordination', 'Command Centre Coordination', 'QR Scanner', 'Other'
+    ];
+
+    function openReportsModal(role, targetTab) {
+        const activeRole = role || (window.WariState && window.WariState.userRole) || 'WARKARI';
+        window.WariState.currentFeedbackRole = activeRole;
+
+        const roleBadge = document.getElementById('fb-role-badge');
+        const userIdentity = document.getElementById('fb-user-identity');
+        const categorySelect = document.getElementById('fb-category-select');
+
+        if (activeRole === 'VOLUNTEER') {
+            if (roleBadge) {
+                roleBadge.textContent = '🦺 VOLUNTEER FEEDBACK';
+                roleBadge.style.color = '#FF9100';
+                roleBadge.style.borderColor = '#FF9100';
+                roleBadge.style.background = 'rgba(255, 109, 0, 0.15)';
+            }
+            if (userIdentity) userIdentity.textContent = 'Ramesh Kulkarni (V-001)';
+            if (categorySelect) {
+                categorySelect.innerHTML = VOLUNTEER_FEEDBACK_CATEGORIES
+                    .map(cat => `<option value="${cat}">${cat}</option>`).join('');
+            }
+        } else {
+            if (roleBadge) {
+                roleBadge.textContent = '👤 WARKARI / USER';
+                roleBadge.style.color = '#00E5FF';
+                roleBadge.style.borderColor = '#00E5FF';
+                roleBadge.style.background = 'rgba(0, 229, 255, 0.15)';
+            }
+            if (userIdentity) userIdentity.textContent = 'Tukaram Shinde (WS-28471)';
+            if (categorySelect) {
+                categorySelect.innerHTML = WARKARI_FEEDBACK_CATEGORIES
+                    .map(cat => `<option value="${cat}">${cat}</option>`).join('');
+            }
+        }
+
+        // Reset form views
+        document.getElementById('feedback-form-container')?.classList.remove('hidden');
+        document.getElementById('feedback-success-container')?.classList.add('hidden');
+        const commentEl = document.getElementById('fb-comment-text');
+        if (commentEl) commentEl.value = '';
+        setFeedbackRating(5);
+
+        // Open modal
+        document.getElementById('analytics-modal')?.classList.remove('hidden');
+
+        // Tab selection
+        if (targetTab === 'feedback') {
+            switchReportsTab('feedback');
+        } else {
+            switchReportsTab('incident');
+        }
+    }
+
+    function switchReportsTab(tabKey) {
+        const btnIncident = document.getElementById('tab-btn-incident-report');
+        const btnFeedback = document.getElementById('tab-btn-give-feedback');
+        const viewIncident = document.getElementById('reports-incident-subview');
+        const viewFeedback = document.getElementById('reports-feedback-subview');
+
+        if (tabKey === 'feedback') {
+            btnIncident?.classList.remove('active');
+            btnFeedback?.classList.add('active');
+            if (btnIncident) { btnIncident.style.background = 'transparent'; btnIncident.style.color = '#8B949E'; btnIncident.style.borderColor = 'rgba(255,255,255,0.1)'; }
+            if (btnFeedback) { btnFeedback.style.background = 'rgba(255, 107, 0, 0.2)'; btnFeedback.style.color = '#FF6B00'; btnFeedback.style.borderColor = '#FF6B00'; }
+            viewIncident?.classList.add('hidden');
+            viewFeedback?.classList.remove('hidden');
+        } else {
+            btnFeedback?.classList.remove('active');
+            btnIncident?.classList.add('active');
+            if (btnIncident) { btnIncident.style.background = 'rgba(0, 230, 118, 0.2)'; btnIncident.style.color = '#00E676'; btnIncident.style.borderColor = '#00E676'; }
+            if (btnFeedback) { btnFeedback.style.background = 'transparent'; btnFeedback.style.color = '#8B949E'; btnFeedback.style.borderColor = 'rgba(255,255,255,0.1)'; }
+            viewFeedback?.classList.add('hidden');
+            viewIncident?.classList.remove('hidden');
+        }
+    }
+
+    function setFeedbackRating(stars) {
+        const val = Math.max(1, Math.min(5, parseInt(stars, 10) || 5));
+        const ratingInput = document.getElementById('fb-rating-val');
+        if (ratingInput) ratingInput.value = val;
+
+        document.querySelectorAll('#fb-star-group .fb-star').forEach(star => {
+            const sVal = parseInt(star.getAttribute('data-val'), 10);
+            if (sVal <= val) {
+                star.classList.add('active');
+                star.classList.remove('inactive');
+            } else {
+                star.classList.remove('active');
+                star.classList.add('inactive');
+            }
+        });
+    }
+
+    function submitFeedbackForm() {
+        const role = window.WariState.currentFeedbackRole || 'WARKARI';
+        const rating = parseInt(document.getElementById('fb-rating-val')?.value || '5', 10);
+        const category = document.getElementById('fb-category-select')?.value || 'App Experience';
+        const comment = (document.getElementById('fb-comment-text')?.value || '').trim();
+        const userId = role === 'VOLUNTEER' ? 'V-001' : 'WS-28471';
+        const userName = role === 'VOLUNTEER' ? 'Ramesh Kulkarni' : 'Tukaram Shinde';
+
+        const payload = {
+            role: role,
+            rating: rating,
+            category: category,
+            comment: comment,
+            user_id: userId,
+            user_name: userName
+        };
+
+        fetch('/api/feedback', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('feedback-form-container')?.classList.add('hidden');
+                document.getElementById('feedback-success-container')?.classList.remove('hidden');
+                showToast("✓ Thank you! Your feedback has been submitted.", "success");
+            } else {
+                showToast(data.error || "Failed to submit feedback", "warning");
+            }
+        })
+        .catch(() => {
+            document.getElementById('feedback-form-container')?.classList.add('hidden');
+            document.getElementById('feedback-success-container')?.classList.remove('hidden');
+            showToast("✓ Thank you! Your feedback has been submitted.", "success");
+        });
+    }
+
+    window.openReportsModal = openReportsModal;
+    window.switchReportsTab = switchReportsTab;
+    window.setFeedbackRating = setFeedbackRating;
+    window.submitFeedbackForm = submitFeedbackForm;
+
+
+
 
 
     // DOM Ready Event Initialization
@@ -5053,6 +5204,45 @@
 
         document.getElementById('btn-vol-corridor-completed')?.addEventListener('click', () => {
             updateCorridorStatus('COMPLETED', 'Dr. Arvind Shinde (AMB-01)');
+        });
+
+        // =========================================================================
+        // Reports & Feedback Workflow Listeners
+        // =========================================================================
+        document.getElementById('tab-btn-incident-report')?.addEventListener('click', () => {
+            switchReportsTab('incident');
+        });
+
+        document.getElementById('tab-btn-give-feedback')?.addEventListener('click', () => {
+            switchReportsTab('feedback');
+        });
+
+        document.getElementById('btn-jump-to-feedback')?.addEventListener('click', () => {
+            switchReportsTab('feedback');
+        });
+
+        document.getElementById('btn-submit-feedback')?.addEventListener('click', () => {
+            submitFeedbackForm();
+        });
+
+        document.getElementById('btn-cancel-feedback')?.addEventListener('click', () => {
+            document.getElementById('analytics-modal')?.classList.add('hidden');
+        });
+
+        document.getElementById('btn-fb-back-to-dashboard')?.addEventListener('click', () => {
+            document.getElementById('analytics-modal')?.classList.add('hidden');
+        });
+
+        document.getElementById('btn-fb-view-analytics')?.addEventListener('click', () => {
+            switchReportsTab('incident');
+        });
+
+        // Star rating clicks
+        document.querySelectorAll('#fb-star-group .fb-star').forEach(star => {
+            star.addEventListener('click', () => {
+                const val = star.getAttribute('data-val');
+                setFeedbackRating(val);
+            });
         });
 
         // 14. Command Center Sub-Tabs

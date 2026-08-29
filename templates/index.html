@@ -603,6 +603,10 @@
                             <span class="act-icon">👥</span>
                             <span>My Group</span>
                         </button>
+                        <button type="button" class="quick-act-btn" id="home-reports-btn" onclick="openReportsModal('WARKARI')">
+                            <span class="act-icon">📊</span>
+                            <span>Reports</span>
+                        </button>
                     </div>
 
                 </div>
@@ -1692,6 +1696,7 @@
                                     ➕ REGISTER
                                 </button>
                                 <button type="button" class="refresh-feed-btn" id="refresh-volunteer-btn">🔄 Refresh</button>
+                                <button type="button" class="reports-btn-pill" id="vol-reports-btn" onclick="openReportsModal('VOLUNTEER')" style="background: rgba(255, 107, 0, 0.15); border: 1px solid #FF6B00; color: #FF6B00; padding: 6px 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">📊 REPORTS</button>
                                 <button type="button" class="demo-logout-btn" id="vol-spa-logout-btn">🚪 LOGOUT</button>
                             </div>
                         </div>
@@ -3526,49 +3531,140 @@
             </div>
         </div>
 
-        <!-- ================= 10. RESPONSE ANALYTICS MODAL ================= -->
+        <!-- ================= 10. REPORTS & RESPONSE ANALYTICS MODAL ================= -->
         <div id="analytics-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
-            <div class="modal-card analytics-card">
+            <div class="modal-card analytics-card" style="max-width: 520px; width: 92vw;">
                 <div class="modal-icon-header">📊</div>
-                <h3 class="modal-title">WariSeva Response Analytics</h3>
-                <p class="modal-msg">Emergency incident performance breakdown & coordination report.</p>
+                <h3 class="modal-title">WariSeva Reports & Feedback</h3>
+                <p class="modal-msg">Emergency incident performance breakdown, coordination reports & pilgrim feedback.</p>
                 
-                <div class="analytics-metrics-deck" id="analytics-metrics-deck">
-                    <div class="analytics-stat-row">
-                        <span>Total Response Time:</span>
-                        <strong class="highlight-green" id="an-total-time">4m 18s</strong>
+                <!-- Reports & Feedback Sub-Tabs -->
+                <div class="reports-modal-tabs" style="display: flex; gap: 8px; margin: 12px 0 16px 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;">
+                    <button type="button" class="reports-tab-btn active" id="tab-btn-incident-report" style="flex: 1; padding: 8px 12px; background: rgba(0, 230, 118, 0.15); border: 1px solid #00E676; border-radius: 8px; color: #00E676; font-weight: 700; font-size: 0.82rem; cursor: pointer;">
+                        📊 Incident Analytics
+                    </button>
+                    <button type="button" class="reports-tab-btn" id="tab-btn-give-feedback" style="flex: 1; padding: 8px 12px; background: rgba(255, 107, 0, 0.15); border: 1px solid #FF6B00; border-radius: 8px; color: #FF6B00; font-weight: 700; font-size: 0.82rem; cursor: pointer;">
+                        💬 Give Feedback
+                    </button>
+                </div>
+
+                <!-- SUBVIEW A: INCIDENT ANALYTICS (EXISTING REPORTS) -->
+                <div id="reports-incident-subview">
+                    <div class="analytics-metrics-deck" id="analytics-metrics-deck">
+                        <div class="analytics-stat-row">
+                            <span>Total Response Time:</span>
+                            <strong class="highlight-green" id="an-total-time">4m 18s</strong>
+                        </div>
+                        <div class="analytics-stat-row">
+                            <span>Volunteer Assignment:</span>
+                            <strong id="an-vol-assign">24 sec</strong>
+                        </div>
+                        <div class="analytics-stat-row">
+                            <span>Volunteer Travel:</span>
+                            <strong id="an-vol-travel">2m 08s</strong>
+                        </div>
+                        <div class="analytics-stat-row">
+                            <span>Route Strategy:</span>
+                            <strong class="highlight-green" id="an-route-savings">Safe Bypass (+7m saved)</strong>
+                        </div>
+                        <div class="analytics-stat-row">
+                            <span>Patient Reached:</span>
+                            <strong class="text-success">✓ Verified On Scene</strong>
+                        </div>
                     </div>
-                    <div class="analytics-stat-row">
-                        <span>Volunteer Assignment:</span>
-                        <strong id="an-vol-assign">24 sec</strong>
+
+                    <!-- WariSeva Response Score Card -->
+                    <div class="score-display-card">
+                        <span class="score-kicker">WARISEVA RESPONSE SCORE</span>
+                        <div class="score-number-row">
+                            <span class="score-big" id="an-score-val">92</span>
+                            <span class="score-denom">/ 100</span>
+                        </div>
+                        <span class="score-rating-badge" id="an-rating-badge">EXEMPLARY RAPID RESPONSE</span>
+                        <p class="score-disclaimer"><em>* Prototype Response Metric based on dispatch time, GPS precision, and bypass routing efficiency.</em></p>
                     </div>
-                    <div class="analytics-stat-row">
-                        <span>Volunteer Travel:</span>
-                        <strong id="an-vol-travel">2m 08s</strong>
+
+                    <div style="margin-top: 12px; text-align: center;">
+                        <button type="button" id="btn-jump-to-feedback" style="width: 100%; background: linear-gradient(135deg, #FF6B00, #E65100); color: #FFF; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 800; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <span>💬</span>
+                            <span>GIVE FEEDBACK / अभिप्राय द्या</span>
+                            <span>→</span>
+                        </button>
                     </div>
-                    <div class="analytics-stat-row">
-                        <span>Route Strategy:</span>
-                        <strong class="highlight-green" id="an-route-savings">Safe Bypass (+7m saved)</strong>
-                    </div>
-                    <div class="analytics-stat-row">
-                        <span>Patient Reached:</span>
-                        <strong class="text-success">✓ Verified On Scene</strong>
+
+                    <div class="modal-actions" style="margin-top: 12px;">
+                        <button type="button" id="close-analytics-modal-btn" class="modal-btn confirm-btn">DONE</button>
                     </div>
                 </div>
 
-                <!-- WariSeva Response Score Card -->
-                <div class="score-display-card">
-                    <span class="score-kicker">WARISEVA RESPONSE SCORE</span>
-                    <div class="score-number-row">
-                        <span class="score-big" id="an-score-val">92</span>
-                        <span class="score-denom">/ 100</span>
-                    </div>
-                    <span class="score-rating-badge" id="an-rating-badge">EXEMPLARY RAPID RESPONSE</span>
-                    <p class="score-disclaimer"><em>* Prototype Response Metric based on dispatch time, GPS precision, and bypass routing efficiency.</em></p>
-                </div>
+                <!-- SUBVIEW B: FEEDBACK FORM (NEW ADDITION UNDER REPORTS) -->
+                <div id="reports-feedback-subview" class="hidden">
+                    <div id="feedback-form-container">
+                        <!-- Role indicator badge & User identity -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; background: rgba(22,27,34,0.8); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06);">
+                            <span id="fb-role-badge" style="background: rgba(0, 229, 255, 0.15); color: #00E5FF; border: 1px solid #00E5FF; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 800;">
+                                👤 WARKARI / USER
+                            </span>
+                            <span id="fb-user-identity" style="font-size: 0.78rem; color: #8B949E;">Tukaram Shinde (WS-28471)</span>
+                        </div>
 
-                <div class="modal-actions">
-                    <button type="button" id="close-analytics-modal-btn" class="modal-btn confirm-btn">DONE</button>
+                        <!-- 1. Star Rating (1 to 5) -->
+                        <div style="margin-bottom: 14px; text-align: center; background: rgba(0,0,0,0.25); padding: 10px; border-radius: 8px;">
+                            <label style="display: block; font-size: 0.8rem; color: #8B949E; margin-bottom: 6px; font-weight: 700;">YOUR RATING / तुमचा अनुभव</label>
+                            <div class="feedback-star-rating" id="fb-star-group" style="display: flex; justify-content: center; gap: 10px; font-size: 2rem; cursor: pointer; user-select: none;">
+                                <span class="fb-star active" data-val="1" style="color: #FFB300;">★</span>
+                                <span class="fb-star active" data-val="2" style="color: #FFB300;">★</span>
+                                <span class="fb-star active" data-val="3" style="color: #FFB300;">★</span>
+                                <span class="fb-star active" data-val="4" style="color: #FFB300;">★</span>
+                                <span class="fb-star active" data-val="5" style="color: #FFB300;">★</span>
+                            </div>
+                            <input type="hidden" id="fb-rating-val" value="5">
+                        </div>
+
+                        <!-- 2. Category Selector -->
+                        <div style="margin-bottom: 12px;">
+                            <label for="fb-category-select" style="display: block; font-size: 0.8rem; color: #8B949E; margin-bottom: 6px; font-weight: 700;">CATEGORY / वर्गवारी</label>
+                            <select id="fb-category-select" style="width: 100%; background: #0D1117; color: #FFF; border: 1px solid #30363D; border-radius: 8px; padding: 10px; font-size: 0.85rem;">
+                                <option value="App Experience">App Experience</option>
+                                <option value="Emergency Response">Emergency Response</option>
+                                <option value="Volunteer Support">Volunteer Support</option>
+                                <option value="Medical Facility">Medical Facility</option>
+                                <option value="Maps / Services">Maps / Services</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <!-- 3. Comments Box -->
+                        <div style="margin-bottom: 14px;">
+                            <label for="fb-comment-text" style="display: block; font-size: 0.8rem; color: #8B949E; margin-bottom: 6px; font-weight: 700;">COMMENTS / तुमचे मत</label>
+                            <textarea id="fb-comment-text" rows="3" placeholder="Share your experience or suggestions for WariSeva..." style="width: 100%; background: #0D1117; color: #FFF; border: 1px solid #30363D; border-radius: 8px; padding: 10px; font-size: 0.85rem; resize: vertical;"></textarea>
+                        </div>
+
+                        <!-- 4. Submit Action -->
+                        <div style="display: flex; gap: 8px;">
+                            <button type="button" id="btn-submit-feedback" style="flex: 2; background: linear-gradient(135deg, #00E676, #00C853); color: #000; border: none; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; cursor: pointer;">
+                                📨 SUBMIT FEEDBACK
+                            </button>
+                            <button type="button" id="btn-cancel-feedback" style="flex: 1; background: transparent; border: 1px solid #30363D; color: #8B949E; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">
+                                CANCEL
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Success Confirmation View -->
+                    <div id="feedback-success-container" class="hidden" style="text-align: center; padding: 20px 10px;">
+                        <div style="font-size: 2.6rem; margin-bottom: 10px;">✅</div>
+                        <h4 style="color: #00E676; font-size: 1.15rem; font-weight: 800; margin: 0 0 8px 0;" id="feedback-success-heading">Thank you! Your feedback has been submitted.</h4>
+                        <p style="color: #8B949E; font-size: 0.82rem; margin: 0 0 16px 0;">Your contribution helps improve safety and coordination for all pilgrims across the Palkhi route.</p>
+                        <div style="display: flex; gap: 8px; justify-content: center;">
+                            <button type="button" id="btn-fb-back-to-dashboard" class="modal-btn confirm-btn" style="min-width: 140px;">
+                                DONE / बंद करा
+                            </button>
+                            <button type="button" id="btn-fb-view-analytics" style="background: rgba(0, 230, 118, 0.15); border: 1px solid #00E676; color: #00E676; padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 0.82rem; cursor: pointer;">
+                                📊 View Analytics
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

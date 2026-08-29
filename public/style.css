@@ -9720,3 +9720,34 @@ html, body {
         text-align: center;
     }
 }
+
+/* =========================================================================
+   REPORTS & FEEDBACK STYLES (WARKARI & VOLUNTEER)
+   ========================================================================= */
+.reports-tab-btn {
+    transition: all 0.2s ease;
+}
+.reports-tab-btn:hover {
+    filter: brightness(1.15);
+}
+.fb-star {
+    transition: transform 0.15s ease, color 0.15s ease;
+}
+.fb-star:hover {
+    transform: scale(1.25);
+}
+.fb-star.active {
+    color: #FFB300 !important;
+}
+.fb-star.inactive {
+    color: #484F58 !important;
+}
+#btn-submit-feedback:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+}
+#btn-jump-to-feedback:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+}
+

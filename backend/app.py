@@ -279,6 +279,21 @@ def init_db():
         )
     ''')
 
+    # 10. Feedback Table (Role-based Feedback for Warkaris & Volunteers)
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS feedback (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            feedback_id TEXT UNIQUE NOT NULL,
+            role TEXT NOT NULL,
+            user_id TEXT,
+            user_name TEXT,
+            rating INTEGER NOT NULL,
+            category TEXT NOT NULL,
+            comment TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+
     conn.commit()
     seed_demo_data(cursor)
     conn.commit()
@@ -3975,6 +3990,123 @@ def report_warkari():
         'zone': zone,
         'message': 'The Wari Safety Network has been notified.'
     }), 201
+
+# =========================================================================
+# REPORTS & FEEDBACK APIS (WARKARI & VOLUNTEER)
+# =========================================================================
+VALID_WARKARI_CATEGORIES = {
+    'App Experience', 'Emergency Response', 'Volunteer Support',
+    'Medical Facility', 'Maps / Services', 'Other'
+}
+
+VALID_VOLUNTEER_CATEGORIES = {
+    'App Experience', 'Warkari Assistance', 'Emergency Response',
+    'Hospital Coordination', 'Command Centre Coordination', 'QR Scanner', 'Other'
+}
+
+@app.route('/api/feedback', methods=['POST'])
+def submit_feedback():
+    """Submit role-based feedback for Warkari or Volunteer."""
+    data = request.get_json(silent=True) or request.form.to_dict() or {}
+    
+    role = str(data.get('role', 'WARKARI')).strip().upper()
+    if role not in ('WARKARI', 'VOLUNTEER'):
+        role = 'WARKARI'
+        
+    try:
+        rating = int(data.get('rating', 5))
+        if rating < 1 or rating > 5:
+            return jsonify({'success': False, 'error': 'Rating must be between 1 and 5 stars.'}), 400
+    except (ValueError, TypeError):
+        return jsonify({'success': False, 'error': 'Invalid rating format.'}), 400
+
+    category = str(data.get('category', 'App Experience')).strip()
+    allowed_categories = VALID_VOLUNTEER_CATEGORIES if role == 'VOLUNTEER' else VALID_WARKARI_CATEGORIES
+    if category not in allowed_categories:
+        category = 'Other'
+
+    raw_comment = str(data.get('comment', '')).strip()
+    comment = re.sub(r'[<>]', '', raw_comment)[:1000]
+
+    user_id = str(data.get('user_id', 'WS-28471' if role == 'WARKARI' else 'V-001')).strip()[:50]
+    user_name = str(data.get('user_name', 'Tukaram Shinde' if role == 'WARKARI' else 'Ramesh Kulkarni')).strip()[:100]
+
+    feedback_id = f"FB-{datetime.now().strftime('%m%d')}-{random.randint(1000, 9999)}"
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS feedback (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            feedback_id TEXT UNIQUE NOT NULL,
+            role TEXT NOT NULL,
+            user_id TEXT,
+            user_name TEXT,
+            rating INTEGER NOT NULL,
+            category TEXT NOT NULL,
+            comment TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+    cursor.execute('''
+        INSERT INTO feedback (feedback_id, role, user_id, user_name, rating, category, comment)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    ''', (feedback_id, role, user_id, user_name, rating, category, comment))
+    conn.commit()
+    conn.close()
+
+    return jsonify({
+        'success': True,
+        'feedback_id': feedback_id,
+        'role': role,
+        'rating': rating,
+        'category': category,
+        'message': 'Thank you! Your feedback has been submitted.'
+    }), 201
+
+@app.route('/api/feedback', methods=['GET'])
+def get_feedback():
+    """Retrieve submitted feedback list (filterable by role)."""
+    role_filter = request.args.get('role', '').strip().upper()
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS feedback (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            feedback_id TEXT UNIQUE NOT NULL,
+            role TEXT NOT NULL,
+            user_id TEXT,
+            user_name TEXT,
+            rating INTEGER NOT NULL,
+            category TEXT NOT NULL,
+            comment TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+    if role_filter in ('WARKARI', 'VOLUNTEER'):
+        cursor.execute('SELECT feedback_id, role, user_name, rating, category, comment, created_at FROM feedback WHERE role = ? ORDER BY id DESC LIMIT 50', (role_filter,))
+    else:
+        cursor.execute('SELECT feedback_id, role, user_name, rating, category, comment, created_at FROM feedback ORDER BY id DESC LIMIT 50')
+    rows = cursor.fetchall()
+    conn.close()
+
+    feedback_list = []
+    for r in rows:
+        feedback_list.append({
+            'feedback_id': r['feedback_id'],
+            'role': r['role'],
+            'user_name': r['user_name'],
+            'rating': r['rating'],
+            'category': r['category'],
+            'comment': r['comment'],
+            'created_at': r['created_at']
+        })
+
+    return jsonify({
+        'success': True,
+        'count': len(feedback_list),
+        'feedback': feedback_list
+    }), 200
 
 @app.route('/api/user/<wari_id>', methods=['GET'])
 @app.route('/api/warkari/<wari_id>', methods=['GET'])
