@@ -80,6 +80,8 @@
         en: {
             lang_code: "en-IN",
             tagline: "Your safety, one tap away.",
+            role_prompt_question: "How can we help you?",
+            role_prompt_sub: "Choose your role to access dedicated emergency coordination, safety tools, and real-time support.",
             value_prop: "\"We don't just report an emergency — we coordinate the response behind the SOS.\"",
             value_flow: "QR Wristband → Exact Identification → Protected Medical Profile → AI Emergency Coordination",
             demo_desc: "DEMO DATA • SIMULATED RESPONSE",
@@ -265,6 +267,8 @@
         mr: {
             lang_code: "mr-IN",
             tagline: "आपली सुरक्षा, एका स्पर्शात.",
+            role_prompt_question: "आम्ही आपली कशी मदत करू शकतो?",
+            role_prompt_sub: "समर्पित आपत्कालीन समन्वय, सुरक्षा साधने आणि थेट मदत मिळवण्यासाठी तुमची भूमिका निवडा.",
             value_prop: "\"आम्ही केवळ आपत्कालीन नोंद करत नाही — मदतीची संपूर्ण यंत्रणा समन्वयित करतो.\"",
             value_flow: "QR रिस्टबँड → अचूक ओळख → सुरक्षित वैद्यकीय माहिती → AI आपत्कालीन समन्वय",
             demo_desc: "डेमो डेटा • सिम्युलेटेड प्रतिसाद",
@@ -450,6 +454,8 @@
         hi: {
             lang_code: "hi-IN",
             tagline: "आपकी सुरक्षा, एक स्पर्श में.",
+            role_prompt_question: "हम आपकी क्या मदद कर सकते हैं?",
+            role_prompt_sub: "समर्पित आपातकालीन समन्वय, सुरक्षा उपकरण और त्वरित सहायता के लिए अपनी भूमिका चुनें।",
             value_prop: "\"हम सिर्फ आपातकाल दर्ज नहीं करते — पूरी राहत प्रणाली का समन्वय करते हैं.\"",
             value_flow: "QR रिस्टबैंड → सटीक पहचान → सुरक्षित चिकित्सा प्रोफ़ाइल → AI आपातकालीन समन्वय",
             demo_desc: "डेमो डेटा • सिम्युलेटेड प्रतिक्रिया",
@@ -698,6 +704,7 @@
 
     // Navigation Switcher
     function switchView(viewId) {
+        window.switchView = switchView;
         document.querySelectorAll('.content-view').forEach(v => v.classList.add('hidden'));
         document.querySelectorAll('.content-view').forEach(v => v.classList.remove('active'));
         const target = document.getElementById(viewId);
@@ -3950,13 +3957,106 @@
             showToast("Command incidents refreshed", "info");
         });
 
-        // Brand click -> Home
-        document.getElementById('sidebar-brand-home')?.addEventListener('click', () => {
-            switchView('home-view');
-        });
-        document.getElementById('nav-home')?.addEventListener('click', () => {
-            switchView('home-view');
-        });
+        // =========================================================================
+        // ROLE PORTAL INTERACTION ENGINE
+        // =========================================================================
+        function initRolePortalWorkflow() {
+            const portal = document.getElementById('first-screen-role-selection');
+            const warkariDash = document.getElementById('warkari-user-dashboard');
+
+            function activateWarkariRole(smooth = true) {
+                switchView('home-view');
+                if (portal) portal.classList.add('hidden');
+                if (warkariDash) {
+                    warkariDash.classList.remove('hidden');
+                    if (smooth) {
+                        warkariDash.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+                window.WariState.selectedRole = 'WARKARI';
+                try { sessionStorage.setItem('wariseva_selected_role', 'WARKARI'); } catch (e) {}
+                setTimeout(() => {
+                    initHomeSafetyMap();
+                    if (window.WariState.maps.homeSafety) {
+                        window.WariState.maps.homeSafety.invalidateSize();
+                    }
+                }, 120);
+            }
+
+            function showFirstScreenPortal() {
+                switchView('home-view');
+                if (portal) {
+                    portal.classList.remove('hidden');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+                if (warkariDash) warkariDash.classList.add('hidden');
+                window.WariState.selectedRole = null;
+                try { sessionStorage.removeItem('wariseva_selected_role'); } catch (e) {}
+            }
+
+            window.activateWarkariRole = activateWarkariRole;
+            window.showFirstScreenPortal = showFirstScreenPortal;
+
+            // 1. Role Selection Card & Button Click Handlers
+            document.getElementById('btn-select-role-warkari')?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                activateWarkariRole();
+            });
+            document.getElementById('card-role-warkari')?.addEventListener('click', () => {
+                activateWarkariRole();
+            });
+
+            document.getElementById('btn-select-role-volunteer')?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                switchView('volunteer-view');
+            });
+            document.getElementById('card-role-volunteer')?.addEventListener('click', () => {
+                switchView('volunteer-view');
+            });
+
+            document.getElementById('btn-select-role-hospital')?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                switchView('responder-view');
+            });
+            document.getElementById('card-role-hospital')?.addEventListener('click', () => {
+                switchView('responder-view');
+            });
+
+            document.getElementById('btn-select-role-command')?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                switchView('command-view');
+            });
+            document.getElementById('card-role-command')?.addEventListener('click', () => {
+                switchView('command-view');
+            });
+
+            // 2. Return to First Screen / Role Selectors
+            document.getElementById('btn-switch-role-from-warkari')?.addEventListener('click', showFirstScreenPortal);
+            document.getElementById('vol-back-to-roles-btn')?.addEventListener('click', showFirstScreenPortal);
+            document.getElementById('hosp-back-to-roles-btn')?.addEventListener('click', showFirstScreenPortal);
+            document.getElementById('cmd-back-to-roles-btn')?.addEventListener('click', showFirstScreenPortal);
+
+            // 3. Home Nav triggers First Screen
+            document.getElementById('sidebar-brand-home')?.addEventListener('click', showFirstScreenPortal);
+            document.getElementById('nav-home')?.addEventListener('click', showFirstScreenPortal);
+            document.getElementById('mob-nav-home')?.addEventListener('click', showFirstScreenPortal);
+
+            // 4. Initial State on load
+            try {
+                const savedRole = sessionStorage.getItem('wariseva_selected_role');
+                if (savedRole === 'WARKARI') {
+                    activateWarkariRole(false);
+                } else {
+                    if (warkariDash) warkariDash.classList.add('hidden');
+                    if (portal) portal.classList.remove('hidden');
+                }
+            } catch (e) {
+                if (warkariDash) warkariDash.classList.add('hidden');
+                if (portal) portal.classList.remove('hidden');
+            }
+        }
+
+        initRolePortalWorkflow();
 
         // 2. Language Selector
         const langDropdown = document.getElementById('lang-select');
@@ -4082,8 +4182,11 @@
         if (addGroupForm) {
             addGroupForm.addEventListener('submit', (e) => {
                 e.preventDefault();
-                const name = document.getElementById('new-member-name').value.trim();
-                const phone = document.getElementById('new-member-phone').value.trim();
+                const nameInput = document.getElementById('new-member-name');
+                const phoneInput = document.getElementById('new-member-phone');
+                const name = nameInput ? nameInput.value.trim() : '';
+                const phone = phoneInput ? phoneInput.value.trim() : '';
+                if (!name) return;
 
                 fetch('/api/group/add-member', {
                     method: 'POST',
@@ -4502,28 +4605,28 @@
         // 14. Command Center Sub-Tabs
         document.getElementById('cmd-tab-operations')?.addEventListener('click', () => {
             document.querySelectorAll('.cmd-tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('cmd-tab-operations').classList.add('active');
-            document.getElementById('cmd-operations-subview').classList.remove('hidden');
-            document.getElementById('cmd-heatmap-subview').classList.add('hidden');
-            document.getElementById('cmd-readiness-subview').classList.add('hidden');
+            document.getElementById('cmd-tab-operations')?.classList.add('active');
+            document.getElementById('cmd-operations-subview')?.classList.remove('hidden');
+            document.getElementById('cmd-heatmap-subview')?.classList.add('hidden');
+            document.getElementById('cmd-readiness-subview')?.classList.add('hidden');
             initCommandMap();
         });
 
         document.getElementById('cmd-tab-heatmap')?.addEventListener('click', () => {
             document.querySelectorAll('.cmd-tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('cmd-tab-heatmap').classList.add('active');
-            document.getElementById('cmd-operations-subview').classList.add('hidden');
-            document.getElementById('cmd-heatmap-subview').classList.remove('hidden');
-            document.getElementById('cmd-readiness-subview').classList.add('hidden');
+            document.getElementById('cmd-tab-heatmap')?.classList.add('active');
+            document.getElementById('cmd-operations-subview')?.classList.add('hidden');
+            document.getElementById('cmd-heatmap-subview')?.classList.remove('hidden');
+            document.getElementById('cmd-readiness-subview')?.classList.add('hidden');
             loadCommandHeatmap();
         });
 
         document.getElementById('cmd-tab-readiness')?.addEventListener('click', () => {
             document.querySelectorAll('.cmd-tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('cmd-tab-readiness').classList.add('active');
-            document.getElementById('cmd-operations-subview').classList.add('hidden');
-            document.getElementById('cmd-heatmap-subview').classList.add('hidden');
-            document.getElementById('cmd-readiness-subview').classList.remove('hidden');
+            document.getElementById('cmd-tab-readiness')?.classList.add('active');
+            document.getElementById('cmd-operations-subview')?.classList.add('hidden');
+            document.getElementById('cmd-heatmap-subview')?.classList.add('hidden');
+            document.getElementById('cmd-readiness-subview')?.classList.remove('hidden');
             loadCommandReadiness();
         });
 
@@ -4841,16 +4944,20 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', () => {
             const v = btn.dataset.view;
             if (v) {
-                document.querySelectorAll('.content-view').forEach(el => el.classList.add('hidden'));
-                document.querySelectorAll('.content-view').forEach(el => el.classList.remove('active'));
-                const target = document.getElementById(v);
-                if (target) {
-                    target.classList.remove('hidden');
-                    target.classList.add('active');
-                    window.WariState.currentView = v;
+                if (typeof window.switchView === 'function') {
+                    window.switchView(v);
+                } else {
+                    document.querySelectorAll('.content-view').forEach(el => el.classList.add('hidden'));
+                    document.querySelectorAll('.content-view').forEach(el => el.classList.remove('active'));
+                    const target = document.getElementById(v);
+                    if (target) {
+                        target.classList.remove('hidden');
+                        target.classList.add('active');
+                        window.WariState.currentView = v;
+                    }
+                    document.querySelectorAll('.sidebar-nav-list .nav-link-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
                 }
-                document.querySelectorAll('.sidebar-nav-list .nav-link-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
             }
         });
     });

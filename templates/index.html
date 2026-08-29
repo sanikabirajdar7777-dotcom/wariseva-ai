@@ -201,9 +201,157 @@
             <main class="content-canvas" id="main-content-canvas">
 
 
-                        <!-- ================= VIEW 1: HOME (REFERENCE DASHBOARD DESIGN) ================= -->
+                        <!-- ================= VIEW 1: HOME (ROLE-BASED PORTAL & WARKARI DASHBOARD) ================= -->
             <section id="home-view" class="content-view active" role="region" aria-label="Home Dashboard">
-                <div class="home-dashboard-grid">
+                
+                <!-- ================= FIRST SCREEN: ROLE SELECTION HERO ================= -->
+                <div id="first-screen-role-selection" class="first-screen-portal-container">
+                    <div class="first-screen-hero-card">
+                        <!-- Top Identity & Logo -->
+                        <div class="first-screen-brand-strip">
+                            <img src="{{ url_for('static', filename='logo.png') }}" alt="WariSeva AI Logo" class="first-screen-brand-logo">
+                            <div class="first-screen-brand-text">
+                                <h1 class="first-screen-main-title">WariSeva <span class="first-screen-ai-pill">AI</span></h1>
+                                <span class="first-screen-tagline" data-i18n="tagline">Your safety, one tap away.</span>
+                            </div>
+                            <div class="first-screen-palkhi-pill">
+                                <span>🚩</span>
+                                <span>PANDHARPUR WARI 2027</span>
+                            </div>
+                        </div>
+
+                        <!-- Central Guiding Question -->
+                        <div class="first-screen-prompt-block">
+                            <h2 class="first-screen-question" id="first-screen-main-question" data-i18n="role_prompt_question">How can we help you?</h2>
+                            <p class="first-screen-subtitle" id="first-screen-main-sub" data-i18n="role_prompt_sub">Choose your role to access dedicated emergency coordination, safety tools, and real-time support.</p>
+                        </div>
+
+                        <!-- The 3 Primary Role Choices -->
+                        <div class="first-screen-roles-grid">
+                            
+                            <!-- ROLE 1: WARKARI / USER -->
+                            <div class="role-portal-card warkari-portal-card" id="card-role-warkari" tabindex="0" role="button" aria-label="Select Warkari / User Role">
+                                <div class="rpc-top-stripe warkari-stripe"></div>
+                                <div class="rpc-inner">
+                                    <div class="rpc-icon-box warkari-icon-box">
+                                        <span class="rpc-icon">👤</span>
+                                    </div>
+                                    <div class="rpc-header">
+                                        <span class="rpc-role-kicker warkari-kicker">PILGRIM & PUBLIC SERVICES</span>
+                                        <h3 class="rpc-role-title">WARKARI / USER</h3>
+                                    </div>
+                                    <p class="rpc-role-description">Access safety services, emergency help and nearby facilities.</p>
+                                    <div class="rpc-feature-list">
+                                        <span class="rpc-tag">🚨 SOS Emergency Help</span>
+                                        <span class="rpc-tag">📍 Safety Map</span>
+                                        <span class="rpc-tag">💧 Water Points</span>
+                                        <span class="rpc-tag">🚻 Restrooms / Toilets</span>
+                                        <span class="rpc-tag">🏥 Medical Facilities</span>
+                                        <span class="rpc-tag">🛌 Rest Camps</span>
+                                    </div>
+                                    <button type="button" class="rpc-action-btn warkari-action-btn" id="btn-select-role-warkari">
+                                        <span>ENTER AS WARKARI</span>
+                                        <span class="rpc-arrow">→</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- ROLE 2: VOLUNTEER -->
+                            <div class="role-portal-card volunteer-portal-card" id="card-role-volunteer" tabindex="0" role="button" aria-label="Select Volunteer Role">
+                                <div class="rpc-top-stripe volunteer-stripe"></div>
+                                <div class="rpc-inner">
+                                    <div class="rpc-icon-box volunteer-icon-box">
+                                        <span class="rpc-icon">🧑‍🚒</span>
+                                    </div>
+                                    <div class="rpc-header">
+                                        <span class="rpc-role-kicker volunteer-kicker">ON-GROUND RESPONSE</span>
+                                        <h3 class="rpc-role-title">VOLUNTEER</h3>
+                                    </div>
+                                    <p class="rpc-role-description">Respond to emergencies, assist Warkaris and scan wristband QR codes.</p>
+                                    <div class="rpc-feature-list">
+                                        <span class="rpc-tag">📸 QR Wristband Scanner</span>
+                                        <span class="rpc-tag">🚨 Active Emergencies</span>
+                                        <span class="rpc-tag">⚡ Accept & En Route</span>
+                                        <span class="rpc-tag">📍 Patient Location Map</span>
+                                        <span class="rpc-tag">🤝 Assistance Actions</span>
+                                        <span class="rpc-tag">🏥 Hospital Transfer</span>
+                                    </div>
+                                    <button type="button" class="rpc-action-btn volunteer-action-btn" id="btn-select-role-volunteer">
+                                        <span>VOLUNTEER PORTAL</span>
+                                        <span class="rpc-arrow">→</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- ROLE 3: HOSPITAL / MEDICAL FACILITY -->
+                            <div class="role-portal-card hospital-portal-card" id="card-role-hospital" tabindex="0" role="button" aria-label="Select Hospital / Medical Facility Role">
+                                <div class="rpc-top-stripe hospital-stripe"></div>
+                                <div class="rpc-inner">
+                                    <div class="rpc-icon-box hospital-icon-box">
+                                        <span class="rpc-icon">🏥</span>
+                                    </div>
+                                    <div class="rpc-header">
+                                        <span class="rpc-role-kicker hospital-kicker">HEALTHCARE & TRAUMA</span>
+                                        <h3 class="rpc-role-title">HOSPITAL / MEDICAL FACILITY</h3>
+                                    </div>
+                                    <p class="rpc-role-description">Receive emergency cases, accept patients and coordinate medical care.</p>
+                                    <div class="rpc-feature-list">
+                                        <span class="rpc-tag">🚑 Incoming Emergency Cases</span>
+                                        <span class="rpc-tag">⚡ Accept Patient Intake</span>
+                                        <span class="rpc-tag">🛏️ Live Bed Capacity</span>
+                                        <span class="rpc-tag">🩺 Triage & Treatment</span>
+                                        <span class="rpc-tag">🔄 Hospital Escalation</span>
+                                        <span class="rpc-tag">✅ Resolve & Discharge</span>
+                                    </div>
+                                    <button type="button" class="rpc-action-btn hospital-action-btn" id="btn-select-role-hospital">
+                                        <span>HOSPITAL PORTAL</span>
+                                        <span class="rpc-arrow">→</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- COMMAND CENTRE: Dedicated Separate Operational Entry -->
+                        <div class="first-screen-ops-strip" id="card-role-command">
+                            <div class="ops-strip-left">
+                                <span class="ops-strip-icon">🛰️</span>
+                                <div class="ops-strip-text">
+                                    <div class="ops-strip-heading">
+                                        <strong>COMMAND CENTRE OPERATIONS</strong>
+                                        <span class="ops-badge">TACTICAL DESK</span>
+                                    </div>
+                                    <p class="ops-strip-sub">Centralized emergency oversight, volunteer coordination, medical facility routing, and network heatmap.</p>
+                                </div>
+                            </div>
+                            <button type="button" class="ops-strip-btn" id="btn-select-role-command">
+                                <span>ENTER COMMAND CENTRE 🔐</span>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ================= WARKARI / USER DASHBOARD VIEW ================= -->
+                <div id="warkari-user-dashboard" class="warkari-user-dashboard">
+                    
+                    <!-- Active Role Banner with Switch Role Button -->
+                    <div class="active-role-sticky-banner" id="warkari-active-role-banner">
+                        <div class="arb-left">
+                            <span class="arb-icon">👤</span>
+                            <div>
+                                <span class="arb-kicker">ACTIVE ROLE</span>
+                                <strong class="arb-title">WARKARI / USER DASHBOARD</strong>
+                            </div>
+                        </div>
+                        <div class="arb-right">
+                            <button type="button" class="arb-switch-btn" id="btn-switch-role-from-warkari" title="Return to Role Selection">
+                                <span>← Change Role / First Screen</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="home-dashboard-grid">
                     
                     <!-- Active Emergency Notice Banner -->
                     <div id="home-active-emergency-banner" class="active-emergency-alert-card hidden">
@@ -283,6 +431,25 @@
                                             <span class="stat-box-val">H-001 Saswad Rural (2.1km)</span>
                                             <span class="stat-box-sub">🟢 12 Beds • Trauma Unit</span>
                                         </div>
+                                    </div>
+                                </div>
+
+                                <!-- Basic Phone / Offline Call Helpline Banner -->
+                                <div class="basic-phone-helpline-box" style="margin-top: 14px; background: rgba(0, 229, 255, 0.08); border: 1.5px dashed rgba(0, 229, 255, 0.35); border-radius: 12px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <span style="font-size: 1.4rem;">📞</span>
+                                        <div>
+                                            <strong style="color: #00E5FF; font-size: 0.85rem; display: block;">NO SMARTPHONE? BASIC PHONE CALL HELPLINE</strong>
+                                            <span style="color: #CBD5E1; font-size: 0.78rem;">Direct emergency phone call for button phones:</span>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                        <a href="tel:108" class="helpline-call-chip" style="background: rgba(255, 23, 68, 0.2); border: 1px solid #FF1744; color: #FF5252; text-decoration: none; padding: 5px 12px; border-radius: 8px; font-weight: 800; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 4px;">
+                                            📞 108 AMBULANCE
+                                        </a>
+                                        <a href="tel:112" class="helpline-call-chip" style="background: rgba(0, 230, 118, 0.2); border: 1px solid #00E676; color: #00E676; text-decoration: none; padding: 5px 12px; border-radius: 8px; font-weight: 800; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 4px;">
+                                            📞 112 EMERGENCY
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -369,14 +536,22 @@
                     </div>
 
                     <!-- Secondary Quick Actions Row -->
-                    <div class="hero-secondary-actions" style="display:flex; justify-content:center; gap:12px; margin-top:8px; flex-wrap:wrap;">
+                    <div class="hero-secondary-actions" style="display:flex; justify-content:center; gap:10px; margin-top:8px; flex-wrap:wrap;">
+                        <button type="button" class="quick-act-btn" id="home-find-water-btn" onclick="document.querySelector('#map-filter-group-home [data-filter=\'WATER\']')?.click(); document.getElementById('home-safety-map')?.scrollIntoView({behavior:\'smooth\', block:\'center\'});">
+                            <span class="act-icon">💧</span>
+                            <span>Water</span>
+                        </button>
+                        <button type="button" class="quick-act-btn" id="home-find-toilet-btn" onclick="document.querySelector('#map-filter-group-home [data-filter=\'TOILET\']')?.click(); document.getElementById('home-safety-map')?.scrollIntoView({behavior:\'smooth\', block:\'center\'});">
+                            <span class="act-icon">🚻</span>
+                            <span>Restrooms</span>
+                        </button>
+                        <button type="button" class="quick-act-btn" id="home-find-medical-btn" onclick="document.querySelector('#map-filter-group-home [data-filter=\'MEDICAL_CAMP\']')?.click(); document.getElementById('home-safety-map')?.scrollIntoView({behavior:\'smooth\', block:\'center\'});">
+                            <span class="act-icon">🏥</span>
+                            <span data-i18n="act_medical_help">Medical Help</span>
+                        </button>
                         <button type="button" class="quick-act-btn" id="home-where-am-i-btn" onclick="document.getElementById('where-modal')?.classList.remove('hidden')">
                             <span class="act-icon">📍</span>
                             <span data-i18n="act_where_am_i">Where am I?</span>
-                        </button>
-                        <button type="button" class="quick-act-btn" id="home-find-medical-btn" onclick="document.getElementById('nav-safety-map')?.click()">
-                            <span class="act-icon">🏥</span>
-                            <span data-i18n="act_medical_help">Medical Help</span>
                         </button>
                         <button type="button" class="quick-act-btn" id="home-open-qr-scanner-btn" onclick="document.getElementById('nav-qr-scanner')?.click()">
                             <span class="act-icon">📸</span>
@@ -471,6 +646,7 @@
                             </div>
                         </div>
                     </div>
+                </div><!-- end #warkari-user-dashboard -->
 
             </section>
 
@@ -1441,6 +1617,22 @@
             <section id="volunteer-view" class="content-view hidden" role="region" aria-label="Volunteer Network Dashboard">
                 <div class="responder-container">
                     
+                    <!-- Volunteer Active Role Header Banner -->
+                    <div class="active-role-sticky-banner volunteer-theme-banner" id="vol-active-role-banner">
+                        <div class="arb-left">
+                            <span class="arb-icon">🧑‍🚒</span>
+                            <div>
+                                <span class="arb-kicker">ACTIVE ROLE</span>
+                                <strong class="arb-title">VOLUNTEER RESPONSE NETWORK</strong>
+                            </div>
+                        </div>
+                        <div class="arb-right">
+                            <button type="button" class="arb-switch-btn" id="vol-back-to-roles-btn" title="Return to Role Selection">
+                                <span>← Change Role / Home</span>
+                            </button>
+                        </div>
+                    </div>
+                    
                     <!-- Volunteer In-App Demo Login Gate -->
                     <div class="demo-auth-gate-card" id="vol-auth-gate-card">
                         <div class="demo-badge-banner">DEMO ACCOUNT • VOLUNTEER</div>
@@ -1498,6 +1690,21 @@
                                 <button type="button" class="refresh-feed-btn" id="refresh-volunteer-btn">🔄 Refresh</button>
                                 <button type="button" class="demo-logout-btn" id="vol-spa-logout-btn">🚪 LOGOUT</button>
                             </div>
+                        </div>
+
+                        <!-- Dedicated QR Wristband Scanner Hero Action Banner -->
+                        <div class="vol-qr-action-banner" id="vol-qr-action-banner">
+                            <div class="vqb-left">
+                                <span class="vqb-icon">📸</span>
+                                <div class="vqb-text">
+                                    <h3 class="vqb-title">SCAN WARKARI WRISTBAND</h3>
+                                    <p class="vqb-sub">Point phone camera to scan pilgrim QR wristband. Immediately access SOS & Report (No PIN required) or verify PIN for protected medical info.</p>
+                                </div>
+                            </div>
+                            <button type="button" class="vqb-btn" id="vol-dash-open-scanner-btn" onclick="document.getElementById('vol-open-scanner-btn')?.click()">
+                                <span>📸 OPEN QR SCANNER</span>
+                                <span class="vqb-arrow">→</span>
+                            </button>
                         </div>
 
                         <!-- Synchronized Active Emergency Dispatch Card -->
@@ -1604,6 +1811,22 @@
             <!-- ================= VIEW 7: MEDICAL RESPONDER & CROWD ROUTING ================= -->
             <section id="responder-view" class="content-view hidden" role="region" aria-label="Medical Responder Dashboard">
                 <div class="responder-container">
+                    
+                    <!-- Hospital Active Role Header Banner -->
+                    <div class="active-role-sticky-banner hospital-theme-banner" id="hosp-active-role-banner">
+                        <div class="arb-left">
+                            <span class="arb-icon">🏥</span>
+                            <div>
+                                <span class="arb-kicker">ACTIVE ROLE</span>
+                                <strong class="arb-title">HOSPITAL / MEDICAL FACILITY PORTAL</strong>
+                            </div>
+                        </div>
+                        <div class="arb-right">
+                            <button type="button" class="arb-switch-btn" id="hosp-back-to-roles-btn" title="Return to Role Selection">
+                                <span>← Change Role / Home</span>
+                            </button>
+                        </div>
+                    </div>
                     
                     <!-- Hospital In-App Demo Login Gate -->
                     <div class="demo-auth-gate-card hospital-accent" id="hosp-auth-gate-card">
@@ -1764,6 +1987,22 @@
             <!-- ================= VIEW 8: COMMAND CENTER & AI INTELLIGENCE ================= -->
             <section id="command-view" class="content-view hidden" role="region" aria-label="Tactical Command Center">
                 <div class="responder-container" id="cmd-gate-wrapper" style="padding-top: 10px;">
+                    
+                    <!-- Command Center Active Role Header Banner -->
+                    <div class="active-role-sticky-banner command-theme-banner" id="cmd-active-role-banner">
+                        <div class="arb-left">
+                            <span class="arb-icon">🛰️</span>
+                            <div>
+                                <span class="arb-kicker">ACTIVE ROLE</span>
+                                <strong class="arb-title">COMMAND CENTRE OPERATIONS</strong>
+                            </div>
+                        </div>
+                        <div class="arb-right">
+                            <button type="button" class="arb-switch-btn" id="cmd-back-to-roles-btn" title="Return to Role Selection">
+                                <span>← Change Role / Home</span>
+                            </button>
+                        </div>
+                    </div>
                     
                     <!-- Command Center In-App Demo Login Gate -->
                     <div class="demo-auth-gate-card command-accent" id="cmd-auth-gate-card">
