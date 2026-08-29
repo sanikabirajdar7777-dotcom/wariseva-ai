@@ -50,19 +50,20 @@
                             <span class="sidebar-brand-tagline" data-i18n="tagline">Your safety, one tap away.</span>
                         </div>
                     </div>
+                    <button type="button" id="sidebar-toggle-btn" class="sidebar-toggle-btn" aria-label="Toggle navigation" title="Toggle Navigation Sidebar">☰</button>
                     <button type="button" id="sidebar-close-btn" class="sidebar-close-btn" aria-label="Close Navigation Menu">✕</button>
                 </div>
 
                 <!-- Navigation List -->
                 <ul class="sidebar-nav-list" role="navigation" aria-label="Sidebar Navigation">
                     <li class="sidebar-nav-item">
-                        <button type="button" class="nav-link-btn active" data-view="home-view" id="nav-home">
+                        <button type="button" class="nav-link-btn active" data-view="home-view" id="nav-home" title="Home / मुख्यपृष्ठ">
                             <span class="nav-icon">🏠</span>
                             <span data-i18n="nav_home">Home</span>
                         </button>
                     </li>
                     <li class="sidebar-nav-item">
-                        <button type="button" class="nav-link-btn" data-view="emergency-view" id="nav-emergency">
+                        <button type="button" class="nav-link-btn" data-view="emergency-view" id="nav-emergency" title="Emergency / आपत्कालीन मदत">
                             <span class="nav-icon">🚨</span>
                             <span data-i18n="nav_emergency">Emergency</span>
                             <span id="header-em-badge" class="nav-badge hidden">1</span>
@@ -75,55 +76,55 @@
                         </button>
                     </li>
                     <li class="sidebar-nav-item">
-                        <button type="button" class="nav-link-btn" data-view="safety-map-view" id="nav-safety-map">
+                        <button type="button" class="nav-link-btn" data-view="safety-map-view" id="nav-safety-map" title="Safety Network / सुरक्षा नकाशा">
                             <span class="nav-icon">🗺️</span>
                             <span data-i18n="nav_map">Safety Network</span>
                         </button>
                     </li>
                     <li class="sidebar-nav-item">
-                        <button type="button" class="nav-link-btn" data-view="emergency-view" id="nav-emergency-status">
+                        <button type="button" class="nav-link-btn" data-view="emergency-view" id="nav-emergency-status" title="Emergency Status / आपत्कालीन स्थिती">
                             <span class="nav-icon">📈</span>
                             <span>Emergency Status</span>
                         </button>
                     </li>
                     <li class="sidebar-nav-item">
-                        <button type="button" class="nav-link-btn" data-view="volunteer-view" id="nav-volunteer">
+                        <button type="button" class="nav-link-btn" data-view="volunteer-view" id="nav-volunteer" title="Volunteer / स्वयंसेवक">
                             <span class="nav-icon">🦺</span>
                             <span data-i18n="nav_volunteer">Volunteer</span>
                         </button>
                     </li>
                     <li class="sidebar-nav-item">
-                        <button type="button" class="nav-link-btn" data-view="responder-view" id="nav-responder">
+                        <button type="button" class="nav-link-btn" data-view="responder-view" id="nav-responder" title="Medical Facility / रुग्णालय">
                             <span class="nav-icon">🏥</span>
                             <span data-i18n="nav_responder">Medical Facility</span>
                         </button>
                     </li>
                     <li class="sidebar-nav-item">
-                        <button type="button" class="nav-link-btn" data-view="command-view" id="nav-command">
+                        <button type="button" class="nav-link-btn" data-view="command-view" id="nav-command" title="Command Center / नियंत्रण कक्ष">
                             <span class="nav-icon">🛰️</span>
                             <span data-i18n="nav_command">Command Center</span>
                         </button>
                     </li>
                     <li class="sidebar-nav-item">
-                        <button type="button" class="nav-link-btn" data-view="qr-scanner-view" id="nav-qr-scanner">
+                        <button type="button" class="nav-link-btn" data-view="qr-scanner-view" id="nav-qr-scanner" title="QR Scanner / क्यूआर स्कॅनर">
                             <span class="nav-icon">📸</span>
                             <span>QR Scanner</span>
                         </button>
                     </li>
                     <li class="sidebar-nav-item">
-                        <button type="button" class="nav-link-btn" id="sidebar-reports-btn" onclick="document.getElementById('analytics-modal')?.classList.remove('hidden')">
+                        <button type="button" class="nav-link-btn" id="sidebar-reports-btn" onclick="document.getElementById('analytics-modal')?.classList.remove('hidden')" title="Reports & Feedback / अहवाल आणि अभिप्राय">
                             <span class="nav-icon">📊</span>
                             <span>Reports</span>
                         </button>
                     </li>
                     <li class="sidebar-nav-item">
-                        <button type="button" class="nav-link-btn" id="sidebar-notif-btn" onclick="document.getElementById('header-notif-btn')?.click()">
+                        <button type="button" class="nav-link-btn" id="sidebar-notif-btn" onclick="document.getElementById('header-notif-btn')?.click()" title="Notifications / सूचना">
                             <span class="nav-icon">🔔</span>
                             <span>Notifications</span>
                         </button>
                     </li>
                     <li class="sidebar-nav-item">
-                        <button type="button" class="nav-link-btn" id="sidebar-help-btn" onclick="document.getElementById('where-modal')?.classList.remove('hidden')">
+                        <button type="button" class="nav-link-btn" id="sidebar-help-btn" onclick="document.getElementById('where-modal')?.classList.remove('hidden')" title="Help & Support / मदत आणि सहाय्य">
                             <span class="nav-icon">❓</span>
                             <span>Help & Support</span>
                         </button>

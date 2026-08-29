@@ -33,10 +33,115 @@
     left: 0;
     user-select: none;
     flex-shrink: 0;
+    transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), min-width 0.25s cubic-bezier(0.4, 0, 0.2, 1), max-width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Hide mobile controls by default on desktop */
-.mobile-menu-btn,
+/* Collapsed Desktop Sidebar Navigation State */
+.sidebar-panel.collapsed {
+    width: 68px !important;
+    min-width: 68px !important;
+    max-width: 68px !important;
+}
+
+.sidebar-panel.collapsed .sidebar-brand {
+    padding: 14px 6px !important;
+    justify-content: center !important;
+}
+
+.sidebar-panel.collapsed .sidebar-brand-text {
+    display: none !important;
+}
+
+.sidebar-panel.collapsed #sidebar-brand-home .sidebar-brand-content {
+    display: none !important;
+}
+
+.sidebar-panel.collapsed .sidebar-system-card {
+    display: none !important;
+}
+
+.sidebar-panel.collapsed .nav-link-btn {
+    justify-content: center !important;
+    padding: 12px 0 !important;
+    margin: 4px 6px !important;
+    border-radius: 8px;
+}
+
+.sidebar-panel.collapsed .nav-link-btn span:not(.nav-icon):not(.nav-badge) {
+    display: none !important;
+}
+
+.sidebar-panel.collapsed .nav-link-btn .nav-icon {
+    font-size: 1.25rem !important;
+    margin: 0 !important;
+}
+
+.sidebar-panel.collapsed .nav-link-btn.active {
+    background: rgba(255, 107, 0, 0.18) !important;
+    border: 1px solid var(--accent-orange) !important;
+    box-shadow: 0 0 10px rgba(255, 107, 0, 0.3) !important;
+}
+
+.sidebar-panel.collapsed .nav-link-btn.active .nav-icon {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 4px rgba(255, 107, 0, 0.6));
+}
+
+/* Sidebar Toggle Buttons */
+.sidebar-toggle-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.sidebar-toggle-btn:hover {
+    background: var(--bg-hover);
+    color: var(--accent-orange);
+    border-color: var(--accent-orange);
+}
+
+.sidebar-panel.collapsed .sidebar-toggle-btn {
+    margin: 0 auto;
+}
+
+.sidebar-panel:not(.collapsed) .sidebar-toggle-btn {
+    margin-left: auto;
+}
+
+/* Header Hamburger Button (Visible on desktop and mobile) */
+.mobile-menu-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    font-size: 1.15rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-right: 8px;
+}
+
+.mobile-menu-btn:hover {
+    background: var(--bg-hover);
+    border-color: var(--accent-orange);
+    color: var(--accent-orange);
+}
+
+/* Hide drawer close and backdrop by default on desktop */
 .sidebar-close-btn,
 .sidebar-backdrop {
     display: none;
@@ -8467,6 +8572,49 @@ html, body {
 
     .sidebar-panel.mobile-open {
         transform: translateX(0) !important;
+    }
+
+    /* Mobile Drawer: always show full layout inside drawer on small screens */
+    .sidebar-panel.collapsed {
+        width: 280px !important;
+        min-width: 280px !important;
+        max-width: 82vw !important;
+    }
+    .sidebar-panel.collapsed .sidebar-brand {
+        padding: 16px 14px !important;
+        justify-content: space-between !important;
+    }
+    .sidebar-panel.collapsed .sidebar-brand-text {
+        display: flex !important;
+    }
+    .sidebar-panel.collapsed #sidebar-brand-home .sidebar-brand-content {
+        display: flex !important;
+    }
+    .sidebar-panel.collapsed .nav-link-btn span:not(.nav-icon):not(.nav-badge) {
+        display: inline !important;
+    }
+    .sidebar-panel.collapsed .nav-link-btn {
+        justify-content: flex-start !important;
+        padding: 10px 14px !important;
+    }
+    .sidebar-panel.collapsed .sidebar-system-card {
+        display: block !important;
+    }
+    .sidebar-toggle-btn {
+        display: none !important;
+    }
+    .sidebar-close-btn {
+        display: flex !important;
+        background: transparent;
+        border: 1px solid var(--border-subtle);
+        color: var(--text-primary);
+        font-size: 1.1rem;
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
     }
 
     /* Mobile Drawer Backdrop */

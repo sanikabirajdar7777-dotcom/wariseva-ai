@@ -4337,26 +4337,48 @@
             });
         });
 
-        // Mobile Sidebar Drawer Toggle & Backdrop Handlers
+        // Sidebar Navigation Toggle & Collapse Engine (Desktop & Mobile)
         const mobileMenuBtn = document.getElementById('mobile-menu-toggle-btn');
+        const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn');
         const sidebarCloseBtn = document.getElementById('sidebar-close-btn');
         const sidebarBackdrop = document.getElementById('sidebar-backdrop');
         const sidebarPanel = document.querySelector('.sidebar-panel');
 
-        if (mobileMenuBtn && sidebarPanel) {
-            mobileMenuBtn.addEventListener('click', () => {
-                sidebarPanel.classList.add('mobile-open');
-                if (sidebarBackdrop) sidebarBackdrop.classList.remove('hidden');
-            });
+        // Collapsed sidebar by default on load
+        if (sidebarPanel) {
+            sidebarPanel.classList.add('collapsed');
         }
+
+        const toggleSidebarNav = () => {
+            if (!sidebarPanel) return;
+            if (window.innerWidth <= 992) {
+                sidebarPanel.classList.toggle('mobile-open');
+                if (sidebarBackdrop) {
+                    sidebarBackdrop.classList.toggle('hidden', !sidebarPanel.classList.contains('mobile-open'));
+                }
+            } else {
+                sidebarPanel.classList.toggle('collapsed');
+            }
+        };
 
         const closeMobileSidebar = () => {
             if (sidebarPanel) sidebarPanel.classList.remove('mobile-open');
             if (sidebarBackdrop) sidebarBackdrop.classList.add('hidden');
         };
 
+        mobileMenuBtn?.addEventListener('click', toggleSidebarNav);
+        sidebarToggleBtn?.addEventListener('click', toggleSidebarNav);
         sidebarCloseBtn?.addEventListener('click', closeMobileSidebar);
         sidebarBackdrop?.addEventListener('click', closeMobileSidebar);
+
+        // Close mobile drawer when clicking navigation links on mobile
+        document.querySelectorAll('.sidebar-panel .nav-link-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (window.innerWidth <= 992) {
+                    closeMobileSidebar();
+                }
+            });
+        });
 
         // Direct Nav ID Listeners for Extra Reliability
         document.getElementById('nav-home')?.addEventListener('click', () => switchView('home-view'));
